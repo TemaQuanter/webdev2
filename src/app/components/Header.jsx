@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faShoppingCart, faSearch } from '@fortawesome/free-solid-svg-icons'
 
-const MyNavbar = () => {
+const Header = () => {
   return (
     <Navbar expand="lg" className="navbar moving-gradient">
       <Container>
@@ -42,4 +42,4 @@ const MyNavbar = () => {
   )
 }
 
-export default MyNavbar
+export default Header
