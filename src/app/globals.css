@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+.navbar {
+  border-radius: 10px;
+}
+
+.form-control {
+  border-radius: 20px;
+}
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.moving-gradient {
+  background: linear-gradient(
+    270deg,
+    #00ff00,
+    #32cd32,
+    #7fff00
+  ); /* Bright green colors */
+  background-size: 400% 400%;
+  animation: gradientMove 15s ease infinite;
+}
