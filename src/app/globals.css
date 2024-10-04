@@ -30,3 +30,17 @@
   background-size: 400% 400%;
   animation: gradientMove 15s ease infinite;
 }
+
+.heading-box {
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 15px;
+  padding: 20px; 
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); 
+  margin: 20px 0; 
+  text-align: center; 
+}
+
+.heading-text {
+  font-size: 32px; 
+  color: #333; 
+}

@@ -1,0 +1,28 @@
+.navigation-links {
+  display: flex;
+  justify-content: space-around; /* Evenly space links */
+  background: linear-gradient(
+    90deg,
+    #d3d3d3,
+    #8bcbff
+  ); /* Gradient background */
+  padding: 1%;
+  border-radius: 5px;
+}
+
+.navigation-links a {
+  text-decoration: none; /* Remove underline from links */
+  color: #007bff; /* Bootstrap primary color */
+  font-weight: bold; /* Make text bold */
+  padding: 5px 10px; /* Add padding for clickable area */
+  border: 1px solid transparent; /* For border effect */
+  border-radius: 5px; /* Rounded corners */
+  transition: background-color 0.3s, color 0.3s; /* Smooth transition */
+  background-color: aliceblue;
+}
+
+.navigation-links a:hover {
+  background-color: #007bff; /* Background color on hover */
+  color: white; /* Change text color on hover */
+  border: 1px solid #007bff; /* Border color on hover */
+}

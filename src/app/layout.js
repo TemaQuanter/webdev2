@@ -5,10 +5,7 @@ import './globals.css' // Adjust the path if necessary
 const RootLayout = ({ children }) => {
   return (
     <html lang="en">
-      <body>
-        <MyNavbar />
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   )
 }
