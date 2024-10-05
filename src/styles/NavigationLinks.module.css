@@ -1,4 +1,4 @@
-.navigation-links {
+.navigationLinks {
   display: flex;
   justify-content: space-around; /* Evenly space links */
   background: linear-gradient(
@@ -10,7 +10,7 @@
   border-radius: 5px;
 }
 
-.navigation-links a {
+.navigationLinks a {
   text-decoration: none; /* Remove underline from links */
   color: #007bff; /* Bootstrap primary color */
   font-weight: bold; /* Make text bold */
@@ -21,7 +21,7 @@
   background-color: aliceblue;
 }
 
-.navigation-links a:hover {
+.navigationLinks a:hover {
   background-color: #007bff; /* Background color on hover */
   color: white; /* Change text color on hover */
   border: 1px solid #007bff; /* Border color on hover */

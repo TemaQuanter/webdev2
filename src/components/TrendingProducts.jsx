@@ -1,6 +1,6 @@
 'use client'
 import { Carousel, Button } from 'react-bootstrap'
-import '../TrendingProducts.css' // Adjust the path as needed
+import styles from '../styles/TrendingProducts.module.css' // Adjust the path as needed
 
 const TrendingProducts = () => {
   const products = [
@@ -51,12 +51,12 @@ const TrendingProducts = () => {
   ]
 
   return (
-    <div className="trending-products">
-      <h2>Trending Products</h2>
+    <div className={styles.trendingProducts}>
+      <h2 className={styles.title}>Trending Products</h2>
       <Carousel interval={4000} controls={true}>
         {products.map((product) => (
           <Carousel.Item key={product.id}>
-            <div className="product-item">
+            <div className={styles.productItem}>
               <img
                 className="d-block"
                 src={product.imageUrl}

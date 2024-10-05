@@ -1,9 +1,9 @@
-import '../NavigationLinks.css' // Adjust the path as needed
+import styles from '../styles/NavigationLinks.module.css'
 import Link from 'next/link'
 
 const NavigationLinks = () => {
   return (
-    <div className="navigation-links">
+    <div className={styles.navigationLinks}>
       <Link href="/">Home</Link>
       <Link href="/products">Products</Link>
       <Link href="/clearance">Clearance</Link>
