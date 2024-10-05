@@ -7,20 +7,36 @@ const SearchBar = () => {
   return (
     <div
       style={{
-        maxWidth: '50vw', // 50% of the viewport width
-        margin: '0 auto', // Center the container
-        padding: '0 2rem' // Padding on left and right
+        width: '80vw',
+        margin: '0 auto'
       }}
     >
-      <form className="d-flex align-items-center">
+      <form
+        className="d-flex align-items-center"
+        style={{ marginTop: '1rem', marginBottom: '1rem' }}
+      >
         <input
-          className="form-control me-2"
+          className="form-control"
           type="search"
           placeholder="Search for products"
           aria-label="Search"
-          style={{ borderRadius: '1.25rem', marginRight: '0.5rem' }} // Rounded input and spacing
+          style={{ borderRadius: '1.25rem', marginRight: '1rem' }} // Extra margin for space between input and button
         />
-        <Button className="btn btn-outline-primary" type="submit">
+        <Button
+          type="submit"
+          className="btn btn-primary"
+          style={{
+            borderRadius: '50%',
+            width: '2.5rem',
+            height: '2.5rem',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: '0',
+            minWidth: '2.5rem', // Ensure width doesn't get adjusted by flex or other layouts
+            minHeight: '2.5rem' // Ensure height stays equal to width
+          }}
+        >
           <FontAwesomeIcon icon={faSearch} />
         </Button>
       </form>
