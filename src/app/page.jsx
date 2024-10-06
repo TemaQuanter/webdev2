@@ -5,6 +5,7 @@ import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Footer from '@/components/footer/Footer'
+import TrendingCategories from '@/components/TrendingCategories'
 
 export default function Home() {
   return (
@@ -14,35 +15,7 @@ export default function Home() {
       <div style={{ marginTop: '1rem' }}>
         <HorizontalScrollView />
       </div>
-
-      <p
-        style={{ textAlign: 'center', marginTop: '2rem', marginBottom: '5rem' }}
-        className="fs-3"
-      >
-        Trending Categories
-      </p>
-      <div
-        className="d-flex flex-column justify-content-center align-items-center"
-        style={{ width: '100vw' }}
-      >
-        <Container>
-          <Row className="text-center">
-            <Col>1 of 3</Col>
-            <Col>2 of 3</Col>
-            <Col>3 of 3</Col>
-          </Row>
-          <Row className="text-center">
-            <Col>1 of 3</Col>
-            <Col>2 of 3</Col>
-            <Col>3 of 3</Col>
-          </Row>
-          <Row className="text-center">
-            <Col>1 of 3</Col>
-            <Col>2 of 3</Col>
-            <Col>3 of 3</Col>
-          </Row>
-        </Container>
-      </div>
+      <TrendingCategories />
       <div style={{ marginTop: '5rem' }}>
         <ControlledCarousel />
       </div>
