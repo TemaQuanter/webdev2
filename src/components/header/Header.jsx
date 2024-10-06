@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import SearchBar from '../SearchBar'
 import NavigationLinks from './NavigationLinks'
+import Link from 'next/link'
 
 const Header = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
@@ -66,7 +67,7 @@ const Header = () => {
 
         <ul style={{ listStyle: 'none', padding: '0' }}>
           <li className="mb-2">
-            <a href="#">Link 1</a>
+            <Link href="/category">Link 1</Link>
           </li>
           <li className="mb-2">
             <a href="#">Link 2</a>
