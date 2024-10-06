@@ -12,14 +12,14 @@ const Header = () => {
   const sidebarStyle = {
     position: 'fixed',
     top: '0',
-    left: isSidebarOpen ? '0' : '-250px',
+    right: isSidebarOpen ? '0' : '-250px', // Change 'left' to 'right'
     width: '250px',
     height: '100%',
     background: '#f8f9fa',
     boxShadow: '2px 0 5px rgba(0, 0, 0, 0.5)',
     zIndex: '1000',
     padding: '1rem',
-    transition: 'left 0.3s ease'
+    transition: 'right 0.3s ease' // Update transition to 'right'
   }
 
   return (
@@ -54,15 +54,16 @@ const Header = () => {
       <NavigationLinks />
 
       <div style={sidebarStyle}>
-        <h5 className="mb-3">
-          Categories{' '}
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          <h5 className="mb-0">Categories</h5>
           <button
             className="btn btn-outline-secondary btn-sm"
             onClick={toggleSidebar}
           >
             <i className="bi bi-x-lg"></i>
           </button>
-        </h5>
+        </div>
+
         <ul style={{ listStyle: 'none', padding: '0' }}>
           <li className="mb-2">
             <a href="#">Link 1</a>
