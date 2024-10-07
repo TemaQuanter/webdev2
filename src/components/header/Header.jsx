@@ -35,13 +35,17 @@ const Header = () => {
         className="d-flex justify-content-between align-items-center"
         style={{ width: '80vw' }}
       >
-        <span className="fs-2 fw-bold">TU Marketplace</span>
+        <span style={{ fontSize: 'min(5vw, 2rem)' }} className="fw-bold">
+          TU Marketplace
+        </span>
         <div className="d-flex justify-content-between" style={{ gap: '2vw' }}>
           <button className="btn btn-outline-primary btn-sm">
             <i className="bi bi-cart-fill fs-5"></i>
           </button>
           <button className="btn btn-outline-primary btn-sm">
-            <i className="bi bi-person-fill fs-5"></i>
+            <Link href="/sign_in">
+              <i className="bi bi-person-fill fs-5"></i>
+            </Link>
           </button>
           <button
             className="btn btn-outline-primary btn-sm"
