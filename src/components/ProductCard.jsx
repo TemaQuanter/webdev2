@@ -6,8 +6,8 @@ const FlexboxLayout = () => {
     <div
       style={{
         display: 'flex',
-        width: '100%',
-        marginBottom: '1rem'
+        width: 'min(100vw, 30rem)',
+        border: '1px solid black'
       }}
     >
       {/* Left Section - 2/5 */}
@@ -18,7 +18,8 @@ const FlexboxLayout = () => {
           textAlign: 'center',
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'center'
+          alignItems: 'center',
+          boxSizing: 'border-box'
         }}
       >
         {/* Product image */}
@@ -45,14 +46,19 @@ const FlexboxLayout = () => {
           flex: 3,
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'center'
+          justifyContent: 'top',
+          padding: '1rem',
+          boxSizing: 'border-box'
         }}
       >
         {/* Product details */}
         <h5 style={{ marginBottom: '0.5rem' }}>Product Name</h5>
-        <p style={{ marginBottom: '0.25rem' }}>Seller: John Johnson</p>
         <p style={{ marginBottom: '0.25rem' }}>
-          Description: This is a product description.
+          Seller: <span className="fw-lighter">John Johnson</span>
+        </p>
+        <p style={{ marginBottom: '0.25rem' }}>
+          Description:{' '}
+          <span className="fw-lighter">This is a product description.</span>
         </p>
         <p style={{ marginBottom: '0.25rem', fontWeight: 'bold' }}>
           Price: EUR 75
