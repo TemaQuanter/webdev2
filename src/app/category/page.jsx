@@ -1,7 +1,7 @@
 import Header from '../../components/header/Header'
 import Footer from '../../components/footer/Footer'
 import ProductCard from '../../components/ProductCard'
-import { Container, Row, Col } from 'react-bootstrap'
+import { Row, Col, Container } from 'react-bootstrap'
 
 export default function Categories() {
   return (
@@ -9,20 +9,21 @@ export default function Categories() {
       <Header />
       <div
         className="d-flex flex-column align-items-center"
-        style={{ width: '100vw', margin: '1rem 0 1rem 0' }}
+        style={{ width: '100%', margin: '1rem 0' }}
       >
-        <Container>
-          <Row>
-            <Col xs={12} sm={12} md={6} lg={4}>
+        {/* Use Container-fluid for full-width responsiveness */}
+        <Container fluid>
+          <Row className="justify-content-center">
+            <Col xs={12} sm={11} md={10} lg={9} className="mb-4">
               <ProductCard />
             </Col>
-            <Col xs={12} sm={12} md={6} lg={4}>
+            <Col xs={12} sm={11} md={10} lg={9} className="mb-4">
               <ProductCard />
             </Col>
-            <Col xs={12} sm={12} md={6} lg={4}>
+            <Col xs={12} sm={11} md={10} lg={9} className="mb-4">
               <ProductCard />
             </Col>
-            <Col xs={12} sm={6} md={4} lg={3}>
+            <Col xs={12} sm={11} md={10} lg={9} className="mb-4">
               <ProductCard />
             </Col>
           </Row>
