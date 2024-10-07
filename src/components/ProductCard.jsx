@@ -6,8 +6,10 @@ const FlexboxLayout = () => {
     <div
       style={{
         display: 'flex',
-        width: 'min(100vw, 30rem)',
-        border: '1px solid black'
+        flexWrap: 'wrap', // Ensures wrapping on smaller screens
+        width: 'min(100%, 30rem)', // Use percentage instead of vw
+        border: '1px solid black',
+        margin: '0 auto' // Center the container
       }}
     >
       {/* Left Section - 2/5 */}
@@ -25,8 +27,9 @@ const FlexboxLayout = () => {
         {/* Product image */}
         <div
           style={{
-            width: '150px',
-            height: '150px',
+            width: '100%',
+            maxWidth: '150px',
+            aspectRatio: '1',
             backgroundColor: '#d3d3d3'
           }}
         />
@@ -46,7 +49,7 @@ const FlexboxLayout = () => {
           flex: 3,
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'top',
+          justifyContent: 'flex-start',
           padding: '1rem',
           boxSizing: 'border-box'
         }}
