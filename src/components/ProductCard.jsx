@@ -7,7 +7,7 @@ const FlexboxLayout = () => {
       style={{
         display: 'flex',
         flexWrap: 'wrap', // Ensures wrapping on smaller screens
-        width: 'min(100%, 30rem)', // Use percentage instead of vw
+        width: 'min(100%)', // Full width
         border: '1px solid black',
         margin: '0 auto' // Center the container
       }}
@@ -21,15 +21,16 @@ const FlexboxLayout = () => {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          boxSizing: 'border-box'
+          boxSizing: 'border-box',
+          borderRight: '1px solid black' // Add a vertical divider line
         }}
       >
         {/* Product image */}
         <div
           style={{
-            width: '100%',
-            maxWidth: '150px',
-            aspectRatio: '1',
+            width: '100%', // Make the image responsive
+            maxWidth: '150px', // Cap the image size to 150px
+            aspectRatio: '1', // Keep the image square
             backgroundColor: '#d3d3d3'
           }}
         />
@@ -49,7 +50,7 @@ const FlexboxLayout = () => {
           flex: 3,
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'flex-start',
+          justifyContent: 'flex-start', // Align content to the top
           padding: '1rem',
           boxSizing: 'border-box'
         }}
