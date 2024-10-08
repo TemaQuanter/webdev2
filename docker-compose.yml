@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  postgres-marketplace:
+    build:
+      context: .
+      dockerfile: docker/postgresql.dockerfile
+    restart: always
+    env_file:
+      - .env
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - marketplace-postgres-data:/var/lib/postgresql/data
+    networks:
+      - internal-network
+
+volumes:
+  marketplace-postgres-data:
+    external: true
+
+networks:
+  trading-bot-network:
+    external: true
+  internal-network:

@@ -5,5 +5,5 @@ CREATE TABLE users(
     email VARCHAR(100) NOT NULL,
     password VARCHAR(200) NOT NULL,
     profile_picture BYTEA,
-    balance NUMBER(10, 2) NOT NULL
+    balance NUMERIC(10, 2) NOT NULL
 );
