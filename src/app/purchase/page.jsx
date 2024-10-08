@@ -6,7 +6,7 @@ import Header from '../../components/header/Header'
 import Footer from '../../components/footer/Footer'
 import ProductCard from '../../components/ProductCard'
 
-export default function Purchase() {
+const Purchase = () => {
   const [isHovered, setIsHovered] = useState(false)
 
   return (
@@ -84,3 +84,5 @@ export default function Purchase() {
     </div>
   )
 }
+
+export default Purchase

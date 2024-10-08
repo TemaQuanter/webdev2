@@ -52,30 +52,32 @@ const Account = () => {
         </div>
       </div>
       <p className="fs-3 fw-bolder">Balance: 100</p>
-      <Button
-        variant="primary"
-        style={{
-          width: '80vw',
-          maxWidth: '30rem',
-          borderRadius: '20px',
-          margin: '2rem 0 0 0'
-        }}
-      >
-        <i class="bi bi-google" style={{ marginRight: '1rem' }}></i>
-        Sales
-      </Button>
-      <Button
-        variant="primary"
-        style={{
-          width: '80vw',
-          maxWidth: '30rem',
-          borderRadius: '20px',
-          margin: '2rem 0 0 0'
-        }}
-      >
-        <i class="bi bi-google" style={{ marginRight: '1rem' }}></i>
-        Purchases
-      </Button>
+      <Link href="/sales">
+        <Button
+          variant="primary"
+          style={{
+            width: '80vw',
+            maxWidth: '30rem',
+            borderRadius: '20px',
+            margin: '2rem 0 0 0'
+          }}
+        >
+          Sales
+        </Button>
+      </Link>
+      <Link href="/purchases">
+        <Button
+          variant="primary"
+          style={{
+            width: '80vw',
+            maxWidth: '30rem',
+            borderRadius: '20px',
+            margin: '2rem 0 0 0'
+          }}
+        >
+          Purchases
+        </Button>
+      </Link>
     </div>
   )
 }
