@@ -19,9 +19,9 @@ docker rmi marketplace_db
 # Create a new image.
 docker build -t marketplace_db -f docker/postgresql.dockerfile .
 
-echo "POSTGRES_USER=$POSTGRES_USER"
-echo "POSTGRES_PASSWORD=$POSTGRES_PASSWORD"
-echo "POSTGRES_DB=$POSTGRES_DB"
+# echo "POSTGRES_USER=$POSTGRES_USER"
+# echo "POSTGRES_PASSWORD=$POSTGRES_PASSWORD"
+# echo "POSTGRES_DB=$POSTGRES_DB"
 
 # Run the database.
 docker run -e POSTGRES_USER=$POSTGRES_USER -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD -e POSTGRES_DB=$POSTGRES_DB -d -p 5432:5432 --name marketplace_db marketplace_db

@@ -3,8 +3,29 @@
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
 const SignUp = () => {
+  const handleSubmit = async (e) => {
+    // Prevent a default behavior.
+    e.preventDefault()
+
+    // Clear any existing errors.
+    setError(null)
+
+    // Try to make a call to register api.
+    try {
+      // Make a call to registration api and send user credentials to it.
+      const response = await fetch('api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json'
+        },
+        body: JSON.stringify({})
+      })
+    } catch (err) {}
+  }
   return (
     <div className="min-h-screen bg-gray-100 d-flex flex-column justify-content-center align-items-center">
       <div
@@ -24,6 +45,7 @@ const SignUp = () => {
       <Form
         className="d-flex flex-column align-items-center"
         style={{ width: '80vw', maxWidth: '30rem' }}
+        onSubmit={handleSubmit}
       >
         <Form.Group className="mb-3 w-100" controlId="formBasicPassword">
           <Form.Control type="text" placeholder="First name" />
