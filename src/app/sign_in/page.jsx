@@ -1,10 +1,59 @@
 'use client'
 
+import { useState } from 'react'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 const SignIn = () => {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState(null)
+  const router = useRouter()
+
+  // This function is executed when a user clicks login button.
+  const handleSubmit = async (e) => {
+    // Prevent the browser from re-direction to another page.
+    // Prevent the browser from re-loading the current page.
+    e.preventDefault()
+
+    // Clear any existing errors
+    setError(null)
+
+    // Try to make a call to login api.
+    try {
+      // Make a call to login api and send user credentials to it.
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password })
+      })
+
+      // If the server response was positive (200)
+      // Then retrieve access token and store it in local storage on user's device.
+      if (response.ok) {
+        // The user logged in successfully.
+        const data = await response.json()
+        // Save the access token or handle session storage as required
+        localStorage.setItem('accessToken', data.accessToken)
+        router.push('/account') // Redirect to a protected route after login
+      } else {
+        // The user failed to login in.
+        // (Either credentials were wrong or something else happened on the back-end)
+        const errorData = await response.json()
+        setError(
+          errorData.message || 'Authentication failed. Please try again.'
+        )
+      }
+    } catch (err) {
+      // Failed to send a request to the login endpoint.
+      setError('An error occurred. Please try again later.')
+    } // end try-catch
+  } // end function handleSubmit
+
   return (
     <div className="min-h-screen bg-gray-100 d-flex flex-column justify-content-center align-items-center">
       <div
@@ -23,17 +72,32 @@ const SignIn = () => {
         New to our website? <Link href="/sign_up">create account</Link>
       </p>
 
+      {error && <p className="text-danger">{error}</p>}
+
       {/* Login form */}
       <Form
         className="d-flex flex-column align-items-center"
         style={{ width: '80vw', maxWidth: '30rem' }}
+        onSubmit={handleSubmit}
       >
         <Form.Group className="mb-3 w-100" controlId="formBasicEmail">
-          <Form.Control type="email" placeholder="Enter email" />
+          <Form.Control
+            type="email"
+            placeholder="Enter email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
         </Form.Group>
 
         <Form.Group className="mb-3 w-100" controlId="formBasicPassword">
-          <Form.Control type="password" placeholder="Password" />
+          <Form.Control
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
         </Form.Group>
 
         <Button
@@ -58,7 +122,7 @@ const SignIn = () => {
         variant="secondary"
         style={{ width: '80vw', maxWidth: '30rem', borderRadius: '20px' }}
       >
-        <i class="bi bi-google" style={{ marginRight: '1rem' }}></i>
+        <i className="bi bi-google" style={{ marginRight: '1rem' }}></i>
         Sign in with Google
       </Button>
       <Link href="/" style={{ marginTop: '1rem' }}>
