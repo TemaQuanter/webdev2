@@ -1,9 +1,6 @@
 import Header from '../components/header/Header'
 import ControlledCarousel from '../components/ControlledCarousel'
 import HorizontalScrollView from '../components/HorizontalScrollView'
-import Container from 'react-bootstrap/Container'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
 import Footer from '@/components/footer/Footer'
 import TrendingCategories from '@/components/TrendingCategories'
 

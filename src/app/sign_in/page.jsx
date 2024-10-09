@@ -44,9 +44,7 @@ const SignIn = () => {
         // The user failed to login in.
         // (Either credentials were wrong or something else happened on the back-end)
         const errorData = await response.json()
-        setError(
-          errorData.message || 'Authentication failed. Please try again.'
-        )
+        setError(errorData.message)
       }
     } catch (err) {
       // Failed to send a request to the login endpoint.
@@ -72,6 +70,7 @@ const SignIn = () => {
         New to our website? <Link href="/sign_up">create account</Link>
       </p>
 
+      {/* An error message, if it is necessary to display it. */}
       {error && <p className="text-danger">{error}</p>}
 
       {/* Login form */}
@@ -80,7 +79,7 @@ const SignIn = () => {
         style={{ width: '80vw', maxWidth: '30rem' }}
         onSubmit={handleSubmit}
       >
-        <Form.Group className="mb-3 w-100" controlId="formBasicEmail">
+        <Form.Group className="mb-3 w-100" controlId="formSignInEmail">
           <Form.Control
             type="email"
             placeholder="Enter email"
@@ -90,7 +89,7 @@ const SignIn = () => {
           />
         </Form.Group>
 
-        <Form.Group className="mb-3 w-100" controlId="formBasicPassword">
+        <Form.Group className="mb-3 w-100" controlId="formSignInPassword">
           <Form.Control
             type="password"
             placeholder="Password"

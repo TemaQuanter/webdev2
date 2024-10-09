@@ -1,5 +1,4 @@
 import React from 'react'
-import 'bootstrap/dist/css/bootstrap.min.css'
 
 const HorizontalScrollView = () => {
   const items = [1, 2, 3, 4, 5, 6] // Example items
