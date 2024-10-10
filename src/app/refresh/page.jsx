@@ -7,6 +7,8 @@ const Refresh = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
 
+  console.log('Refresh page triggered')
+
   useEffect(() => {
     const refreshTokens = async () => {
       // Get a response from refresh api.
@@ -17,6 +19,8 @@ const Refresh = () => {
         },
         body: {}
       })
+
+      console.log(response)
 
       // Check if the response was received successfully.
       if (response.ok) {

@@ -6,6 +6,8 @@ import jwt from 'jsonwebtoken'
 import { NextResponse } from 'next/server'
 
 export async function POST(req) {
+  console.log('Refresh API triggered')
+
   // Retrieve the refresh token from cookies.
   const refreshToken = req.cookies.get('refreshToken')
 
@@ -28,7 +30,9 @@ export async function POST(req) {
   } catch (err) {
     // The token is not valid.
     // Redirect the user to log in page.
-    return NextResponse.redirect('/log_in')
+    const redirectUrl = new URL('/log_in', req.nextUrl.origin)
+
+    return NextResponse.redirect(redirectUrl)
   } // end try-catch
 
   // Otherwise the refresh token is still valid.

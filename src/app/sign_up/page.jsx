@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { INTERNAL_SERVER_ERROR } from '@/constants'
 
 const SignUp = () => {
   const [firstName, setFirstName] = useState('')
@@ -12,6 +13,8 @@ const SignUp = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [repeatPassword, setRepeatPassword] = useState('')
+
+  const router = useRouter()
 
   // Error to be displayed in case something goes wrong.
   const [error, setError] = useState(null)
@@ -51,17 +54,15 @@ const SignUp = () => {
       // Check the server response.
       if (response.ok) {
         // The response is OK and it is possible to proceed further.
-        // Get the returned data.
-        const data = await response.json()
-
-        console.log(data)
+        // Redirect the client to log in page.
+        router.push('/sign_in')
       } else {
         // An error was returned.
         const errorData = await response.json()
         setError(errorData.message)
       }
     } catch (err) {
-      setError('An error occurred. Please, try again later.')
+      setError(INTERNAL_SERVER_ERROR)
     } // end try-catch
   } // end function handleSubmit
   return (
