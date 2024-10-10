@@ -12,11 +12,12 @@ const Refresh = () => {
   useEffect(() => {
     const refreshTokens = async () => {
       // Get a response from refresh api.
-      const response = await fetch('/api/refresh', {
+      const response = await fetch('/api/auth/refresh', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
+        credentials: 'include',
         body: {}
       })
 

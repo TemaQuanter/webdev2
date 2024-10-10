@@ -43,7 +43,7 @@ const Header = () => {
             <i className="bi bi-cart-fill fs-5"></i>
           </button>
           <button className="btn btn-outline-primary btn-sm">
-            <Link href="/sign_in">
+            <Link href="/account">
               <i className="bi bi-person-fill fs-5"></i>
             </Link>
           </button>

@@ -6,10 +6,8 @@ import jwt from 'jsonwebtoken'
 import { NextResponse } from 'next/server'
 
 export async function POST(req) {
-  console.log('Refresh API triggered')
-
   // Retrieve the refresh token from cookies.
-  const refreshToken = req.cookies.get('refreshToken')
+  const refreshToken = req.cookies.get('refreshToken').value
 
   // Check if the refresh token is set.
   if (!refreshToken) {
@@ -23,14 +21,18 @@ export async function POST(req) {
 
   // TODO: Check if the token is used in the database.
 
+  // Decoded jwt.
+  let decoded
+
   // Verify the validity of refresh token.
   try {
     // Try to decode the token and make sure that it has not expired yet.
-    const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET)
+    decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET)
   } catch (err) {
+    console.log(err)
     // The token is not valid.
     // Redirect the user to log in page.
-    const redirectUrl = new URL('/log_in', req.nextUrl.origin)
+    const redirectUrl = new URL('/sign_in', req.nextUrl.origin)
 
     return NextResponse.redirect(redirectUrl)
   } // end try-catch
@@ -49,8 +51,11 @@ export async function POST(req) {
     { expiresIn: '15m' }
   )
 
+  // Response.
+  const response = NextResponse.json({}, { status: 200 })
+
   // Stores the refresh token securely in cookies.
-  req.cookies.set('refreshToken', newRefreshToken, {
+  response.cookies.set('refreshToken', newRefreshToken, {
     httpOnly: true, // Prevents client side from accessing the cookie.
     path: '/', // Makes the cookie accessible to all paths in the domain.
     sameSite: 'Strict', // Prevents CSRF attacks by not sending the cookie across requests from other websites.
@@ -58,13 +63,15 @@ export async function POST(req) {
   })
 
   // Stores the access token securely in cookies.
-  req.cookies.set('accessToken', newAccessToken, {
+  response.cookies.set('accessToken', newAccessToken, {
     httpOnly: true, // Prevents client side from accessing the cookie.
     path: '/', // Makes the cookie accessible to all paths in the domain.
     sameSite: 'Strict', // Prevents CSRF attacks by not sending the cookie across requests from other websites.
     maxAge: 60 * 60 // 1 hour (in seconds) until the cookie expires.
   })
 
+  console.log('Refresh API SUCCEEDED!')
+
   // Send a successful response.
-  return NextResponse.json({}, { status: 200 })
+  return response
 } // end function POST

@@ -5,11 +5,13 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { INTERNAL_SERVER_ERROR } from '@/constants'
 
 const SignIn = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState(null)
+
   const router = useRouter()
 
   // This function is executed when a user clicks login button.
@@ -29,6 +31,7 @@ const SignIn = () => {
         headers: {
           'Content-Type': 'application/json'
         },
+        credentials: 'include',
         body: JSON.stringify({ email, password })
       })
 
@@ -36,10 +39,8 @@ const SignIn = () => {
       // Then retrieve access token and store it in local storage on user's device.
       if (response.ok) {
         // The user logged in successfully.
-        const data = await response.json()
-        // Save the access token or handle session storage as required
-        localStorage.setItem('accessToken', data.accessToken)
-        router.push('/account') // Redirect to a protected route after login
+        // Redirect the user to their account.
+        router.push('/account')
       } else {
         // The user failed to login in.
         // (Either credentials were wrong or something else happened on the back-end)
@@ -48,7 +49,7 @@ const SignIn = () => {
       }
     } catch (err) {
       // Failed to send a request to the login endpoint.
-      setError('An error occurred. Please try again later.')
+      setError(INTERNAL_SERVER_ERROR)
     } // end try-catch
   } // end function handleSubmit
 
