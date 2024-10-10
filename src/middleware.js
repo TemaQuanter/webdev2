@@ -13,9 +13,17 @@ export function middleware(req) {
   if (!accessToken) {
     // Access token is not set.
     // Redirect the request to a token refresh api.
-    const refreshUrl = new URL('/api/refresh', req.nextUrl.origin)
-    console.log(refreshUrl.pathname)
-  }
+    const refreshUrl = new URL('/refresh', req.nextUrl.origin)
+
+    // Save the original request url.
+    refreshUrl.searchParams.set('redirectTo', req.url)
+
+    // Redirect the client to refresh api.
+    return NextResponse.redirect(refreshUrl)
+  } // end if
+
+  // Otherwise, all checks passed successfully.
+  return NextResponse.next()
 } // end function middleware
 
 export const config = {
