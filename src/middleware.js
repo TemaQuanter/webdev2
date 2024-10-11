@@ -9,16 +9,20 @@ export function middleware(req) {
   // Get an access token.
   const accessToken = req.cookies.get('accessToken')
 
+  console.log('Access token in middleware:', accessToken)
+
   // Check if the access token is set.
   if (!accessToken) {
     // Access token is not set.
     // Redirect the request to a token refresh api.
     const refreshUrl = new URL('/refresh', req.nextUrl.origin)
 
-    console.log(req.nextUrl)
-
     // Save the original request url.
     refreshUrl.searchParams.set('redirectTo', req.nextUrl.pathname)
+    console.log(
+      'Middleware set redirectTo to',
+      refreshUrl.searchParams.get('redirectTo')
+    )
 
     // Redirect the client to refresh api.
     return NextResponse.redirect(refreshUrl)

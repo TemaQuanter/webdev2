@@ -1,15 +1,16 @@
 'use client'
 
-import { useState, useEffect, Suspense } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 const Refresh = () => {
   const [isLoading, setIsLoading] = useState(true)
-  const [redirectPath, setRedirectPath] = useState(null)
   const router = useRouter()
   const searchParams = useSearchParams()
 
   useEffect(() => {
+    console.log('Effect started')
+
     const handleAuthentication = async () => {
       try {
         console.log('Starting the refresh process...')
@@ -29,44 +30,27 @@ const Refresh = () => {
         if (response.ok) {
           const redirectTo = searchParams.get('redirectTo') || '/account'
           console.log('Setting redirect path to:', redirectTo)
-          setRedirectPath(redirectTo) // Update state to trigger redirect outside of async function
+          router.replace(redirectTo)
         } else {
           console.error('Failed to refresh token. Redirecting to sign-in page.')
-          setRedirectPath('/sign_in') // Update state to trigger redirect to sign-in
+          router.replace('/sign_in')
         }
       } catch (error) {
         console.error('Error during the refresh process:', error)
-        setRedirectPath('/sign_in') // Update state to trigger redirect to sign-in
+        router.replace('/sign_in')
       } finally {
         setIsLoading(false)
       }
     }
 
     handleAuthentication()
-  }, [searchParams])
+  }, [searchParams]) // Include only relevant dependencies
 
-  // Redirect outside of async function when redirectPath is updated
-  useEffect(() => {
-    if (redirectPath) {
-      console.log('Redirecting to:', redirectPath)
-      router.replace(redirectPath)
-      console.log('After redirection')
-    }
-  }, [redirectPath]) // This useEffect runs when `redirectPath` state is set
-
-  // If the refresh process is ongoing, show the message
   if (isLoading) {
     return <p>Refreshing the session...</p>
   }
 
-  // Fallback in case the refresh logic fails to display anything
   return <p>Something went wrong, please try reloading the page.</p>
 }
 
-export default function WrappedRefresh() {
-  return (
-    <Suspense fallback={<p>Loading...</p>}>
-      <Refresh />
-    </Suspense>
-  )
-}
+export default Refresh

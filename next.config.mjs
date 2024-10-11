@@ -7,7 +7,8 @@ const nextConfig = {
         hostname: 'www.ieabroad.com'
       }
     ]
-  }
+  },
+  reactStrictMode: false
 }
 
 export default nextConfig

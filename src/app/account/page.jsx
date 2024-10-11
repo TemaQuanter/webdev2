@@ -24,6 +24,7 @@ const Account = () => {
         width={150}
         height={150}
         style={{ borderRadius: '50%', marginTop: '3rem' }}
+        alt="Profile picture"
       />
       <div className="d-flex flex-row justify-content-center align-items-center">
         <p className="fs-4 fw-bolder" style={{ margin: '1rem 0 1rem 0' }}>
