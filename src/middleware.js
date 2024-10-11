@@ -1,37 +1,31 @@
-/*
-    This middleware verifies user authentication while they are using some
-    features, available only to authenticated users.
-*/
-
 import { NextResponse } from 'next/server'
 
 export function middleware(req) {
-  // Get an access token.
   const accessToken = req.cookies.get('accessToken')
+  const refreshToken = req.cookies.get('refreshToken')
 
   console.log('Access token in middleware:', accessToken)
+  console.log('Refresh token in middleware:', refreshToken)
 
-  // Check if the access token is set.
-  if (!accessToken) {
-    // Access token is not set.
-    // Redirect the request to a token refresh api.
+  // If both accessToken and refreshToken are missing, redirect to sign_in
+  if (!accessToken && !refreshToken) {
+    console.log('No tokens found, redirecting to sign-in...')
+    return NextResponse.redirect(new URL('/sign_in', req.nextUrl.origin))
+  }
+
+  // If accessToken is missing but refreshToken exists, try refreshing tokens
+  if (!accessToken && refreshToken) {
+    console.log('Access token missing, attempting to refresh...')
     const refreshUrl = new URL('/refresh', req.nextUrl.origin)
-
-    // Save the original request url.
     refreshUrl.searchParams.set('redirectTo', req.nextUrl.pathname)
-    console.log(
-      'Middleware set redirectTo to',
-      refreshUrl.searchParams.get('redirectTo')
-    )
-
-    // Redirect the client to refresh api.
     return NextResponse.redirect(refreshUrl)
-  } // end if
+  }
 
-  // Otherwise, all checks passed successfully.
+  // If accessToken exists, proceed to the protected page
+  console.log('Access token found, proceeding to next middleware...')
   return NextResponse.next()
-} // end function middleware
+}
 
 export const config = {
   matcher: ['/account/:path*', '/account']
-} // end config
+}

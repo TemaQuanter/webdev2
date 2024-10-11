@@ -1,78 +1,55 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { INTERNAL_SERVER_ERROR } from '@/constants'
+import Cookies from 'js-cookie' // Import js-cookie for cookie handling
 
 const SignIn = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState(null)
-
   const router = useRouter()
 
-  // This function is executed when a user clicks login button.
+  // Use useEffect to clear any existing tokens when the component loads
+  useEffect(() => {
+    console.log('Clearing any old tokens...')
+    Cookies.remove('accessToken') // Remove accessToken
+    Cookies.remove('refreshToken') // Remove refreshToken
+  }, [])
+
   const handleSubmit = async (e) => {
-    // Prevent the browser from re-direction to another page.
-    // Prevent the browser from re-loading the current page.
     e.preventDefault()
-
-    // Clear any existing errors
     setError(null)
+    console.log('Starting login process...')
 
-    // Try to make a call to login api.
     try {
-      // Make a call to login api and send user credentials to it.
+      // Call login API
       const response_login = await fetch('/api/auth/login', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include', // Ensures cookies are included
         body: JSON.stringify({ email, password })
       })
 
-      // Make sure that login request was successful.
       if (!response_login.ok) {
-        // An error occurred in the request.
-        // Unwrap the error and display it to the user.
         const errorData = await response_login.json()
+        console.error('Login failed:', errorData.message)
         setError(errorData.message)
-
-        // Do not proceed further, because of the error.
         return
-      } // end if
-
-      // Make a call to refresh api and get both refresh and access tokens.
-      const response_refresh = await fetch('/api/auth/refresh', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        credentials: 'include',
-        body: JSON.stringify({ email, password })
-      })
-
-      // If the server response was positive (200)
-      // Then retrieve access token and store it in local storage on user's device.
-      if (response_refresh.ok) {
-        // The user logged in successfully.
-        // Redirect the user to their account.
-        router.push('/account')
-      } else {
-        // The user failed to login in.
-        // (Either credentials were wrong or something else happened on the back-end)
-        const errorData = await response_refresh.json()
-        setError(errorData.message)
       }
+
+      console.log('Login successful, reloading page...')
+      // Force a full page reload to ensure cookies are set and state is correct
+      window.location.href = '/account'
     } catch (err) {
-      // Failed to send a request to the login endpoint.
+      console.error('Login process failed with error:', err)
       setError(INTERNAL_SERVER_ERROR)
-    } // end try-catch
-  } // end function handleSubmit
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 d-flex flex-column justify-content-center align-items-center">
@@ -89,13 +66,11 @@ const SignIn = () => {
         Sign in to your account
       </p>
       <p className="fs-6 fw-bold">
-        New to our website? <Link href="/sign_up">create account</Link>
+        New to our website? <Link href="/sign_up">Create account</Link>
       </p>
 
-      {/* An error message, if it is necessary to display it. */}
       {error && <p className="text-danger">{error}</p>}
 
-      {/* Login form */}
       <Form
         className="d-flex flex-column align-items-center"
         style={{ width: '80vw', maxWidth: '30rem' }}
@@ -130,25 +105,6 @@ const SignIn = () => {
           Sign In
         </Button>
       </Form>
-
-      {/* Divider with "or" */}
-      <div className="d-flex align-items-center my-3 w-100">
-        <hr className="flex-grow-1" />
-        <span className="mx-2">or</span>
-        <hr className="flex-grow-1" />
-      </div>
-
-      {/* Other authentication methods */}
-      <Button
-        variant="secondary"
-        style={{ width: '80vw', maxWidth: '30rem', borderRadius: '20px' }}
-      >
-        <i className="bi bi-google" style={{ marginRight: '1rem' }}></i>
-        Sign in with Google
-      </Button>
-      <Link href="/" style={{ marginTop: '1rem' }}>
-        &lt; Back
-      </Link>
     </div>
   )
 }

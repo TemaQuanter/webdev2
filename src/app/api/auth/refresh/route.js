@@ -1,75 +1,62 @@
-/*
-    This file contains the logic for handling refresh tokens in the application.
-*/
-
 import jwt from 'jsonwebtoken'
 import { NextResponse } from 'next/server'
 
 export async function POST(req) {
-  // Retrieve the refresh token from cookies.
   const refreshToken = req.cookies.get('refreshToken')
 
-  // Check if the refresh token is set.
+  // Log incoming cookies
+  console.log('Cookies in refresh request:', req.cookies)
+  console.log('Refresh token in refresh request:', refreshToken)
+
   if (!refreshToken) {
-    // The refresh token is not set.
-    // Return an error.
+    console.log('No refresh token found in cookies.')
     return NextResponse.json(
       { message: 'Refresh Token not found' },
       { status: 401 }
     )
-  } // end if
+  }
 
-  // TODO: Check if the token is used in the database.
-
-  // Decoded jwt.
   let decoded
-
-  // Verify the validity of refresh token.
   try {
-    // Try to decode the token and make sure that it has not expired yet.
     decoded = jwt.verify(refreshToken.value, process.env.REFRESH_TOKEN_SECRET)
+    console.log('Decoded refresh token:', decoded)
   } catch (err) {
-    console.log(err)
-    // The token is not valid.
-    // Redirect the user to log in page.
-    const redirectUrl = new URL('/sign_in', req.nextUrl.origin)
+    console.log('Invalid refresh token:', err)
+    return NextResponse.json(
+      { message: 'Invalid refresh token' },
+      { status: 401 }
+    )
+  }
 
-    return NextResponse.redirect(redirectUrl)
-  } // end try-catch
-
-  // Otherwise the refresh token is still valid.
-  // Make new refresh and access tokens.
   const newRefreshToken = jwt.sign(
     { userId: decoded.userId },
     process.env.REFRESH_TOKEN_SECRET,
     { expiresIn: '7d' }
   )
-
   const newAccessToken = jwt.sign(
     { userId: decoded.userId },
     process.env.ACCESS_TOKEN_SECRET,
     { expiresIn: '15m' }
   )
 
-  // Response.
+  console.log('Successfully generated new refresh and access tokens.')
+
   const response = NextResponse.json({}, { status: 200 })
-
-  // Stores the refresh token securely in cookies.
   response.cookies.set('refreshToken', newRefreshToken, {
-    httpOnly: true, // Prevents client side from accessing the cookie.
-    path: '/', // Makes the cookie accessible to all paths in the domain.
-    sameSite: 'Strict', // Prevents CSRF attacks by not sending the cookie across requests from other websites.
-    maxAge: 60 * 60 * 24 * 7 // 1 week (in seconds) until the cookie expires.
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production', // Use secure in production
+    path: '/',
+    sameSite: 'Lax',
+    maxAge: 60 * 60 * 24 * 7 // 1 week
   })
 
-  // Stores the access token securely in cookies.
   response.cookies.set('accessToken', newAccessToken, {
-    httpOnly: true, // Prevents client side from accessing the cookie.
-    path: '/', // Makes the cookie accessible to all paths in the domain.
-    sameSite: 'Strict', // Prevents CSRF attacks by not sending the cookie across requests from other websites.
-    maxAge: 60 * 60 // 1 hour (in seconds) until the cookie expires.
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production', // Use secure in production
+    path: '/',
+    sameSite: 'Lax',
+    maxAge: 60 * 60 // 1 hour
   })
 
-  // Send a successful response.
   return response
-} // end function POST
+}

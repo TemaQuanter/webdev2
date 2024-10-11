@@ -14,22 +14,16 @@ const ProductListing = () => {
   const [error, setError] = useState(null)
 
   const handleSubmit = (e) => {
-    // Prevent the default form submission behavior
     e.preventDefault()
-
-    // Reset any previous error messages
     setError(null)
 
-    // Check if the image exceeds 10MB in size
     if (image && image.size > 10485760) {
       setError('Image size exceeds 10MB limit.')
       return
     }
 
-    // Simulate success message after form submission
     alert('Form submitted successfully!')
 
-    // Reset form values to empty/initial state after submission
     setProductName('')
     setDescription('')
     setCategory('')
@@ -42,7 +36,6 @@ const ProductListing = () => {
     <div className="min-h-screen bg-light d-flex flex-column justify-content-center align-items-center">
       <h1>List a Product</h1>
 
-      {/* Error message displayed if there is an error */}
       {error && <p className="text-danger">{error}</p>}
 
       <Form
@@ -75,13 +68,19 @@ const ProductListing = () => {
 
         <Form.Group className="mb-3">
           <Form.Label>Category</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter product category"
+          <Form.Select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
             required
-          />
+          >
+            <option value="" disabled>
+              Select a category
+            </option>
+            <option value="Electronics">Electronics</option>
+            <option value="Clothing">Clothing</option>
+            <option value="Books">Books</option>
+            <option value="Home Appliances">Home Appliances</option>
+          </Form.Select>
         </Form.Group>
 
         <Form.Group className="mb-3">
