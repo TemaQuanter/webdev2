@@ -12,11 +12,6 @@ export async function POST(req) {
   // Get the request data.
   const body = await req.json()
 
-  // Debug.
-  console.log(body)
-  console.log(body.email)
-  console.log(body.password)
-
   // Get a hash from the password that was sent.
   const hashedPassword = await bcrypt.hash(body.password, SALT_ROUNDS)
 
@@ -48,8 +43,6 @@ export async function POST(req) {
     // Disconnect from the database.
     await prisma.$disconnect()
   } // end try-catch
-
-  console.log(user)
 
   // Check if the user with such credentials exists.
   if (!user || !(await bcrypt.compare(body.password, user.password))) {

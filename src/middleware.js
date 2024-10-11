@@ -15,8 +15,10 @@ export function middleware(req) {
     // Redirect the request to a token refresh api.
     const refreshUrl = new URL('/refresh', req.nextUrl.origin)
 
+    console.log(req.nextUrl)
+
     // Save the original request url.
-    refreshUrl.searchParams.set('redirectTo', req.url)
+    refreshUrl.searchParams.set('redirectTo', req.nextUrl.pathname)
 
     // Redirect the client to refresh api.
     return NextResponse.redirect(refreshUrl)

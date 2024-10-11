@@ -1,43 +1,72 @@
 'use client'
 
+import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useEffect } from 'react'
 
 const Refresh = () => {
+  const [isLoading, setIsLoading] = useState(true)
+  const [redirectPath, setRedirectPath] = useState(null)
   const router = useRouter()
   const searchParams = useSearchParams()
 
-  console.log('Refresh page triggered')
-
   useEffect(() => {
-    const refreshTokens = async () => {
-      // Get a response from refresh api.
-      const response = await fetch('/api/auth/refresh', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        credentials: 'include',
-        body: {}
-      })
+    const handleAuthentication = async () => {
+      try {
+        console.log('Starting the refresh process...')
 
-      console.log(response)
+        const response = await fetch('/api/auth/refresh', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          credentials: 'include',
+          body: JSON.stringify({})
+        })
 
-      // Check if the response was received successfully.
-      if (response.ok) {
-        // Response was successful.
-        // Redirect the client to the requested address.
-        router.replace(searchParams.get('redirectTo'))
-      } else {
-        // An error occurred.
-        // Redirect to the login page.
-        router.replace('/sign_in')
-      } // end if
-    } // end function refreshTokens
+        console.log('API response:', response)
+        console.log('Response status:', response.status)
 
-    refreshTokens()
-  }, [router, searchParams])
-  return <p>Refreshing the session...</p>
-} // end function Refresh
+        if (response.ok) {
+          const redirectTo = searchParams.get('redirectTo') || '/account'
+          console.log('Setting redirect path to:', redirectTo)
+          setRedirectPath(redirectTo) // Update state to trigger redirect outside of async function
+        } else {
+          console.error('Failed to refresh token. Redirecting to sign-in page.')
+          setRedirectPath('/sign_in') // Update state to trigger redirect to sign-in
+        }
+      } catch (error) {
+        console.error('Error during the refresh process:', error)
+        setRedirectPath('/sign_in') // Update state to trigger redirect to sign-in
+      } finally {
+        setIsLoading(false)
+      }
+    }
 
-export default Refresh
+    handleAuthentication()
+  }, [searchParams])
+
+  // Redirect outside of async function when redirectPath is updated
+  useEffect(() => {
+    if (redirectPath) {
+      console.log('Redirecting to:', redirectPath)
+      router.replace(redirectPath)
+      console.log('After redirection')
+    }
+  }, [redirectPath]) // This useEffect runs when `redirectPath` state is set
+
+  // If the refresh process is ongoing, show the message
+  if (isLoading) {
+    return <p>Refreshing the session...</p>
+  }
+
+  // Fallback in case the refresh logic fails to display anything
+  return <p>Something went wrong, please try reloading the page.</p>
+}
+
+export default function WrappedRefresh() {
+  return (
+    <Suspense fallback={<p>Loading...</p>}>
+      <Refresh />
+    </Suspense>
+  )
+}

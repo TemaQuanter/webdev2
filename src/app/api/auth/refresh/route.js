@@ -7,7 +7,7 @@ import { NextResponse } from 'next/server'
 
 export async function POST(req) {
   // Retrieve the refresh token from cookies.
-  const refreshToken = req.cookies.get('refreshToken').value
+  const refreshToken = req.cookies.get('refreshToken')
 
   // Check if the refresh token is set.
   if (!refreshToken) {
@@ -27,7 +27,7 @@ export async function POST(req) {
   // Verify the validity of refresh token.
   try {
     // Try to decode the token and make sure that it has not expired yet.
-    decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET)
+    decoded = jwt.verify(refreshToken.value, process.env.REFRESH_TOKEN_SECRET)
   } catch (err) {
     console.log(err)
     // The token is not valid.
@@ -69,8 +69,6 @@ export async function POST(req) {
     sameSite: 'Strict', // Prevents CSRF attacks by not sending the cookie across requests from other websites.
     maxAge: 60 * 60 // 1 hour (in seconds) until the cookie expires.
   })
-
-  console.log('Refresh API SUCCEEDED!')
 
   // Send a successful response.
   return response

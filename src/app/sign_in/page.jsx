@@ -26,7 +26,28 @@ const SignIn = () => {
     // Try to make a call to login api.
     try {
       // Make a call to login api and send user credentials to it.
-      const response = await fetch('/api/auth/login', {
+      const response_login = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify({ email, password })
+      })
+
+      // Make sure that login request was successful.
+      if (!response_login.ok) {
+        // An error occurred in the request.
+        // Unwrap the error and display it to the user.
+        const errorData = await response_login.json()
+        setError(errorData.message)
+
+        // Do not proceed further, because of the error.
+        return
+      } // end if
+
+      // Make a call to refresh api and get both refresh and access tokens.
+      const response_refresh = await fetch('/api/auth/refresh', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -37,14 +58,14 @@ const SignIn = () => {
 
       // If the server response was positive (200)
       // Then retrieve access token and store it in local storage on user's device.
-      if (response.ok) {
+      if (response_refresh.ok) {
         // The user logged in successfully.
         // Redirect the user to their account.
         router.push('/account')
       } else {
         // The user failed to login in.
         // (Either credentials were wrong or something else happened on the back-end)
-        const errorData = await response.json()
+        const errorData = await response_refresh.json()
         setError(errorData.message)
       }
     } catch (err) {

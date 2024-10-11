@@ -55,7 +55,6 @@ export async function POST(req) {
     const insertedUser = await prisma.users.create({
       data: { ...newUser }
     })
-    console.log('User created')
   } catch (err) {
     // Check if the user with such email address already exists.
     if (err.code === 'P2002' && err.meta.target[0] === 'email') {
