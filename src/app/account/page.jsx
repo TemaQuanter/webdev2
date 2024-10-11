@@ -4,8 +4,62 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Link from 'next/link'
 import Image from 'next/image'
+import { useState, useEffect } from 'react'
+import { INTERNAL_SERVER_ERROR } from '@/constants'
 
 const Account = () => {
+  const [user, setUser] = useState(null)
+  const [error, setError] = useState(null)
+
+  // Get a user from the database.
+  useEffect(() => {
+    // Mark the beginning of the hook.
+    console.log('useEffect start')
+
+    // A function that handles post request to the database.
+    const handleDatabaseRequest = async () => {
+      // Perform a request to load the user data from the database.
+      try {
+        const response = await fetch('/api/db/get_account_data', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          credentials: 'include'
+        })
+
+        // Validate the response.
+        if (response.ok) {
+          // Get the data.
+          const data = await response.json()
+
+          // Set the user.
+          setUser(data.body)
+        } else {
+          // An error occurred.
+          // Get the error.
+          const errorData = await response.json()
+
+          setError(errorData.message)
+        } // end if
+      } catch (err) {
+        // Log the error.
+        console.log(err)
+
+        // An error occurred.
+        setError(INTERNAL_SERVER_ERROR)
+      } // end try-catch
+    } // end function handleDatabaseRequest
+
+    // Execute data fetching.
+    handleDatabaseRequest()
+  }, [])
+
+  // If error, inform a user about it.
+  if (error) {
+    return <p>{error}</p>
+  } // end if
+
   return (
     <div className="min-h-screen bg-gray-100 d-flex flex-column justify-content-center align-items-center">
       <div className="w-100">
@@ -20,7 +74,7 @@ const Account = () => {
         </Button>
       </div>
       <Image
-        src="/images/image.png"
+        src="/images/default_profile.png"
         width={150}
         height={150}
         style={{ borderRadius: '50%', marginTop: '3rem' }}
@@ -28,7 +82,7 @@ const Account = () => {
       />
       <div className="d-flex flex-row justify-content-center align-items-center">
         <p className="fs-4 fw-bolder" style={{ margin: '1rem 0 1rem 0' }}>
-          Loren Gray
+          {user ? `${user.first_name} ${user.last_name}` : 'Name Surname'}
         </p>
         <i className="bi bi-pencil-square" style={{ marginLeft: '0.5rem' }}></i>
       </div>
@@ -38,7 +92,7 @@ const Account = () => {
           style={{ padding: '1rem', width: '10rem' }}
         >
           <p className="mb-1">Purchases</p>
-          <p className="fw-bold">12</p>
+          <p className="fw-bold">0</p>
         </div>
         <div
           className="border-start"
@@ -49,10 +103,10 @@ const Account = () => {
           style={{ padding: '1rem', width: '10rem' }}
         >
           <p className="mb-1">Sales</p>
-          <p className="fw-bold">9</p>
+          <p className="fw-bold">0</p>
         </div>
       </div>
-      <p className="fs-3 fw-bolder">Balance: 100</p>
+      <p className="fs-3 fw-bolder">Balance: 0</p>
       <Link href="/sales">
         <Button
           variant="primary"

@@ -17,6 +17,7 @@ export async function POST(req) {
   }
 
   let decoded
+
   try {
     decoded = jwt.verify(refreshToken.value, process.env.REFRESH_TOKEN_SECRET)
     console.log('Decoded refresh token:', decoded)
@@ -46,7 +47,7 @@ export async function POST(req) {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production', // Use secure in production
     path: '/',
-    sameSite: 'Lax',
+    sameSite: 'Strict',
     maxAge: 60 * 60 * 24 * 7 // 1 week
   })
 
@@ -54,7 +55,7 @@ export async function POST(req) {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production', // Use secure in production
     path: '/',
-    sameSite: 'Lax',
+    sameSite: 'Strict',
     maxAge: 60 * 60 // 1 hour
   })
 
