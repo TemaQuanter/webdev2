@@ -31,10 +31,10 @@ const Account = () => {
         // Validate the response.
         if (response.ok) {
           // Get the data.
-          const data = await response.json()
+          const responseUser = await response.json()
 
           // Set the user.
-          setUser(data.body)
+          setUser(responseUser)
         } else {
           // An error occurred.
           // Get the error.
@@ -92,7 +92,7 @@ const Account = () => {
           style={{ padding: '1rem', width: '10rem' }}
         >
           <p className="mb-1">Purchases</p>
-          <p className="fw-bold">0</p>
+          <p className="fw-bold">{user ? user.numOfPurchases : '0'}</p>
         </div>
         <div
           className="border-start"
@@ -103,10 +103,10 @@ const Account = () => {
           style={{ padding: '1rem', width: '10rem' }}
         >
           <p className="mb-1">Sales</p>
-          <p className="fw-bold">0</p>
+          <p className="fw-bold">{user ? user.numOfSales : '0'}</p>
         </div>
       </div>
-      <p className="fs-3 fw-bolder">Balance: 0</p>
+      <p className="fs-3 fw-bolder">Balance: {user ? user.balance : '0'}</p>
       <Link href="/sales">
         <Button
           variant="primary"

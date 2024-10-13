@@ -1,7 +1,11 @@
 import { NextResponse } from 'next/server'
 import bcrypt from 'bcrypt'
 import { PrismaClient } from '@prisma/client'
-import jwt from 'jsonwebtoken'
+import {
+  createJWT,
+  TYPE_ACCESS_TOKEN,
+  TYPE_REFRESH_TOKEN
+} from '@/utils/jwt_manager'
 
 export async function POST(req) {
   const body = await req.json()
@@ -30,16 +34,8 @@ export async function POST(req) {
     )
   }
 
-  const refreshToken = jwt.sign(
-    { userId: user.user_id },
-    process.env.REFRESH_TOKEN_SECRET,
-    { expiresIn: '7d' }
-  )
-  const accessToken = jwt.sign(
-    { userId: user.user_id },
-    process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: '15m' }
-  )
+  const accessToken = await createJWT(TYPE_ACCESS_TOKEN, user.user_id)
+  const refreshToken = await createJWT(TYPE_REFRESH_TOKEN, user.user_id)
 
   console.log('Login successful, issuing new refresh and access tokens.')
 
@@ -51,7 +47,7 @@ export async function POST(req) {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production', // Only set to secure in production
     path: '/',
-    sameSite: 'Lax',
+    sameSite: 'Strict',
     maxAge: 60 * 60 * 24 * 7 // 1 week
   })
 
@@ -60,7 +56,7 @@ export async function POST(req) {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     path: '/',
-    sameSite: 'Lax',
+    sameSite: 'Strict',
     maxAge: 60 * 60 // 1 hour
   })
 

@@ -4,8 +4,8 @@
 */
 
 import { INTERNAL_SERVER_ERROR } from '@/constants'
+import { TYPE_ACCESS_TOKEN, verifyJWT } from '@/utils/jwt_manager'
 import { PrismaClient } from '@prisma/client'
-import jwt from 'jsonwebtoken'
 import { NextResponse } from 'next/server'
 
 export async function GET(req) {
@@ -14,26 +14,20 @@ export async function GET(req) {
   // Get access token from the cookies.
   const accessToken = req.cookies.get('accessToken')
 
-  // Decoded access token.
-  let decoded
-
   // Data that will be retrieved from the database.
   let user
   let numOfPurchases
   let numOfSales
 
   // Try to decrypt and verify the access token.
-  try {
-    decoded = jwt.verify(accessToken.value, process.env.ACCESS_TOKEN_SECRET)
+  const decoded = await verifyJWT(TYPE_ACCESS_TOKEN, accessToken.value)
 
-    // Display the decoded access token.
-    console.log(decoded)
-  } catch (err) {
-    // An error occurred during token verification.
+  // Display the decoded access token.
+  console.log(decoded)
 
-    // Log the error.
-    console.log(err)
-
+  // Check if the access token is valid.
+  if (decoded === null) {
+    // The decoded token is invalid.
     // Send a not authorized response to the client.
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
   } // end try-catch
@@ -52,7 +46,7 @@ export async function GET(req) {
         user_id: userId
       },
       select: {
-        id: true,
+        user_id: true,
         first_name: true,
         last_name: true,
         email: true,

@@ -1,7 +1,11 @@
 import { NextResponse } from 'next/server'
-import jwt from 'jsonwebtoken'
+import {
+  TYPE_ACCESS_TOKEN,
+  TYPE_REFRESH_TOKEN,
+  verifyJWT
+} from './utils/jwt_manager'
 
-export function middleware(req) {
+export async function middleware(req) {
   let accessToken = req.cookies.get('accessToken')
   let refreshToken = req.cookies.get('refreshToken')
 
@@ -10,31 +14,14 @@ export function middleware(req) {
 
   // Verify token validity.
 
-  // If access token exists, verify that it is still valid.
+  // If access token exists, verify its validity.
   if (accessToken) {
-    try {
-      const decoded = jwt.verify(
-        accessToken.value,
-        process.env.ACCESS_TOKEN_SECRET
-      )
-    } catch (err) {
-      // Token is invalid.
-      accessToken = null
-    } // end try-catch
+    accessToken = await verifyJWT(TYPE_ACCESS_TOKEN, accessToken.value)
   } // end if
 
-  // If refresh token exists, verify that it is still valid.
+  // If refresh token exists, verify its validity.
   if (refreshToken) {
-    try {
-      const decoded = jwt.verify(
-        refreshToken.value,
-        process.env.REFRESH_TOKEN_SECRET
-      )
-    } catch (err) {
-      console.log(err)
-      // Token is invalid.
-      refreshToken = null
-    } // end try-catch
+    refreshToken = await verifyJWT(TYPE_REFRESH_TOKEN, refreshToken.value)
   } // end if
 
   console.log('accessToken', accessToken)
