@@ -15,7 +15,9 @@ export async function POST(req) {
   const accessToken = req.cookies.get('accessToken')
 
   // Retrieve the data passed with the request.
-  const body = await req.json()
+  const formData = await req.formData()
+
+  console.log(formData)
 
   // Try to decrypt and verify the access token.
   const decoded = await verifyJWT(TYPE_ACCESS_TOKEN, accessToken.value)
@@ -33,13 +35,48 @@ export async function POST(req) {
   // Get the user ID from the token.
   const userId = decoded.userId
 
+  // Verify the user credentials.
+
+  // Make sure that the name is set properly.
+  if (formData.get('firstName').length < 1) {
+    // The name is invalid.
+    return NextResponse.json(
+      {
+        message: 'User name must be at least 1 character long.'
+      },
+      { status: 400 }
+    )
+  } // end if
+
+  // Make sure that the last name is set properly.
+  if (formData.get('lastName').length < 1) {
+    // The last name is invalid.
+    return NextResponse.json(
+      {
+        message: 'User last name must be at least 1 character long.'
+      },
+      { status: 400 }
+    )
+  } // end if
+
   // Establish a connection with the database.
   const prisma = new PrismaClient()
 
-  // Verify the user credentials.
-
-  // Try to retrieve the necessary data.
+  // Try to update the user data.
   try {
+    const updatedUser = await prisma.users.update({
+      where: {
+        user_id: userId
+      },
+      data: {
+        first_name: formData.get('firstName'),
+        last_name: formData.get('lastName'),
+        profile_picture: formData.get('profile_picture')
+      }
+    })
+
+    // Log the updated user.
+    console.log('Updated user:', updatedUser)
   } catch (err) {
     // Log the error.
     console.log(err)
@@ -54,6 +91,6 @@ export async function POST(req) {
     await prisma.$disconnect()
   } // end try-catch
 
-  // Return the user.
-  return NextResponse.json(user, { status: 200 })
+  // Return the successful response.
+  return NextResponse.json({}, { status: 200 })
 } // end function POST
