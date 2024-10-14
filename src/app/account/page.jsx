@@ -86,7 +86,7 @@ const Account = () => {
         </p>
 
         {/* Wrap the icon in a Link to make it redirect */}
-        <Link href="/editprofile" passHref>
+        <Link href="/account/edit_profile" passHref>
           <i
             className="bi bi-pencil-square"
             style={{ marginLeft: '0.5rem', cursor: 'pointer' }}
