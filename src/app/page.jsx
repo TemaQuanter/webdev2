@@ -8,16 +8,31 @@ export default function Home() {
   // First carousel with images
   const carouselOneImages = [
     {
-      src: '/images/banner1.jpg',
+      src: '/images/banners1.png',
       alt: 'Image 1',
-      captionTitle: 'First Slide Title',
-      captionText: 'This is the first slide description'
+      captionTitle: '',
+      captionText: ''
     },
     {
-      src: '/images/carousel1-image2.jpg',
+      src: '/images/banners2.png',
       alt: 'Image 2',
-      captionTitle: 'Second Slide Title',
-      captionText: 'This is the second slide description'
+      captionTitle: '',
+      captionText: ''
+    }
+  ]
+
+  const carouselTwoImages = [
+    {
+      src: '/images/banners3.png',
+      alt: 'Image 1',
+      captionTitle: '',
+      captionText: ''
+    },
+    {
+      src: '/images/banners4.png',
+      alt: 'Image 2',
+      captionTitle: '',
+      captionText: ''
     }
   ]
 
@@ -32,7 +47,7 @@ export default function Home() {
       <TrendingCategories />
       <div style={{ marginTop: '5rem' }}>
         {/* Second carousel with no images passed, so it shows placeholders */}
-        <ControlledCarousel />
+        <ControlledCarousel images={carouselTwoImages} />
       </div>
       <Footer />
     </div>

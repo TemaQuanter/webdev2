@@ -13,15 +13,31 @@ const Header = () => {
   const sidebarStyle = {
     position: 'fixed',
     top: '0',
-    right: isSidebarOpen ? '0' : '-250px', // Change 'left' to 'right'
+    right: isSidebarOpen ? '0' : '-250px', // Slide in from the right
     width: '250px',
     height: '100%',
     background: '#f8f9fa',
     boxShadow: '2px 0 5px rgba(0, 0, 0, 0.5)',
     zIndex: '1000',
     padding: '1rem',
-    transition: 'right 0.3s ease' // Update transition to 'right'
+    transition: 'right 0.3s ease' // Smooth transition for opening/closing
   }
+
+  // List of 12 categories for the marketplace
+  const categories = [
+    { name: 'Hoodies', link: '/category/hoodies' },
+    { name: 'Laptops', link: '/category/laptops' },
+    { name: 'Smartphones', link: '/category/smartphones' },
+    { name: 'Shoes', link: '/category/shoes' },
+    { name: 'Accessories', link: '/category/accessories' },
+    { name: 'Gaming Consoles', link: '/category/gaming-consoles' },
+    { name: 'Headphones', link: '/category/headphones' },
+    { name: 'Cameras', link: '/category/cameras' },
+    { name: 'Fitness Gear', link: '/category/fitness-gear' },
+    { name: 'Home Appliances', link: '/category/home-appliances' },
+    { name: 'Books', link: '/category/books' },
+    { name: 'Furniture', link: '/category/furniture' }
+  ]
 
   return (
     <div
@@ -58,6 +74,7 @@ const Header = () => {
       <SearchBar />
       <NavigationLinks />
 
+      {/* Sidebar */}
       <div style={sidebarStyle}>
         <div className="d-flex justify-content-between align-items-center mb-3">
           <h5 className="mb-0">Categories</h5>
@@ -70,15 +87,11 @@ const Header = () => {
         </div>
 
         <ul style={{ listStyle: 'none', padding: '0' }}>
-          <li className="mb-2">
-            <Link href="/category">Link 1</Link>
-          </li>
-          <li className="mb-2">
-            <a href="#">Link 2</a>
-          </li>
-          <li className="mb-2">
-            <a href="#">Link 3</a>
-          </li>
+          {categories.map((category, index) => (
+            <li className="mb-2" key={index}>
+              <Link href={category.link}>{category.name}</Link>
+            </li>
+          ))}
         </ul>
       </div>
     </div>

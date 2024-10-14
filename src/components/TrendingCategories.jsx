@@ -19,26 +19,24 @@ const TrendingCategories = () => {
       >
         <Container>
           <Row className="text-center my-5">
+            {/* First Column with 3 buttons */}
             <Col>
               <Button
-                className="rounded-circle"
+                className="rounded-circle mb-4" // Adds margin between the buttons
                 style={{ width: '100px', height: '100px' }}
               >
                 <img
                   src="https://www.ieabroad.com/wp-content/uploads/TUD.png"
                   alt=""
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />
               </Button>
-            </Col>
-            <Col>
               <Button
-                className="rounded-circle"
+                className="rounded-circle mb-4"
                 style={{ width: '100px', height: '100px' }}
               >
                 2 of 3
               </Button>
-            </Col>
-            <Col>
               <Button
                 className="rounded-circle"
                 style={{ width: '100px', height: '100px' }}
@@ -46,25 +44,21 @@ const TrendingCategories = () => {
                 3 of 3
               </Button>
             </Col>
-          </Row>
-          <Row className="text-center my-5">
+
+            {/* Second Column with 3 buttons */}
             <Col>
               <Button
-                className="rounded-circle"
+                className="rounded-circle mb-4"
                 style={{ width: '100px', height: '100px' }}
               >
                 1 of 3
               </Button>
-            </Col>
-            <Col>
               <Button
-                className="rounded-circle"
+                className="rounded-circle mb-4"
                 style={{ width: '100px', height: '100px' }}
               >
                 2 of 3
               </Button>
-            </Col>
-            <Col>
               <Button
                 className="rounded-circle"
                 style={{ width: '100px', height: '100px' }}

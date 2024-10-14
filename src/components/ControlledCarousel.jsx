@@ -11,7 +11,7 @@ function ControlledCarousel({ images = [] }) {
   }
 
   return (
-    <Carousel activeIndex={index} onSelect={handleSelect}>
+    <Carousel activeIndex={index} onSelect={handleSelect} interval={3000}>
       {images.length > 0 ? (
         images.map((image, idx) => (
           <Carousel.Item key={idx}>
@@ -19,7 +19,7 @@ function ControlledCarousel({ images = [] }) {
               className="d-block w-100"
               src={image.src}
               alt={image.alt}
-              style={{ height: '300px', objectFit: 'cover' }}
+              style={{ height: '400px', objectFit: 'cover' }}
             />
             <Carousel.Caption>
               <h3>{image.captionTitle}</h3>
@@ -34,7 +34,7 @@ function ControlledCarousel({ images = [] }) {
             <div
               style={{
                 width: '100%',
-                height: '300px',
+                height: '400px',
                 backgroundColor: '#e9ecef'
               }}
             />
@@ -47,7 +47,7 @@ function ControlledCarousel({ images = [] }) {
             <div
               style={{
                 width: '100%',
-                height: '300px',
+                height: '400x',
                 backgroundColor: '#e9ecef'
               }}
             />
@@ -60,7 +60,7 @@ function ControlledCarousel({ images = [] }) {
             <div
               style={{
                 width: '100%',
-                height: '300px',
+                height: '400px',
                 backgroundColor: '#e9ecef'
               }}
             />
