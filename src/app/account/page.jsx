@@ -84,8 +84,16 @@ const Account = () => {
         <p className="fs-4 fw-bolder" style={{ margin: '1rem 0 1rem 0' }}>
           {user ? `${user.first_name} ${user.last_name}` : 'Name Surname'}
         </p>
-        <i className="bi bi-pencil-square" style={{ marginLeft: '0.5rem' }}></i>
+
+        {/* Wrap the icon in a Link to make it redirect */}
+        <Link href="/editprofile" passHref>
+          <i
+            className="bi bi-pencil-square"
+            style={{ marginLeft: '0.5rem', cursor: 'pointer' }}
+          ></i>
+        </Link>
       </div>
+
       <div className="d-flex justify-content-center align-items-center mt-4">
         <div
           className="text-center flex-grow-1"
