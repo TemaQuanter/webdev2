@@ -15,7 +15,6 @@ const EmailVerification = () => {
     setError(null)
     setMessage(null)
 
-    // Simulate sending verification code (in a real app, you'd trigger an API call here)
     if (email.includes('@')) {
       setMessage('Verification code sent to your email!')
     } else {
@@ -28,7 +27,6 @@ const EmailVerification = () => {
     setError(null)
     setMessage(null)
 
-    // Simulate verification check (in a real app, you'd validate the code via an API)
     if (verificationCode === '123456') {
       setMessage('Email verified successfully!')
     } else {
@@ -40,9 +38,8 @@ const EmailVerification = () => {
     <div className="min-h-screen bg-light d-flex flex-column justify-content-center align-items-center">
       <h1>Email Verification</h1>
 
-      {/* Error message displayed if there is an error */}
       {error && <p className="text-danger">{error}</p>}
-      {/* Success message displayed after actions */}
+
       {message && <p className="text-success">{message}</p>}
 
       <Form
