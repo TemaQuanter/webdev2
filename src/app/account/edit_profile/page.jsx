@@ -1,22 +1,139 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Link from 'next/link'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 
 const EditProfile = () => {
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [profilePic, setProfilePic] = useState(null)
+  const [error, setError] = useState(null)
+  const [user, setUser] = useState(null)
 
-  const handleSubmit = (e) => {
+  const router = useRouter()
+
+  // Retrieve the existing user information from the database.
+  useEffect(() => {
+    console.log('useEffect started')
+
+    const handleDatabaseRequest = async () => {
+      // Retrieve the existing user information from the database.
+      try {
+        const response = await fetch('/api/db/get_account_data', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          credentials: 'include'
+        })
+
+        // Check if the data retrieval was successful.
+        if (response.ok) {
+          // The response was successful.
+          // Get the data from the response.
+          const body = await response.json()
+
+          // Set the user.
+          setUser(body)
+
+          // Set the existing user data in the fields.
+          setFirstName(body.first_name)
+          setLastName(body.last_name)
+          setProfilePic(body.profile_picture)
+        } else {
+          // An error occurred while trying to retrieve the data.
+
+          // Get error data.
+          const errorData = await response.json()
+
+          // Log the error.
+          console.log(errorData.message)
+
+          // Display the error message to the user.
+          setError(errorData.message)
+        } // end if
+      } catch (err) {
+        // Show the error to the user.
+        setError(err)
+
+        // Log the error.
+        console.log(err)
+      } // end try-catch
+    } // end function handleDatabaseRequest
+
+    // Call the function to retrieve the current user data from the database.
+    handleDatabaseRequest()
+  }, [])
+
+  const handleSubmit = async (e) => {
+    // Prevent the default browser behavior (page reload).
     e.preventDefault()
-    // Simulate a save action
-    alert(`Profile updated: ${firstName} ${lastName}`)
-    // You can replace this with an API call to save the updated information
-  }
+
+    // Make sure that the changes to the user account are valid.
+
+    // Check the name.
+    if (firstName.length < 1) {
+      // The user name is invalid.
+      setError('User name must be at least 1 character long.')
+      return
+    } // end if
+
+    // Check the last name.
+    if (lastName.length < 1) {
+      // The user last name is invalid.
+      setError('User last name must be at least 1 character long.')
+      return
+    } // end if
+
+    // Create a form data.
+    const formData = new FormData()
+
+    // Append the text fields to the form.
+    formData.append('firstName', firstName)
+    formData.append('lastName', lastName)
+
+    // Set the profile picture if provided.
+    formData.append('profile_picture', profilePic)
+
+    try {
+      // Send a request to update the user data in the database.
+      const response = await fetch('/api/db/update_account_data', {
+        method: 'POST',
+        credentials: 'include',
+        body: formData
+      })
+
+      console.log(response)
+
+      // Check if the update was successful.
+      if (response.ok) {
+        // Successful update.
+        // Redirect the user to the main account page.
+        router.push('/account')
+      } else {
+        // An error occurred.
+
+        // Retrieve the error from the response.
+        const errorData = await response.json()
+
+        // Log the error.
+        console.log(errorData.message)
+
+        // Show the error to the user.
+        setError(errorData.message)
+      } // end if
+    } catch (err) {
+      // Show the error to the user.
+      setError(err)
+
+      // Log the error.
+      console.log(err)
+    } // end try-catch
+  } // end function handleSubmit
 
   return (
     <div className="min-h-screen bg-gray-100 d-flex flex-column justify-content-center align-items-center">
@@ -46,6 +163,9 @@ const EditProfile = () => {
         style={{ borderRadius: '50%', marginTop: '3rem' }}
         alt="Profile picture"
       />
+
+      {/* Display an error, if necessary */}
+      {error && <p className="text-danger">{error}</p>}
 
       <Form
         className="w-100"
