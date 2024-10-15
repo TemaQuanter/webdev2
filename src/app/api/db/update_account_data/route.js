@@ -73,16 +73,59 @@ export const POST = async (req) => {
     )
   } // end if
 
+  // Establish a connection with the database.
+  const prisma = new PrismaClient()
+
   // If the image was provided, get the file data.
-  if (formData.get('profilePicture')) {
+  if (formData.get('profilePicture') instanceof File) {
+    // Remove the previous profile picture of the user from the database.
+
+    // Retrieve the path of the previous profile picture from the database.
+    try {
+      const previousProfilePictureUrl = await prisma.users.findUnique({
+        where: {
+          user_id: userId
+        },
+        select: {
+          profile_picture_url: true
+        }
+      })
+
+      // If the file exists, remove it.
+      if (previousProfilePictureUrl.profile_picture_url) {
+        await fs.unlink(previousProfilePictureUrl.profile_picture_url)
+      } // end if
+    } catch (err) {
+      // An error occurred while deleting a file.
+      // Log the issue.
+      console.log(err)
+
+      // Response with an error.
+      return NextResponse.json(
+        { message: INTERNAL_SERVER_ERROR },
+        { status: 500 }
+      )
+    } // end try-catch
+
     // Get a file.
     profilePictureFile = formData.get('profilePicture')
 
-    // Convert file data to a buffer.
-    buffer = Buffer.from(await profilePictureFile.arrayBuffer())
+    // Check the file type.
+    if (!profilePictureFile.type.includes('image')) {
+      // It is a wrong file type, return an error.
+      console.log('Wrong file type for profile picture')
+
+      return NextResponse.json(
+        { message: 'File must be an image' },
+        { status: 400 }
+      )
+    } // end if
 
     // Get a file extension.
     const fileExtension = path.extname(profilePictureFile.name)
+
+    // Convert file data to a buffer.
+    buffer = Buffer.from(await profilePictureFile.arrayBuffer())
 
     // Generate a filepath.
     filePath = path.join(
@@ -103,9 +146,6 @@ export const POST = async (req) => {
       console.error('Error writing file:', error)
     } // end try-catch
   } // end if
-
-  // Establish a connection with the database.
-  const prisma = new PrismaClient()
 
   // Try to update the user data.
   try {

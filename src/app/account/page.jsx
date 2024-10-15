@@ -80,7 +80,12 @@ const Account = () => {
         src="/api/db/get_profile_picture"
         width={150}
         height={150}
-        style={{ borderRadius: '50%', marginTop: '3rem' }}
+        style={{
+          borderRadius: '50%',
+          marginTop: '3rem',
+          objectFit: 'cover', // Maintains the picture scale.
+          objectPosition: 'top' // Crops the bottom of the image.
+        }}
         alt="Profile picture"
       />
       <div className="d-flex flex-row justify-content-center align-items-center">
