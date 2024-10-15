@@ -3,15 +3,13 @@
     general information about user account.
 */
 
-import { INTERNAL_SERVER_ERROR } from '@/constants'
+import { INTERNAL_SERVER_ERROR, PROFILE_PICTURES_PATH } from '@/constants'
 import { TYPE_ACCESS_TOKEN, verifyJWT } from '@/utils/jwt_manager'
 import { PrismaClient } from '@prisma/client'
 import { NextResponse } from 'next/server'
 import { Buffer } from 'buffer'
 import { promises as fs } from 'fs'
 import path from 'path'
-
-const PROFILE_PICTURES_PATH = 'protected_images/profile_pictures'
 
 export const POST = async (req) => {
   console.log('update_account_data api triggered')

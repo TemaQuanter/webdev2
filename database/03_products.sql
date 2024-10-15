@@ -4,7 +4,7 @@ CREATE TABLE products (
     title VARCHAR(100) NOT NULL,
     description TEXT NOT NULL,
     category_id INT NOT NULL,
-    image BYTEA NOT NULL,
+    image_url TEXT NOT NULL,
     price NUMERIC(10, 2) NOT NULL,
     number_of_items INT NOT NULL,
     

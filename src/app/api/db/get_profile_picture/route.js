@@ -11,7 +11,7 @@ import { promises as fs } from 'fs'
 import path from 'path'
 
 export const GET = async (req) => {
-  console.log('get_account_data api triggered')
+  console.log('get_profile_picture api triggered')
 
   // Get access token from the cookies.
   const accessToken = req.cookies.get('accessToken')

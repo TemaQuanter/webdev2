@@ -38,7 +38,7 @@ model products {
   title           String      @db.VarChar(100)
   description     String
   category_id     Int
-  image           Bytes
+  image_url       String
   price           Decimal     @db.Decimal(10, 2)
   number_of_items Int
   cart            cart[]
