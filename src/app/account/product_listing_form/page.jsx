@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
+import ButtonBack from '@/components/ButtonBack'
 
 const ProductListing = () => {
   const [productName, setProductName] = useState('')
@@ -40,13 +41,15 @@ const ProductListing = () => {
 
   return (
     <div className="min-h-screen bg-light d-flex flex-column justify-content-center align-items-center">
-      <h1>List a Product</h1>
+      <ButtonBack href="/account" />
+
+      <h1 style={{ margin: '3rem 0 3rem 0' }}>List a Product</h1>
 
       {/* Error message displayed if there is an error */}
       {error && <p className="text-danger">{error}</p>}
 
       <Form
-        className="w-100"
+        className="w-80"
         style={{ maxWidth: '30rem' }}
         onSubmit={handleSubmit}
       >
@@ -120,7 +123,7 @@ const ProductListing = () => {
         </Form.Group>
 
         <Button
-          style={{ borderRadius: '20px' }}
+          style={{ borderRadius: '20px', margin: '3rem 0 3rem 0' }}
           className="w-100"
           variant="primary"
           type="submit"

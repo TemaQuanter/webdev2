@@ -103,8 +103,5 @@ export const GET = async (req) => {
       { message: 'Error reading profile picture' },
       { status: 500 }
     )
-  }
-
-  // Return the user.
-  return NextResponse.json(user, { status: 200 })
+  } // end try-catch
 } // end function GET

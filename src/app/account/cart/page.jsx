@@ -2,9 +2,9 @@
 
 import { useState } from 'react'
 import { Container } from 'react-bootstrap'
-import Header from '../../components/header/Header'
-import Footer from '../../components/footer/Footer'
-import ProductCard from '../../components/ProductCard'
+import Header from '@/components/header/Header'
+import Footer from '@/components/footer/Footer'
+import ProductCard from '@/components/ProductCard'
 
 const Purchase = () => {
   const [isHovered, setIsHovered] = useState(false)
@@ -94,7 +94,7 @@ const Purchase = () => {
             marginBottom: '3rem'
           }}
         >
-          Add to cart
+          Purchase
         </button>
       </div>
 

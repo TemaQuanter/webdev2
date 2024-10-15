@@ -56,7 +56,9 @@ const Header = () => {
         </span>
         <div className="d-flex justify-content-between" style={{ gap: '2vw' }}>
           <button className="btn btn-outline-primary btn-sm">
-            <i className="bi bi-cart-fill fs-5"></i>
+            <Link href="/account/cart">
+              <i className="bi bi-cart-fill fs-5"></i>
+            </Link>
           </button>
           <button className="btn btn-outline-primary btn-sm">
             <Link href="/account">

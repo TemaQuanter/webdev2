@@ -19,7 +19,7 @@ const Purchases = () => {
           className="btn btn-sm"
         >
           <Link
-            href="/account"
+            href="/account/sales"
             style={{ color: 'inherit', textDecoration: 'none' }}
           >
             <i className="bi bi-chevron-left"></i>
@@ -27,10 +27,10 @@ const Purchases = () => {
         </Button>
       </div>
 
-      <div className="">
+      <div>
         <Container>
           <p className="text-left fs-5 fw-bolder" style={{ marginTop: '2rem' }}>
-            Purchases
+            Sales history
           </p>
           {/* Main Page Heading */}
         </Container>

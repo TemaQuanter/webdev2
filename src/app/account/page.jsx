@@ -123,7 +123,7 @@ const Account = () => {
         </div>
       </div>
       <p className="fs-3 fw-bolder">Balance: {user ? user.balance : '0'}</p>
-      <Link href="/sales">
+      <Link href="/account/sales">
         <Button
           variant="primary"
           style={{
@@ -136,7 +136,7 @@ const Account = () => {
           Sales
         </Button>
       </Link>
-      <Link href="/purchases">
+      <Link href="/account/purchases">
         <Button
           variant="primary"
           style={{
