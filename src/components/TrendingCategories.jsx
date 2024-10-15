@@ -1,75 +1,132 @@
-import React from 'react'
-import Container from 'react-bootstrap/Container'
+'use client'
+import React, { useEffect, useState } from 'react'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 
-const TrendingCategories = () => {
-  return (
-    <>
-      <p
-        style={{ textAlign: 'center', marginTop: '2rem', marginBottom: '5rem' }}
-        className="fs-3"
-      >
-        Trending Categories
-      </p>
-      <div
-        className="d-flex flex-column justify-content-center align-items-center"
-        style={{ width: '100vw' }}
-      >
-        <Container>
-          <Row className="text-center my-5">
-            {/* First Column with 3 buttons */}
-            <Col>
-              <Button
-                className="rounded-circle mb-4" // Adds margin between the buttons
-                style={{ width: '100px', height: '100px' }}
-              >
-                <img
-                  src="https://www.ieabroad.com/wp-content/uploads/TUD.png"
-                  alt=""
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                />
-              </Button>
-              <Button
-                className="rounded-circle mb-4"
-                style={{ width: '100px', height: '100px' }}
-              >
-                2 of 3
-              </Button>
-              <Button
-                className="rounded-circle"
-                style={{ width: '100px', height: '100px' }}
-              >
-                3 of 3
-              </Button>
-            </Col>
+function TrendingCategories() {
+  const [isMounted, setIsMounted] = useState(false)
+  const [isSmallScreen, setIsSmallScreen] = useState(false)
 
-            {/* Second Column with 3 buttons */}
-            <Col>
-              <Button
-                className="rounded-circle mb-4"
-                style={{ width: '100px', height: '100px' }}
-              >
-                1 of 3
-              </Button>
-              <Button
-                className="rounded-circle mb-4"
-                style={{ width: '100px', height: '100px' }}
-              >
-                2 of 3
-              </Button>
-              <Button
-                className="rounded-circle"
-                style={{ width: '100px', height: '100px' }}
-              >
-                3 of 3
-              </Button>
-            </Col>
-          </Row>
-        </Container>
+  // Detect screen size after component mounts
+  useEffect(() => {
+    setIsMounted(true)
+    const handleResize = () => setIsSmallScreen(window.innerWidth <= 768)
+    handleResize()
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  if (!isMounted) {
+    // Prevent rendering until component has mounted (to avoid hydration issues)
+    return null
+  }
+
+  const buttonStyle = {
+    width: '200px', // Adjust this size if needed
+    height: '200px',
+    borderRadius: '50%', // Makes the buttons circular
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
+    overflow: 'hidden',
+    padding: 0
+  }
+
+  const imgStyle = {
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover'
+  }
+
+  const rowStyle = {
+    maxWidth: '95%',
+    margin: '0 auto',
+    paddingLeft: '8%',
+    paddingRight: '5%'
+  }
+
+  const items = [
+    { id: 1, imgSrc: 'https://via.placeholder.com/150', alt: 'Hair Care' },
+    {
+      id: 2,
+      imgSrc: 'https://via.placeholder.com/150',
+      alt: 'Hair Care Accessories'
+    },
+    {
+      id: 3,
+      imgSrc: 'https://via.placeholder.com/150',
+      alt: 'Cordless Vacuums'
+    },
+    { id: 4, imgSrc: 'https://via.placeholder.com/150', alt: 'Corded Vacuums' },
+    {
+      id: 5,
+      imgSrc: 'https://via.placeholder.com/150',
+      alt: 'Floor Care Accessories'
+    },
+    { id: 6, imgSrc: 'https://via.placeholder.com/150', alt: 'Air Treatment' },
+    { id: 7, imgSrc: 'https://via.placeholder.com/150', alt: 'Lighting' },
+    {
+      id: 8,
+      imgSrc: 'https://via.placeholder.com/150',
+      alt: 'Lighting Accessories'
+    }
+  ]
+
+  if (isSmallScreen) {
+    // Render a horizontal scroll view on small screens with circular buttons
+    return (
+      <div>
+        <div
+          style={{
+            display: 'flex',
+            overflowX: 'auto',
+            padding: '1rem'
+          }}
+        >
+          {items.map((item, index) => (
+            <div
+              key={`${item.id}-${index}`} // Ensure unique key using id + index
+              style={{
+                margin: '0 1rem',
+                width: '200px',
+                height: '200px',
+                borderRadius: '50%', // Keep the items circular
+                overflow: 'hidden',
+                flexShrink: 0 // Prevent shrinking in the horizontal scroll
+              }}
+            >
+              <img src={item.imgSrc} alt={item.alt} style={imgStyle} />
+            </div>
+          ))}
+        </div>
       </div>
-    </>
+    )
+  }
+
+  return (
+    <div>
+      <Row className="text-center my-4 mx-auto gx-0" style={rowStyle}>
+        {items.slice(0, 4).map((item, index) => (
+          <Col xs={12} sm={6} md={3} key={`${item.id}-${index}`}>
+            <Button variant="outline-primary" style={buttonStyle}>
+              <img src={item.imgSrc} alt={item.alt} style={imgStyle} />
+            </Button>
+          </Col>
+        ))}
+      </Row>
+
+      <Row className="text-center my-4 mx-auto gx-0" style={rowStyle}>
+        {items.slice(4).map((item, index) => (
+          <Col xs={12} sm={6} md={3} key={`${item.id}-${index}`}>
+            <Button variant="outline-primary" style={buttonStyle}>
+              <img src={item.imgSrc} alt={item.alt} style={imgStyle} />
+            </Button>
+          </Col>
+        ))}
+      </Row>
+    </div>
   )
 }
 

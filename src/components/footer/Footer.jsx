@@ -3,8 +3,13 @@
 const Footer = () => {
   return (
     <div
-      className="d-flex flex-wrap justify-content-between align-items-start bg-light p-4 m-0"
-      style={{ width: '100vw', height: 'auto' }}
+      className="d-flex flex-wrap justify-content-between align-items-start p-4 m-0"
+      style={{
+        width: '100vw',
+        height: 'auto',
+        background: 'linear-gradient(90deg, #d3d3d3, #8bcbff)',
+        padding: '1rem 0'
+      }}
     >
       {/* Section 1: Contact Information */}
       <div className="text-left mb-3" style={{ minWidth: '200px' }}>

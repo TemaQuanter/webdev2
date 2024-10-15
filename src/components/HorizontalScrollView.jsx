@@ -6,12 +6,12 @@ const HorizontalScrollView = () => {
     { id: 1, imgSrc: '/images/hoodie.png', alt: 'Hoodie Image' },
     { id: 2, imgSrc: '/images/laptop.png', alt: 'Banner 1' },
     { id: 3, imgSrc: '/images/phone.png', alt: 'Banner 2' },
-    { id: 3, imgSrc: '/images/shoes.png', alt: 'Banner 2' },
-    { id: 3, imgSrc: '/images/watch.png', alt: 'Banner 2' },
-    { id: 3, imgSrc: '/images/headphones.png', alt: 'Banner 2' },
-    { id: 3, imgSrc: '/images/book.png', alt: 'Banner 2' },
-    { id: 3, imgSrc: '/images/furniture.png', alt: 'Banner 2' },
-    { id: 3, imgSrc: '/images/vacuum.png', alt: 'Banner 2' }
+    { id: 4, imgSrc: '/images/shoes.png', alt: 'Banner 2' },
+    { id: 5, imgSrc: '/images/watch.png', alt: 'Banner 2' },
+    { id: 6, imgSrc: '/images/headphones.png', alt: 'Banner 2' },
+    { id: 7, imgSrc: '/images/book.png', alt: 'Banner 2' },
+    { id: 8, imgSrc: '/images/furniture.png', alt: 'Banner 2' },
+    { id: 9, imgSrc: '/images/vacuum.png', alt: 'Banner 2' }
   ]
 
   return (
