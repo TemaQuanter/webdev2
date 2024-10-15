@@ -6,6 +6,7 @@ import Button from 'react-bootstrap/Button'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+import ButtonBack from '@/components/ButtonBack'
 
 const EditProfile = () => {
   const [firstName, setFirstName] = useState('')
@@ -138,20 +139,7 @@ const EditProfile = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 d-flex flex-column justify-content-center align-items-center">
-      <div className="w-100">
-        <Button
-          variant="outline-secondary"
-          style={{ margin: '3rem 0 0 3rem' }}
-          className="btn btn-sm"
-        >
-          <Link
-            href="/account"
-            style={{ color: 'inherit', textDecoration: 'none' }}
-          >
-            <i className="bi bi-chevron-left"></i>
-          </Link>
-        </Button>
-      </div>
+      <ButtonBack href="/account" />
 
       <img
         src={

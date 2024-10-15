@@ -6,6 +6,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import { INTERNAL_SERVER_ERROR } from '@/constants'
+import ButtonBack from '@/components/ButtonBack'
 
 const Account = () => {
   const [user, setUser] = useState(null)
@@ -65,17 +66,7 @@ const Account = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 d-flex flex-column justify-content-center align-items-center">
-      <div className="w-100">
-        <Button
-          variant="outline-secondary"
-          style={{ margin: '3rem 0 0 3rem' }}
-          className="btn btn-sm"
-        >
-          <Link href="/" style={{ color: 'inherit', textDecoration: 'none' }}>
-            <i className="bi bi-chevron-left"></i>
-          </Link>
-        </Button>
-      </div>
+      <ButtonBack href="/" />
       <img
         src="/api/db/get_profile_picture"
         width={150}

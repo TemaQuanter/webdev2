@@ -6,26 +6,14 @@ import Button from 'react-bootstrap/Button'
 import Link from 'next/link'
 
 import ProductCard from '@/components/ProductCard'
+import ButtonBack from '@/components/ButtonBack'
 
 const Purchases = () => {
   const [isHovered, setIsHovered] = useState(false)
 
   return (
     <div className="min-h-screen bg-gray-100 d-flex flex-column justify-content-center align-items-center">
-      <div className="w-100">
-        <Button
-          variant="outline-secondary"
-          style={{ margin: '3rem 0 0 3rem' }}
-          className="btn btn-sm"
-        >
-          <Link
-            href="/account"
-            style={{ color: 'inherit', textDecoration: 'none' }}
-          >
-            <i className="bi bi-chevron-left"></i>
-          </Link>
-        </Button>
-      </div>
+      <ButtonBack href="/account" />
 
       <div>
         <Container>

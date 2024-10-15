@@ -41,7 +41,7 @@ const ProductListing = () => {
 
   return (
     <div className="min-h-screen bg-light d-flex flex-column justify-content-center align-items-center">
-      <ButtonBack href="/account" />
+      <ButtonBack href="/account/sales" />
 
       <h1 style={{ margin: '3rem 0 3rem 0' }}>List a Product</h1>
 
