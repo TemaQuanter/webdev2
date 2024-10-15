@@ -6,7 +6,7 @@ import {
 } from '@/utils/jwt_manager'
 import { NextResponse } from 'next/server'
 
-export async function POST(req) {
+export const POST = async (req) => {
   // Try to extract a refresh token from the cookies.
   const refreshToken = req.cookies.get('refreshToken')
 

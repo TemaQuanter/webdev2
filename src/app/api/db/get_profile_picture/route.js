@@ -7,6 +7,8 @@ import { INTERNAL_SERVER_ERROR } from '@/constants'
 import { TYPE_ACCESS_TOKEN, verifyJWT } from '@/utils/jwt_manager'
 import { PrismaClient } from '@prisma/client'
 import { NextResponse } from 'next/server'
+import { promises as fs } from 'fs'
+import path from 'path'
 
 export const GET = async (req) => {
   console.log('get_account_data api triggered')
@@ -16,8 +18,7 @@ export const GET = async (req) => {
 
   // Data that will be retrieved from the database.
   let user
-  let numOfPurchases
-  let numOfSales
+  let profilePicture
 
   // Try to decrypt and verify the access token.
   const decoded = await verifyJWT(TYPE_ACCESS_TOKEN, accessToken.value)
@@ -46,34 +47,11 @@ export const GET = async (req) => {
         user_id: userId
       },
       select: {
-        user_id: true,
-        first_name: true,
-        last_name: true,
-        email: true,
-        verification: {
-          select: {
-            email_is_verified: true
-          }
-        },
-        balance: true
+        profile_picture_url: true
       }
     })
 
     console.log(user)
-
-    // Calculate the number of purchases.
-    numOfPurchases = await prisma.purchases.count({
-      where: {
-        buyer_id: userId
-      }
-    })
-
-    // Calculate the number of sales.
-    numOfSales = await prisma.purchases.count({
-      where: {
-        seller_id: userId
-      }
-    })
   } catch (err) {
     // Log the error.
     console.log(err)
@@ -88,11 +66,42 @@ export const GET = async (req) => {
     await prisma.$disconnect()
   } // end try-catch
 
-  // Add separately calculated fields into the user.
-  user = {
-    ...user,
-    numOfPurchases,
-    numOfSales
+  // If the user does not exist, then return
+  // the default profile picture.
+  if (!user) {
+    return NextResponse.json({ message: 'User not found' }, { status: 404 })
+  } // end if
+
+  // Construct the image path.
+  const imagePath =
+    user.profile_picture_url ||
+    path.join(process.cwd(), 'public/images/default_profile.png')
+
+  console.log(imagePath)
+
+  try {
+    // Read the image file from the file system.
+    const imageBuffer = await fs.readFile(imagePath)
+
+    // Determine the correct content type.
+    const contentType = `image/${path
+      .extname(imagePath)
+      .slice(1)
+      .toLowerCase()}`
+
+    // Return the image as a binary response.
+    return new Response(imageBuffer, {
+      headers: {
+        'Content-Type': contentType,
+        'Content-Disposition': 'inline; filename="profile_picture.jpg"' // Optional
+      }
+    })
+  } catch (err) {
+    console.log(err)
+    return NextResponse.json(
+      { message: 'Error reading profile picture' },
+      { status: 500 }
+    )
   }
 
   // Return the user.
