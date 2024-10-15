@@ -8,6 +8,10 @@ import { TYPE_ACCESS_TOKEN, verifyJWT } from '@/utils/jwt_manager'
 import { PrismaClient } from '@prisma/client'
 import { NextResponse } from 'next/server'
 import { Buffer } from 'buffer'
+import { promises as fs } from 'fs'
+import path from 'path'
+
+const PROFILE_PICTURES_PATH = 'protected_images/profile_pictures'
 
 export const POST = async (req) => {
   console.log('update_account_data api triggered')
@@ -18,8 +22,11 @@ export const POST = async (req) => {
   // Retrieve the data passed with the request.
   const formData = await req.formData()
 
+  console.log(formData)
+
   // Profile picture file.
   let profilePictureFile
+  let filePath = null
 
   // The buffer to store the profile picture in.
   let buffer
@@ -74,9 +81,27 @@ export const POST = async (req) => {
     // Convert file data to a buffer.
     buffer = Buffer.from(await profilePictureFile.arrayBuffer())
 
-    // TODO: update a profile picture.
+    // Get a file extension.
+    const fileExtension = path.extname(profilePictureFile.name)
 
-    console.log('File loaded')
+    // Generate a filepath.
+    filePath = path.join(
+      process.cwd(),
+      PROFILE_PICTURES_PATH,
+      `${userId.toString()}${fileExtension}`
+    )
+
+    console.log(filePath)
+
+    // Save the profile picture to the required path.
+    try {
+      // Write the file to the file system.
+      await fs.writeFile(filePath, buffer)
+      console.log(`File saved at: ${filePath}`)
+    } catch (error) {
+      // An error occurred while saving a file.
+      console.error('Error writing file:', error)
+    } // end try-catch
   } // end if
 
   // Establish a connection with the database.
@@ -91,7 +116,8 @@ export const POST = async (req) => {
       },
       data: {
         first_name: formData.get('firstName'),
-        last_name: formData.get('lastName')
+        last_name: formData.get('lastName'),
+        ...(filePath && { profile_picture_url: filePath }) // Conditionally include profile_picture_url only if filePath exists
       }
     })
 

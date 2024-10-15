@@ -97,6 +97,7 @@ export const GET = async (req) => {
       }
     })
   } catch (err) {
+    // An error occurred while reading the file.
     console.log(err)
     return NextResponse.json(
       { message: 'Error reading profile picture' },

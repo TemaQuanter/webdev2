@@ -152,12 +152,8 @@ const EditProfile = () => {
         </Button>
       </div>
 
-      <Image
-        src={
-          profilePic
-            ? URL.createObjectURL(profilePic)
-            : '/images/default_profile.png'
-        }
+      <img
+        src="/api/db/get_profile_picture"
         width={150}
         height={150}
         style={{ borderRadius: '50%', marginTop: '3rem' }}
