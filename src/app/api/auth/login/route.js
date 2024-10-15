@@ -7,7 +7,7 @@ import {
   TYPE_REFRESH_TOKEN
 } from '@/utils/jwt_manager'
 
-export async function POST(req) {
+export const POST = async (req) => {
   const body = await req.json()
   const prisma = new PrismaClient()
   let user

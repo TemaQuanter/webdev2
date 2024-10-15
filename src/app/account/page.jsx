@@ -33,6 +33,9 @@ const Account = () => {
           // Get the data.
           const responseUser = await response.json()
 
+          // Log the received data.
+          console.log(responseUser)
+
           // Set the user.
           setUser(responseUser)
         } else {
@@ -73,8 +76,8 @@ const Account = () => {
           </Link>
         </Button>
       </div>
-      <Image
-        src="/images/default_profile.png"
+      <img
+        src="/api/db/get_profile_picture"
         width={150}
         height={150}
         style={{ borderRadius: '50%', marginTop: '3rem' }}

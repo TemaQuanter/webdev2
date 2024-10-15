@@ -97,7 +97,7 @@ const EditProfile = () => {
     formData.append('lastName', lastName)
 
     // Set the profile picture if provided.
-    formData.append('profile_picture', profilePic)
+    formData.append('profilePicture', profilePic)
 
     try {
       // Send a request to update the user data in the database.
