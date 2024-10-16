@@ -37,6 +37,22 @@ const DeliveryPage = () => {
   return (
     <>
       <Header />
+      <section
+        style={{
+          background: 'linear-gradient(90deg, #d3d3d3, #8bcbff)',
+          color: 'black', // Set text color to black
+          padding: '5rem 2rem',
+          textAlign: 'center'
+        }}
+      >
+        <h1 style={{ fontSize: '48px', fontWeight: '700' }}>
+          Delivery Information
+        </h1>
+        <p style={{ fontSize: '20px', maxWidth: '600px', margin: '1rem auto' }}>
+          Get all the details on how your products are delivered, timeframes,
+          and additional delivery charges based on your location.
+        </p>
+      </section>
 
       <div
         style={{
