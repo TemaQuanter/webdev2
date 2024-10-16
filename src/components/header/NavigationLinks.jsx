@@ -5,8 +5,8 @@ const NavigationLinks = () => {
   return (
     <div className={styles.navigationLinks} style={{ width: '90vw' }}>
       <Link href="/">Home</Link>
-      <Link href="/products">Products</Link>
-      <Link href="/clearance">About us</Link>
+      <Link href="/delivery">Delivery</Link>
+      <Link href="/aboutus">About us</Link>
     </div>
   )
 }

@@ -48,29 +48,29 @@ function TrendingCategories() {
   }
 
   const items = [
-    { id: 1, imgSrc: 'https://via.placeholder.com/150', alt: 'Hair Care' },
+    { id: 1, imgSrc: 'images/accessoriesLogo.png', alt: 'Accessories' },
     {
       id: 2,
-      imgSrc: 'https://via.placeholder.com/150',
-      alt: 'Hair Care Accessories'
+      imgSrc: 'images/BookLogo.png',
+      alt: 'Book'
     },
     {
       id: 3,
-      imgSrc: 'https://via.placeholder.com/150',
-      alt: 'Cordless Vacuums'
+      imgSrc: 'images/camerasLogo.png',
+      alt: 'Camera'
     },
-    { id: 4, imgSrc: 'https://via.placeholder.com/150', alt: 'Corded Vacuums' },
+    { id: 4, imgSrc: 'images/furnitureLogo.png', alt: 'Furniture' },
     {
       id: 5,
-      imgSrc: 'https://via.placeholder.com/150',
-      alt: 'Floor Care Accessories'
+      imgSrc: 'images/HeadphonesLogo.png',
+      alt: 'Headphones'
     },
-    { id: 6, imgSrc: 'https://via.placeholder.com/150', alt: 'Air Treatment' },
-    { id: 7, imgSrc: 'https://via.placeholder.com/150', alt: 'Lighting' },
+    { id: 6, imgSrc: 'images/hoodieLogo.png', alt: 'Hoodie' },
+    { id: 7, imgSrc: 'images/laptopLogo.png', alt: 'Laptop' },
     {
       id: 8,
-      imgSrc: 'https://via.placeholder.com/150',
-      alt: 'Lighting Accessories'
+      imgSrc: 'images/shoesLogo.png',
+      alt: 'shoes'
     }
   ]
 
