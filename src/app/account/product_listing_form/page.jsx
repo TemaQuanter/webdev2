@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import ButtonBack from '@/components/ButtonBack'
@@ -14,8 +14,61 @@ const ProductListing = () => {
   const [items, setItems] = useState(1)
   const [error, setError] = useState(null)
 
-  const handleSubmit = (e) => {
-    // Prevent the default form submission behavior
+  // These categories will be loaded from the database.
+  const [allCategories, setAllCategories] = useState(null)
+
+  // Load the available categories from the database.
+  useEffect(() => {
+    console.log('useEffect started...')
+
+    const handleDatabaseRequest = async () => {
+      try {
+        const response = await fetch('/api/db/get_product_categories', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+
+        // Check if the request was executed successfully.
+        if (response.ok) {
+          // Get the response data.
+          const data = await response.json()
+
+          // Log the data.
+          console.log(data)
+
+          // Update the categories.
+          setAllCategories(data)
+        } else {
+          // An error occurred while retrieving the categories.
+
+          // Get the error data.
+          const errorData = await response.json()
+
+          // Log the error.
+          console.log(errorData.message)
+
+          // Display the error to the user.
+          setError(errorData.message)
+        } // end if
+      } catch (err) {
+        // An error occurred while retrieving the categories.
+
+        // Log the error.
+        console.log(err)
+
+        // Display the error to the user.
+        // setError(err)
+      } // end try-catch
+    } // end handleDatabaseRequest.
+
+    // Call the function to execute the request.
+    handleDatabaseRequest()
+  }, [])
+
+  const handleSubmit = async (e) => {
+    // Prevent the default form submission behavior.
     e.preventDefault()
 
     // Reset any previous error messages
@@ -25,19 +78,56 @@ const ProductListing = () => {
     if (image && image.size > 10485760) {
       setError('Image size exceeds 10MB limit.')
       return
-    }
+    } // end if
 
-    // Simulate success message after form submission
-    alert('Form submitted successfully!')
+    // Create a submission form.
+    const formData = new FormData()
 
-    // Reset form values to empty/initial state after submission
-    setProductName('')
-    setDescription('')
-    setCategory('')
-    setImage(null)
-    setPrice('')
-    setItems(1)
-  }
+    formData.append('productTitle', productName)
+    formData.append('productDescription', description)
+    formData.append('productCategory', category)
+    formData.append('productImage', image)
+    formData.append('productPrice', price)
+    formData.append('numberOfItems', items)
+
+    // Call an api to list the product.
+    try {
+      const response = await fetch('/api/db/list_item', {
+        method: 'POST',
+        credentials: 'include',
+        body: formData
+      })
+
+      console.log(response)
+
+      // Check if the response was successful.
+      if (response.ok) {
+        // The response was successful.
+        // Redirect the user to sales page.
+        // Do hard reload to update the state.
+        window.location.href = '/account/sales'
+      } else {
+        // An error occurred.
+
+        // Get the error.
+        const errorData = await response.json()
+
+        // Log the error.
+        console.log(errorData.message)
+
+        // Display the error to the user.
+        setError(errorData.message)
+      } // end if
+    } catch (err) {
+      // Something went wrong.
+
+      // Log the error.
+      console.log(err)
+
+      // Display the error to the user.
+      setError(err)
+    } // end try-catch
+  } // end function handleSubmit
 
   return (
     <div className="min-h-screen bg-light d-flex flex-column justify-content-center align-items-center">
@@ -84,10 +174,16 @@ const ProductListing = () => {
             required
           >
             <option value="">Select a category</option>
-            <option value="category1">Category 1</option>
-            <option value="category2">Category 2</option>
-            <option value="category3">Category 3</option>
-            <option value="category4">Category 4</option>
+            {allCategories
+              ? allCategories.map((singleCategory) => (
+                  <option
+                    value={singleCategory.category_id}
+                    key={singleCategory.category_id}
+                  >
+                    {singleCategory.name}
+                  </option>
+                ))
+              : null}
           </Form.Select>
         </Form.Group>
 

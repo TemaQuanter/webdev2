@@ -5,7 +5,8 @@ CREATE TABLE users(
     email VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(200) NOT NULL,
     balance NUMERIC(10, 2) NOT NULL,
-    profile_picture_url TEXT
+    profile_picture_url TEXT,
+    is_deleted BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 
@@ -25,6 +26,7 @@ BEGIN
 END;
 $$;
 
+
 -- This function makes sure that each user record has a relative verification record.
 CREATE OR REPLACE FUNCTION create_verification_record()
 RETURNS TRIGGER
@@ -41,11 +43,51 @@ BEGIN
 END;
 $$;
 
+
+-- This function performs a soft-delete for the user.
+CREATE OR REPLACE PROCEDURE soft_delete_user(user_id INT)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    -- Check that the user actually exists in the database.
+    IF NOT EXISTS (SELECT 1 FROM users WHERE users.user_id = soft_delete_user.user_id) THEN
+        -- The user does not exist.
+        RAISE EXCEPTION 'The user with ID % does not exist', soft_delete_user.user_id;
+    END IF;
+
+    -- Remove verification for the user.
+    DELETE FROM verification WHERE verification.user_id = soft_delete_user.user_id;
+
+    -- Remove the authentication for the user.
+    DELETE FROM authentication WHERE authentication.user_id = soft_delete_user.user_id;
+
+    -- Remove the user's cart.
+    DELETE FROM cart WHERE cart.user_id = soft_delete_user.user_id;
+
+    -- Set all products that the user was selling as unavailable.
+    UPDATE products SET products.number_of_items = 0 WHERE products.seller_id = soft_delete_user.user_id;
+
+    -- Anonymize user data and mark the account as deleted.
+    UPDATE users SET
+        users.first_name = 'User',
+        users.last_name = 'Deleted',
+        users.email = CONCAT(soft_delete_user.user_id, '@deleted.com'),
+        users.password = 'None',
+        users.balance = 0,
+        users.profile_picture_url = NULL,
+        users.is_deleted = TRUE
+    WHERE
+        users.user_id = soft_delete_user.user_id;
+END;
+$$;
+
+
 -- A trigger that validates user credentials before insert or update.
 CREATE TRIGGER validate_user_credentials_before_insert
 BEFORE INSERT OR UPDATE ON users
 FOR EACH ROW
 EXECUTE FUNCTION check_correct_user_credentials();
+
 
 -- A trigger that makes sure that each user has a verification record.
 CREATE TRIGGER create_verification_on_user_insert
