@@ -42,8 +42,10 @@ export const POST = async (req) => {
 
   console.log('Successfully generated new refresh and access tokens.')
 
-  // Store the refresh token in the cookies.
+  // Generate a response with cookies.
   const response = NextResponse.json({}, { status: 200 })
+
+  // Store the refresh token in the cookies.
   response.cookies.set('refreshToken', newRefreshToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production', // Use secure in production

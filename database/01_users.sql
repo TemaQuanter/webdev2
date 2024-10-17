@@ -65,17 +65,17 @@ BEGIN
     DELETE FROM cart WHERE cart.user_id = soft_delete_user.user_id;
 
     -- Set all products that the user was selling as unavailable.
-    UPDATE products SET products.number_of_items = 0 WHERE products.seller_id = soft_delete_user.user_id;
+    UPDATE products SET number_of_items = 0 WHERE products.seller_id = soft_delete_user.user_id;
 
     -- Anonymize user data and mark the account as deleted.
     UPDATE users SET
-        users.first_name = 'User',
-        users.last_name = 'Deleted',
-        users.email = CONCAT(soft_delete_user.user_id, '@deleted.com'),
-        users.password = 'None',
-        users.balance = 0,
-        users.profile_picture_url = NULL,
-        users.is_deleted = TRUE
+        first_name = 'User',
+        last_name = 'Deleted',
+        email = CONCAT(soft_delete_user.user_id, '@deleted.com'),
+        password = 'None',
+        balance = 0,
+        profile_picture_url = NULL,
+        is_deleted = TRUE
     WHERE
         users.user_id = soft_delete_user.user_id;
 END;

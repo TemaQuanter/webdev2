@@ -140,6 +140,9 @@ const Account = () => {
           Purchases
         </Button>
       </Link>
+      <Link href="/account/delete_account" style={{ marginTop: '3rem' }}>
+        Delete account
+      </Link>
     </div>
   )
 }
