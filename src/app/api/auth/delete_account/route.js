@@ -3,23 +3,38 @@ import { NextResponse } from 'next/server'
 
 export const DELETE = async (req) => {
   const prisma = new PrismaClient()
-  const body = await req.json() // Parse the request body
 
   try {
-    // Delete the user based on the provided email
+    const body = await req.json()
+    console.log('Received DELETE request for user email:', body.email)
+
+    // First, delete the associated verification record
+    const deletedVerification = await prisma.verification.delete({
+      where: {
+        user_id: (
+          await prisma.users.findUnique({
+            where: { email: body.email }
+          })
+        ).user_id
+      }
+    })
+    console.log('Deleted verification record:', deletedVerification)
+
+    // Then delete the user based on the provided email
     const deletedUser = await prisma.users.delete({
       where: {
         email: body.email
       }
     })
+    console.log('User deleted successfully:', deletedUser)
 
-    // Return success response
     return NextResponse.json(
       { message: 'Account deleted successfully.' },
       { status: 200 }
     )
   } catch (err) {
-    // Handle case where no user was found with the provided email
+    console.error('Error deleting user:', err)
+
     if (err.code === 'P2025') {
       return NextResponse.json(
         { message: 'No user found with this email.' },
@@ -32,6 +47,6 @@ export const DELETE = async (req) => {
       )
     }
   } finally {
-    await prisma.$disconnect() // Disconnect from the database
+    await prisma.$disconnect()
   }
 }

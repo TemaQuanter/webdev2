@@ -84,3 +84,24 @@ body {
   background-color: lightgray; /* Just for visibility */
   padding: 10px; /* Optional padding for the items */
 }
+/* For larger screens, make sure the carousel items take full width */
+.carousel-item img {
+  width: 100%; /* Ensure the image takes up full width */
+  height: auto; /* Maintain aspect ratio */
+  object-fit: cover; /* Ensure the image covers the container properly */
+}
+
+/* Optional: Control the height of the image for desktop */
+@media (min-width: 992px) {
+  .carousel-item img {
+    max-height: 600px; /* Prevent the image from becoming too tall */
+  }
+}
+
+/* Adjust for smaller screens */
+@media (max-width: 768px) {
+  .carousel-item img {
+    max-height: 400px; /* Reduce height for smaller screens */
+    object-fit: contain; /* Ensure the image fits inside the container without cutting off */
+  }
+}

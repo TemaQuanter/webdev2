@@ -19,7 +19,12 @@ function ControlledCarousel({ images = [] }) {
               className="d-block w-100"
               src={image.src}
               alt={image.alt}
-              style={{ height: '400px', objectFit: 'cover' }}
+              style={{
+                width: '100%', // Take full width on larger screens
+                height: 'auto', // Maintain aspect ratio
+                maxHeight: '600px', // Optional: Set a max height to prevent too tall images
+                objectFit: 'cover' // Ensure the image covers the container without distortion
+              }}
             />
             <Carousel.Caption>
               <h3>{image.captionTitle}</h3>
@@ -47,7 +52,7 @@ function ControlledCarousel({ images = [] }) {
             <div
               style={{
                 width: '100%',
-                height: '400x',
+                height: '400px',
                 backgroundColor: '#e9ecef'
               }}
             />
