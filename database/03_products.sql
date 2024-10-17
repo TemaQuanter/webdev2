@@ -11,3 +11,20 @@ CREATE TABLE products (
     FOREIGN KEY (seller_id) REFERENCES users(user_id),
     FOREIGN KEY (category_id) REFERENCES categories(category_id)
 );
+
+
+-- This is a simple search engine for products.
+CREATE OR REPLACE FUNCTION search_products(search_text TEXT)
+RETURNS SETOF products
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    search_request TEXT;
+BEGIN
+    search_request := CONCAT('%', search_products.search_text, '%');
+
+    RETURN QUERY
+    SELECT * FROM products WHERE products.title ILIKE search_request
+    OR description ILIKE search_request LIMIT 5;
+END;
+$$;
