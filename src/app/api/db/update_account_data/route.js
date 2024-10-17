@@ -142,6 +142,11 @@ export const POST = async (req) => {
     } catch (error) {
       // An error occurred while saving a file.
       console.error('Error writing file:', error)
+
+      return NextResponse.json(
+        { message: INTERNAL_SERVER_ERROR },
+        { status: 500 }
+      )
     } // end try-catch
   } // end if
 

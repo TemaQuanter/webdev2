@@ -2,10 +2,13 @@
     This file contains a logic for listing a new product.
 */
 
-import { INTERNAL_SERVER_ERROR } from '@/constants'
+import { INTERNAL_SERVER_ERROR, PRODUCT_IMAGES_PATH } from '@/constants'
 import { TYPE_ACCESS_TOKEN, verifyJWT } from '@/utils/jwt_manager'
 import { PrismaClient } from '@prisma/client'
 import { NextResponse } from 'next/server'
+import { Buffer } from 'buffer'
+import { promises as fs } from 'fs'
+import path from 'path'
 
 export const POST = async (req) => {
   console.log('list_item api triggered')
@@ -15,6 +18,9 @@ export const POST = async (req) => {
 
   // Try to decrypt and verify the access token.
   const decoded = await verifyJWT(TYPE_ACCESS_TOKEN, accessToken.value)
+
+  let productImageFile
+  let buffer
 
   // Display the decoded access token.
   console.log(decoded)
@@ -37,26 +43,145 @@ export const POST = async (req) => {
 
   console.log(formData)
 
-  // TODO: Verify the product data.
+  // Make sure that the title is set and that it is valid.
+  if (
+    !formData.get('productTitle') ||
+    formData.get('productTitle').length < 2
+  ) {
+    // Product title is invalid.
+    return NextResponse.json(
+      { message: 'Product title must be at least 3 characters.' },
+      { status: 400 }
+    )
+  } // end if
 
+  // Make sure that there is a product description.
+  if (
+    !formData.get('productDescription') ||
+    formData.get('productDescription').length > 200 ||
+    formData.get('productDescription').length < 20
+  ) {
+    // Product description is invalid.
+    return NextResponse.json({
+      message: 'Product description must be from 20 to 200 characters'
+    })
+  } // end if
+
+  // Make sure that the product category is set correctly.
+  if (
+    !formData.get('productCategory') ||
+    isNaN(Number(formData.get('productCategory')))
+  ) {
+    // The product price is either not set or not a number.
+    return NextResponse.json(
+      {
+        message: 'Product category must be a number.'
+      },
+      { status: 400 }
+    )
+  } // end if
+
+  // Make sure that the image is provided and that the format of the image is valid.
+  if (
+    !(formData.get('productImage') instanceof File) ||
+    !formData.get('productImage').type.includes('image')
+  ) {
+    // The product image is invalid.
+    return NextResponse.json(
+      {
+        message: 'Product image file invalid, must be an image (e.g. .jpg/.png)'
+      },
+      { status: 400 }
+    )
+  } // end if
+
+  // Make sure that the price is set correctly.
+  if (
+    !formData.get('productPrice') ||
+    isNaN(Number(formData.get('productPrice')))
+  ) {
+    // The product price is either not set or not a number.
+    return NextResponse.json(
+      {
+        message: 'Product price is either not set or not a number'
+      },
+      { status: 400 }
+    )
+  } // end if
+
+  // Make sure that the number of products is set correctly.
+  if (
+    !formData.get('numberOfItems') ||
+    isNaN(Number(formData.get('numberOfItems')))
+  ) {
+    // The product price is either not set or not a number.
+    return NextResponse.json(
+      {
+        message: 'Number of product items is either not set or not a number'
+      },
+      { status: 400 }
+    )
+  } // end if
+
+  // Create a new instance of a product to be listed.
   const newProduct = {
     seller_id: userId,
-    title: null,
-    description: null,
-    category_id: null,
-    image_url: null,
-    price: null,
-    number_of_items: null
-  }
+    title: formData.get('productTitle'),
+    description: formData.get('productDescription'),
+    category_id: Number(formData.get('productCategory')),
+    image_url: 'None', // The file path requires an ID, that will be retrieved later.
+    price: Number(formData.get('productPrice')),
+    number_of_items: Number(formData.get('numberOfItems'))
+  } // end newProduct
 
   // Try to insert a new product to the database.
   try {
-    // Insert a new product to the database.
-    const insertedProduct = await prisma.products.create({
-      data: { ...newProduct }
-    })
+    // Insert a new product to the database and save a product image
+    // in a single transaction.
+    const insertedProduct = await prisma.$transaction(async (prisma) => {
+      // Insert a new product to the database.
+      const product = await prisma.products.create({
+        data: { ...newProduct }
+      })
 
-    console.log(insertedProduct)
+      console.log(product)
+
+      // Set the product image.
+
+      // Get a file.
+      productImageFile = formData.get('productImage')
+
+      // Get a file extension.
+      const fileExtension = path.extname(productImageFile.name)
+
+      // Convert file data to a buffer.
+      buffer = Buffer.from(await productImageFile.arrayBuffer())
+
+      // Save the profile picture to the required path.
+
+      // Generate a filepath.
+      const filePath = path.join(
+        process.cwd(),
+        PRODUCT_IMAGES_PATH,
+        `${product.product_id}${fileExtension}`
+      )
+
+      console.log(filePath)
+
+      // Write the file to the file system.
+      await fs.writeFile(filePath, buffer)
+      console.log(`File saved at: ${filePath}`)
+
+      // Update the image path for the product.
+      await prisma.products.update({
+        where: {
+          product_id: product.product_id
+        },
+        data: {
+          image_url: filePath
+        }
+      })
+    })
   } catch (err) {
     // Log the error.
     console.log(err)

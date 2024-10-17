@@ -1,12 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import SearchBar from '../SearchBar'
 import NavigationLinks from './NavigationLinks'
 import Link from 'next/link'
 
 const Header = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  const [error, setError] = useState(null)
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen)
 
@@ -23,21 +24,58 @@ const Header = () => {
     transition: 'right 0.3s ease' // Smooth transition for opening/closing
   }
 
-  // List of 12 categories for the marketplace
-  const categories = [
-    { name: 'Hoodies', link: '/category/hoodies' },
-    { name: 'Laptops', link: '/category/laptops' },
-    { name: 'Smartphones', link: '/category/smartphones' },
-    { name: 'Shoes', link: '/category/shoes' },
-    { name: 'Accessories', link: '/category/accessories' },
-    { name: 'Gaming Consoles', link: '/category/gaming-consoles' },
-    { name: 'Headphones', link: '/category/headphones' },
-    { name: 'Cameras', link: '/category/cameras' },
-    { name: 'Fitness Gear', link: '/category/fitness-gear' },
-    { name: 'Home Appliances', link: '/category/home-appliances' },
-    { name: 'Books', link: '/category/books' },
-    { name: 'Furniture', link: '/category/furniture' }
-  ]
+  // These categories will be loaded from the database.
+  const [allCategories, setAllCategories] = useState(null)
+
+  // Load the available categories from the database.
+  useEffect(() => {
+    console.log('useEffect started...')
+
+    const handleDatabaseRequest = async () => {
+      try {
+        const response = await fetch('/api/db/get_product_categories', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+
+        // Check if the request was executed successfully.
+        if (response.ok) {
+          // Get the response data.
+          const data = await response.json()
+
+          // Log the data.
+          console.log(data)
+
+          // Update the categories.
+          setAllCategories(data)
+        } else {
+          // An error occurred while retrieving the categories.
+
+          // Get the error data.
+          const errorData = await response.json()
+
+          // Log the error.
+          console.log(errorData.message)
+
+          // Display the error to the user.
+          setError(errorData.message)
+        } // end if
+      } catch (err) {
+        // An error occurred while retrieving the categories.
+
+        // Log the error.
+        console.log(err)
+
+        // Display the error to the user.
+        // setError(err)
+      } // end try-catch
+    } // end handleDatabaseRequest.
+
+    // Call the function to execute the request.
+    handleDatabaseRequest()
+  }, [])
 
   return (
     <div
@@ -88,12 +126,17 @@ const Header = () => {
           </button>
         </div>
 
+        {/* Display an error, if necessary */}
+        {error && <p className="text-danger">{error}</p>}
+
         <ul style={{ listStyle: 'none', padding: '0' }}>
-          {categories.map((category, index) => (
-            <li className="mb-2" key={index}>
-              <Link href={category.link}>{category.name}</Link>
-            </li>
-          ))}
+          {allCategories
+            ? allCategories.map((category) => (
+                <li className="mb-2" key={category.category_id}>
+                  <Link href="/">{category.name}</Link>
+                </li>
+              ))
+            : null}
         </ul>
       </div>
     </div>
