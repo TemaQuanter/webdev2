@@ -4,18 +4,15 @@ import Link from 'next/link'
 const ButtonBack = (props) => {
   return (
     <div className="w-100">
-      <Button
-        variant="outline-secondary"
-        style={{ margin: '3rem 0 0 3rem' }}
-        className="btn btn-sm"
-      >
-        <Link
-          href={props.href}
-          style={{ color: 'inherit', textDecoration: 'none' }}
+      <Link href={props.href} passHref>
+        <Button
+          variant="outline-secondary"
+          style={{ margin: '3rem 0 0 3rem' }}
+          className="btn btn-sm"
         >
-          <i className="bi bi-chevron-left"></i>
-        </Link>
-      </Button>
+          <i className="bi bi-chevron-left"></i> Back
+        </Button>
+      </Link>
     </div>
   )
 } // end function ButtonBack
