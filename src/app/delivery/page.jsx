@@ -32,7 +32,7 @@ const DeliveryPage = () => {
 
     // Dynamically inject Google Maps API script into the page
     const googleMapScript = document.createElement('script')
-    googleMapScript.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDov3YdR3KFqIA3ZC216h-l3S8saUN_KgQ&callback=initMap`
+    googleMapScript.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&callback=initMap`
     googleMapScript.async = true
     googleMapScript.defer = true
     window.document.body.appendChild(googleMapScript)
