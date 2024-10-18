@@ -8,8 +8,10 @@ import { useEffect, useState } from 'react'
 const HINTS_NUMBER_LIMIT = 5
 const PAGE_NUMBER = 1
 
-const SearchBar = () => {
-  const [productSearchText, setProductSearchText] = useState('')
+const SearchBar = (props) => {
+  const [productSearchText, setProductSearchText] = useState(
+    props.searchBarText || ''
+  )
   const [productSearchResults, setProductSearchResults] = useState([])
   const [isActiveSearchBar, setIsActiveSearchBar] = useState(false)
 
@@ -28,7 +30,7 @@ const SearchBar = () => {
           },
           body: JSON.stringify({
             productSearchText: productSearchText,
-            hintsNumberLimit: HINTS_NUMBER_LIMIT,
+            resultLimit: HINTS_NUMBER_LIMIT,
             pageNumber: PAGE_NUMBER
           })
         })
@@ -64,6 +66,20 @@ const SearchBar = () => {
     handleDatabaseRequest()
   }, [productSearchText])
 
+  const handleSearchSubmit = async (e) => {
+    // Prevent the default behavior.
+    e.preventDefault()
+
+    // Create query parameters using URLSearchParams.
+    const params = new URLSearchParams({
+      search: productSearchText,
+      page: 1
+    })
+
+    // Redirect the user to the products page.
+    window.location.href = `/products?${params.toString()}`
+  } // end function handleSearchSubmit
+
   return (
     <div
       style={{
@@ -78,6 +94,7 @@ const SearchBar = () => {
           marginBottom: '1rem',
           position: 'relative'
         }}
+        onSubmit={handleSearchSubmit}
       >
         <InputGroup className="d-flex align-items-center">
           <Form.Control

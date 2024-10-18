@@ -22,6 +22,7 @@ RETURNS TABLE (
     title VARCHAR(100),
     description TEXT,
     category_uuid UUID,
+    image_url TEXT,
     price NUMERIC(10, 2),
     number_of_items INT
 ) 
@@ -55,6 +56,7 @@ BEGIN
         p.title,
         p.description,
         c.category_uuid AS "category_uuid",
+        p.image_url,
         p.price,
         p.number_of_items 
     FROM products p

@@ -11,6 +11,7 @@ import ButtonBack from '@/components/ButtonBack'
 const Purchases = () => {
   const [listedProducts, setListedProducts] = useState([])
   const [error, setError] = useState(null)
+  const [account, setAccount] = useState(null)
 
   // Load the listed products.
   useEffect(() => {
@@ -43,6 +44,39 @@ const Purchases = () => {
 
           // Load the listed items.
           setListedProducts(data)
+        }
+      } catch (err) {
+        // An error occurred while retrieving the data.
+
+        // Log the error.
+        console.log(err)
+
+        // Display the error to the user.
+        setError(err)
+      } // end try-catch
+
+      // Make a request to get the user data.
+      try {
+        const response = await fetch('/api/db/get_account_data', {
+          method: 'GET',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+
+        // Check the response.
+        if (response.ok) {
+          // The response was successful.
+
+          // Retrieved the data.
+          const data = await response.json()
+
+          // Log the retrieved data.
+          console.log(data)
+
+          // Load the listed items.
+          setAccount(data)
         }
       } catch (err) {
         // An error occurred while retrieving the data.
@@ -107,9 +141,9 @@ const Purchases = () => {
       <Container fluid className="my-4" style={{ padding: '0 15px' }}>
         <div
           className="mx-auto d-flex flex-column"
-          style={{ maxWidth: '85%', gap: '5rem' }}
+          style={{ maxWidth: '85%', gap: '3rem' }}
         >
-          {listedProducts
+          {listedProducts && account
             ? listedProducts.map((listedProduct, index) => {
                 // Remove 'public' from the UR
                 const imagePath = listedProduct.image_url.replace(
@@ -119,6 +153,7 @@ const Purchases = () => {
                 return (
                   <ProductCard
                     title={listedProduct.title}
+                    sellerName={`${account.first_name} ${account.last_name}`}
                     description={listedProduct.description}
                     imageUrl={imagePath}
                     price={listedProduct.price}

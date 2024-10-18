@@ -5,7 +5,7 @@ import SearchBar from '../SearchBar'
 import NavigationLinks from './NavigationLinks'
 import Link from 'next/link'
 
-const Header = () => {
+const Header = (props) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const [error, setError] = useState(null)
 
@@ -113,7 +113,7 @@ const Header = () => {
           </button>
         </div>
       </div>
-      <SearchBar />
+      <SearchBar searchBarText={props.searchBarText} />
       <NavigationLinks />
 
       {/* Sidebar */}
