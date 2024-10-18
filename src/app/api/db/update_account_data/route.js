@@ -25,9 +25,13 @@ export const POST = async (req) => {
   // Profile picture file.
   let profilePictureFile
   let filePath = null
+  let fileExtension
 
   // The buffer to store the profile picture in.
   let buffer
+
+  // Previous user state.
+  let previousUserState
 
   console.log(formData)
 
@@ -80,18 +84,25 @@ export const POST = async (req) => {
 
     // Retrieve the path of the previous profile picture from the database.
     try {
-      const previousProfilePictureUrl = await prisma.users.findUnique({
+      previousUserState = await prisma.users.findUnique({
         where: {
           user_id: userId
         },
         select: {
+          user_uuid: true,
           profile_picture_url: true
         }
       })
 
       // If the file exists, remove it.
-      if (previousProfilePictureUrl.profile_picture_url) {
-        await fs.unlink(previousProfilePictureUrl.profile_picture_url)
+      if (previousUserState.profile_picture_url) {
+        await fs.unlink(
+          path.join(
+            process.cwd(),
+            PROFILE_PICTURES_PATH,
+            previousUserState.profile_picture_url
+          )
+        )
       } // end if
     } catch (err) {
       // An error occurred while deleting a file.
@@ -120,7 +131,7 @@ export const POST = async (req) => {
     } // end if
 
     // Get a file extension.
-    const fileExtension = path.extname(profilePictureFile.name)
+    fileExtension = path.extname(profilePictureFile.name)
 
     // Convert file data to a buffer.
     buffer = Buffer.from(await profilePictureFile.arrayBuffer())
@@ -129,7 +140,7 @@ export const POST = async (req) => {
     filePath = path.join(
       process.cwd(),
       PROFILE_PICTURES_PATH,
-      `${userId.toString()}${fileExtension}`
+      `${previousUserState.user_uuid}${fileExtension}`
     )
 
     console.log(filePath)
@@ -160,7 +171,9 @@ export const POST = async (req) => {
       data: {
         first_name: formData.get('firstName'),
         last_name: formData.get('lastName'),
-        ...(filePath && { profile_picture_url: filePath }) // Conditionally include profile_picture_url only if filePath exists
+        ...(filePath && {
+          profile_picture_url: `${previousUserState.user_uuid}${fileExtension}`
+        }) // Conditionally include profile_picture_url only if filePath exists
       }
     })
 

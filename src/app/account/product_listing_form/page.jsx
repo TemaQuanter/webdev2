@@ -175,11 +175,8 @@ const ProductListing = () => {
           >
             <option value="">Select a category</option>
             {allCategories
-              ? allCategories.map((singleCategory) => (
-                  <option
-                    value={singleCategory.category_id}
-                    key={singleCategory.category_id}
-                  >
+              ? allCategories.map((singleCategory, index) => (
+                  <option value={singleCategory.category_uuid} key={index}>
                     {singleCategory.name}
                   </option>
                 ))

@@ -5,6 +5,9 @@ import { Form, Button, InputGroup } from 'react-bootstrap'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { useEffect, useState } from 'react'
 
+const HINTS_NUMBER_LIMIT = 5
+const PAGE_NUMBER = 1
+
 const SearchBar = () => {
   const [productSearchText, setProductSearchText] = useState('')
   const [productSearchResults, setProductSearchResults] = useState([])
@@ -24,7 +27,9 @@ const SearchBar = () => {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            productSearchText: productSearchText
+            productSearchText: productSearchText,
+            hintsNumberLimit: HINTS_NUMBER_LIMIT,
+            pageNumber: PAGE_NUMBER
           })
         })
 
@@ -34,6 +39,8 @@ const SearchBar = () => {
 
           // Get the response data.
           const data = await response.json()
+
+          console.log(data)
 
           // Set product search results.
           setProductSearchResults(data)

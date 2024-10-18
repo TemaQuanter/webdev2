@@ -70,12 +70,12 @@ export const POST = async (req) => {
   // Make sure that the product category is set correctly.
   if (
     !formData.get('productCategory') ||
-    isNaN(Number(formData.get('productCategory')))
+    typeof formData.get('productCategory') !== 'string'
   ) {
     // The product price is either not set or not a number.
     return NextResponse.json(
       {
-        message: 'Product category must be a number.'
+        message: 'Product category must be a string.'
       },
       { status: 400 }
     )
@@ -84,12 +84,14 @@ export const POST = async (req) => {
   // Make sure that the image is provided and that the format of the image is valid.
   if (
     !(formData.get('productImage') instanceof File) ||
-    !formData.get('productImage').type.includes('image')
+    !formData.get('productImage').type.includes('image') ||
+    formData.get('productImage').size > 10485760
   ) {
     // The product image is invalid.
     return NextResponse.json(
       {
-        message: 'Product image file invalid, must be an image (e.g. .jpg/.png)'
+        message:
+          'Product image file invalid, must be an image (e.g. .jpg/.png) and less than 10MB'
       },
       { status: 400 }
     )
@@ -124,11 +126,9 @@ export const POST = async (req) => {
   } // end if
 
   // Create a new instance of a product to be listed.
-  const newProduct = {
-    seller_id: userId,
+  let newProduct = {
     title: formData.get('productTitle'),
     description: formData.get('productDescription'),
-    category_id: Number(formData.get('productCategory')),
     image_url: 'None', // The file path requires an ID, that will be retrieved later.
     price: Number(formData.get('productPrice')),
     number_of_items: Number(formData.get('numberOfItems'))
@@ -141,7 +141,20 @@ export const POST = async (req) => {
     const insertedProduct = await prisma.$transaction(async (prisma) => {
       // Insert a new product to the database.
       const product = await prisma.products.create({
-        data: { ...newProduct }
+        data: {
+          ...newProduct,
+          categories: {
+            connect: {
+              // Use a UUID to set a foreign key relationship.
+              category_uuid: formData.get('productCategory')
+            }
+          },
+          users: {
+            connect: {
+              user_id: userId
+            }
+          }
+        }
       })
 
       console.log(product)
@@ -163,7 +176,7 @@ export const POST = async (req) => {
       const filePath = path.join(
         process.cwd(),
         PRODUCT_IMAGES_PATH,
-        `${product.product_id}${fileExtension}`
+        `${product.product_uuid}${fileExtension}`
       )
 
       console.log(filePath)
@@ -178,7 +191,7 @@ export const POST = async (req) => {
           product_id: product.product_id
         },
         data: {
-          image_url: filePath
+          image_url: `${product.product_uuid}${fileExtension}`
         }
       })
     })

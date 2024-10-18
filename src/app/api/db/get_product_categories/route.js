@@ -21,7 +21,7 @@ export const GET = async (req) => {
     // Retrieve all the required categories data from the database.
     categories = await prisma.categories.findMany({
       select: {
-        category_id: true,
+        category_uuid: true,
         name: true
       }
     })

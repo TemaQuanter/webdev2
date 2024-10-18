@@ -13,6 +13,23 @@ export const POST = async (req) => {
   // Get the request data.
   const body = await req.json()
 
+  console.log(body)
+
+  // Make sure that everything that is needed for the query was passed.
+  if (
+    body.productSearchText == null ||
+    isNaN(Number(body.hintsNumberLimit)) ||
+    isNaN(Number(body.pageNumber))
+  ) {
+    return NextResponse.json(
+      {
+        message:
+          'The number of hints or the search text or page number was not passed.'
+      },
+      { status: 400 }
+    )
+  } // end if
+
   // Data that will be retrieved from the database.
   let products
 
@@ -23,7 +40,7 @@ export const POST = async (req) => {
   try {
     // Retrieve all the required products data from the database.
     products =
-      await prisma.$queryRaw`SELECT * FROM search_products(${body.productSearchText});`
+      await prisma.$queryRaw`SELECT * FROM search_products(${body.productSearchText}, ${body.hintsNumberLimit}::INT, ${body.pageNumber}::INT);`
 
     console.log(products)
   } catch (err) {

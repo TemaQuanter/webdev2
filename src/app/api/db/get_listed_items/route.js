@@ -15,9 +15,7 @@ export const GET = async (req) => {
   const accessToken = req.cookies.get('accessToken')
 
   // Data that will be retrieved from the database.
-  let user
-  let numOfPurchases
-  let numOfSales
+  let listedItems
 
   // Try to decrypt and verify the access token.
   const decoded = await verifyJWT(TYPE_ACCESS_TOKEN, accessToken.value)
@@ -40,40 +38,21 @@ export const GET = async (req) => {
 
   // Try to retrieve the necessary data.
   try {
-    // Retrieve all the required user data from the database.
-    user = await prisma.users.findUnique({
-      where: {
-        user_id: userId
-      },
-      select: {
-        user_uuid: true,
-        first_name: true,
-        last_name: true,
-        email: true,
-        verification: {
-          select: {
-            email_is_verified: true
-          }
-        },
-        balance: true
-      }
-    })
-
-    console.log(user)
-
-    // Calculate the number of purchases.
-    numOfPurchases = await prisma.purchases.count({
-      where: {
-        buyer_id: userId
-      }
-    })
-
-    // Calculate the number of sales.
-    numOfSales = await prisma.purchases.count({
+    // Retrieve all the required products data from the database.
+    listedItems = await prisma.products.findUnique({
       where: {
         seller_id: userId
+      },
+      select: {
+        product_uuid: true,
+        title: true,
+        description: true,
+        price: true,
+        number_of_items: true
       }
     })
+
+    console.log(listedItems)
   } catch (err) {
     // Log the error.
     console.log(err)
@@ -88,10 +67,6 @@ export const GET = async (req) => {
     await prisma.$disconnect()
   } // end try-catch
 
-  // Add separately calculated fields into the user.
-  user.numOfPurchases = numOfPurchases
-  user.numOfSales = numOfSales
-
-  // Return the user.
-  return NextResponse.json(user, { status: 200 })
+  // Return the listed items.
+  return NextResponse.json(listedItems, { status: 200 })
 } // end function GET

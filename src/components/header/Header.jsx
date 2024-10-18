@@ -131,8 +131,8 @@ const Header = () => {
 
         <ul style={{ listStyle: 'none', padding: '0' }}>
           {allCategories
-            ? allCategories.map((category) => (
-                <li className="mb-2" key={category.category_id}>
+            ? allCategories.map((category, index) => (
+                <li className="mb-2" key={index}>
                   <Link href="/">{category.name}</Link>
                 </li>
               ))
