@@ -93,16 +93,18 @@ const Header = () => {
           TU Marketplace
         </span>
         <div className="d-flex justify-content-between" style={{ gap: '2vw' }}>
-          <button className="btn btn-outline-primary btn-sm">
-            <Link href="/account/cart">
+          <Link href="/account/cart" passHref>
+            <button className="btn btn-outline-primary btn-sm">
               <i className="bi bi-cart-fill fs-5"></i>
-            </Link>
-          </button>
-          <button className="btn btn-outline-primary btn-sm">
-            <Link href="/account">
+            </button>
+          </Link>
+
+          <Link href="/account" passHref>
+            <button className="btn btn-outline-primary btn-sm">
               <i className="bi bi-person-fill fs-5"></i>
-            </Link>
-          </button>
+            </button>
+          </Link>
+
           <button
             className="btn btn-outline-primary btn-sm"
             onClick={toggleSidebar}
