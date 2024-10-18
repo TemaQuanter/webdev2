@@ -31,7 +31,7 @@ const Refresh = () => {
           const redirectTo = searchParams.get('redirectTo') || '/account'
           console.log('Setting redirect path to:', redirectTo)
           // Force a full page reload to ensure cookies are set and state is correct.
-          window.location.href = '/account'
+          window.location.href = redirectTo
         } else {
           console.error('Failed to refresh token. Redirecting to sign-in page.')
           router.replace('/sign_in')

@@ -10,6 +10,7 @@ const RESULT_LIMIT = 10
 
 const Products = () => {
   const [products, setProducts] = useState([])
+  const [sellers, setSellers] = useState([])
   const [error, setError] = useState(null)
 
   // Get search parameters from the URL
@@ -79,18 +80,77 @@ const Products = () => {
     handleProductSearch()
   }, [])
 
+  // Retrieve the seller information for the products.
+  useEffect(() => {
+    // Reset the errors.
+    setError(null)
+
+    // This function makes an api call to retrieve the product items.
+    const handleSellerSearch = async () => {
+      // Make a request to retrieve the searched for products.
+      try {
+        const sellerRequests = products.map(async (product) => {
+          const response = await fetch('/api/db/get_public_user_data', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+              user_uuid: product.seller_uuid
+            })
+          })
+
+          // Check if the request was successful.
+          if (response.ok) {
+            // The products were successfully retrieved from the database.
+            // Return a promise with data retrieval.
+            return response.json()
+          } else {
+            // The response is an error.
+            const errorData = await response.json()
+
+            // Throw an error.
+            throw new Error(errorData.message)
+          } // end if
+        }) // end map
+
+        // Wait for all requests to complete
+        const sellersData = await Promise.all(sellerRequests)
+
+        // Store all the seller information
+        setSellers(sellersData)
+      } catch (err) {
+        // An error occurred while requesting the data.
+
+        // Log the error.
+        console.log(err)
+
+        // Display the error to the user.
+        setError(err)
+      } // end try-catch
+    } // end function handleSellerSearch
+
+    // Call the request handler if the product were found.
+    if (products.length > 0) {
+      handleSellerSearch()
+    } // end if
+  }, [products])
+
   return (
     <>
       <Header searchBarText={searchQuery} /> {/* Include the header */}
       <h1 className="fs-4 text-center" style={{ margin: '1rem 0 1rem 0' }}>
         Search result:
       </h1>
+      {/* Error message displayed if there is an error */}
+      {error && <p className="text-danger">{error}</p>}
       <div
         className="mx-auto d-flex flex-column"
         style={{ maxWidth: '85%', gap: '3rem' }}
       >
         {/* Conditionally render the list only when on the client and when products are loaded */}
-        {products &&
+        {products.length === sellers.length &&
           products.map((productItem, index) => {
             // Get image URL for the product.
             const imageUrl = productItem.image_url.replace('public/', '/')
@@ -100,6 +160,8 @@ const Products = () => {
                 title={productItem.title}
                 description={productItem.description}
                 imageUrl={imageUrl}
+                sellerName={`${sellers[index].first_name} ${sellers[index].last_name}`}
+                price={productItem.price}
               />
             )
           })}
