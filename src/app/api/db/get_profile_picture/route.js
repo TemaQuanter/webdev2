@@ -3,7 +3,7 @@
     general information about user account.
 */
 
-import { INTERNAL_SERVER_ERROR, PROFILE_PICTURES_PATH } from '@/constants'
+import { INTERNAL_SERVER_ERROR } from '@/constants'
 import { TYPE_ACCESS_TOKEN, verifyJWT } from '@/utils/jwt_manager'
 import { PrismaClient } from '@prisma/client'
 import { NextResponse } from 'next/server'
@@ -74,7 +74,7 @@ export const GET = async (req) => {
 
   // Construct the image path.
   const imagePath = user.profile_picture_url
-    ? path.join(process.cwd(), PROFILE_PICTURES_PATH, user.profile_picture_url)
+    ? path.join(process.cwd(), user.profile_picture_url)
     : path.join(process.cwd(), 'public/images/default_profile.png')
 
   console.log(imagePath)

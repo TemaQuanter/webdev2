@@ -1,6 +1,6 @@
 import React from 'react'
 
-const FlexboxLayout = () => {
+const FlexboxLayout = (props) => {
   return (
     <div
       style={{
@@ -25,13 +25,14 @@ const FlexboxLayout = () => {
         }}
       >
         {/* Product image */}
-        <div
+        <img
           style={{
             width: '100%', // Make the image responsive
             maxWidth: '150px', // Cap the image size to 150px
             aspectRatio: '1', // Keep the image square
             backgroundColor: '#d3d3d3'
           }}
+          src={props.imageUrl}
         />
         {/* Stars rating directly below the image */}
         <div>
@@ -55,16 +56,15 @@ const FlexboxLayout = () => {
         }}
       >
         {/* Product details */}
-        <h5 style={{ marginBottom: '0.5rem' }}>Product Name</h5>
+        <h5 style={{ marginBottom: '0.5rem' }}>{props.title}</h5>
         <p style={{ marginBottom: '0.25rem' }}>
-          Seller: <span className="fw-lighter">John Johnson</span>
+          Seller: <span className="fw-lighter">{props.sellerName}</span>
         </p>
         <p style={{ marginBottom: '0.25rem' }}>
-          Description:{' '}
-          <span className="fw-lighter">This is a product description.</span>
+          Description: <span className="fw-lighter">{props.description}</span>
         </p>
         <p style={{ marginBottom: '0.25rem', fontWeight: 'bold' }}>
-          Price: EUR 75
+          Price: EUR {props.price}
         </p>
       </div>
     </div>

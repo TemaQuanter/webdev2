@@ -172,7 +172,10 @@ export const POST = async (req) => {
         first_name: formData.get('firstName'),
         last_name: formData.get('lastName'),
         ...(filePath && {
-          profile_picture_url: `${previousUserState.user_uuid}${fileExtension}`
+          profile_picture_url: path.join(
+            PROFILE_PICTURES_PATH,
+            `${previousUserState.user_uuid}${fileExtension}`
+          )
         }) // Conditionally include profile_picture_url only if filePath exists
       }
     })

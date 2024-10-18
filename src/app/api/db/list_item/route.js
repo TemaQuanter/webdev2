@@ -62,9 +62,12 @@ export const POST = async (req) => {
     formData.get('productDescription').length < 20
   ) {
     // Product description is invalid.
-    return NextResponse.json({
-      message: 'Product description must be from 20 to 200 characters'
-    })
+    return NextResponse.json(
+      {
+        message: 'Product description must be from 20 to 200 characters'
+      },
+      { status: 401 }
+    )
   } // end if
 
   // Make sure that the product category is set correctly.
@@ -191,7 +194,10 @@ export const POST = async (req) => {
           product_id: product.product_id
         },
         data: {
-          image_url: `${product.product_uuid}${fileExtension}`
+          image_url: path.join(
+            PRODUCT_IMAGES_PATH,
+            `${product.product_uuid}${fileExtension}`
+          )
         }
       })
     })

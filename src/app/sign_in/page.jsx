@@ -15,32 +15,35 @@ const SignIn = () => {
   const router = useRouter()
 
   // Use useEffect to clear any existing tokens when the component loads
-  useEffect(() => {
-    console.log('Clearing any old tokens...')
-    Cookies.remove('accessToken') // Remove accessToken
-    Cookies.remove('refreshToken') // Remove refreshToken
-  }, [])
+  //   useEffect(() => {
+  //     console.log('Clearing any old tokens...')
+  //     Cookies.remove('accessToken') // Remove accessToken
+  //     Cookies.remove('refreshToken') // Remove refreshToken
+  //   }, [])
 
   const handleSubmit = async (e) => {
+    // Prevent the page from automatic reload.
     e.preventDefault()
+
     setError(null)
     console.log('Starting login process...')
 
+    // Try to log in.
     try {
       // Call login API
-      const response_login = await fetch('/api/auth/login', {
+      const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include', // Ensures cookies are included
         body: JSON.stringify({ email, password })
       })
 
-      if (!response_login.ok) {
-        const errorData = await response_login.json()
+      if (!response.ok) {
+        const errorData = await response.json()
         console.error('Login failed:', errorData.message)
         setError(errorData.message)
         return
-      }
+      } // end if
 
       console.log('Login successful, reloading page...')
       // Force a full page reload to ensure cookies are set and state is correct
@@ -48,7 +51,7 @@ const SignIn = () => {
     } catch (err) {
       console.error('Login process failed with error:', err)
       setError(INTERNAL_SERVER_ERROR)
-    }
+    } // end try-catch
   }
 
   return (

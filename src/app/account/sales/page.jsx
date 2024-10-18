@@ -23,7 +23,7 @@ const Purchases = () => {
     const handleLoadListedItems = async () => {
       // Make a request to the listed items API.
       try {
-        const response = await fetch('api/db/get_listed_items', {
+        const response = await fetch('/api/db/get_listed_items', {
           method: 'GET',
           credentials: 'include',
           headers: {
@@ -109,10 +109,23 @@ const Purchases = () => {
           className="mx-auto d-flex flex-column"
           style={{ maxWidth: '85%', gap: '5rem' }}
         >
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
+          {listedProducts
+            ? listedProducts.map((listedProduct, index) => {
+                // Remove 'public' from the UR
+                const imagePath = listedProduct.image_url.replace(
+                  'public/',
+                  '/'
+                )
+                return (
+                  <ProductCard
+                    title={listedProduct.title}
+                    description={listedProduct.description}
+                    imageUrl={imagePath}
+                    price={listedProduct.price}
+                  />
+                )
+              })
+            : null}
         </div>
       </Container>
     </div>

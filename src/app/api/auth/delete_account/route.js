@@ -8,6 +8,7 @@ import { PrismaClient } from '@prisma/client'
 import { NextResponse } from 'next/server'
 import bcrypt from 'bcrypt'
 import { promises as fs } from 'fs'
+import path from 'path'
 
 export const DELETE = async (req) => {
   console.log('delete_account api triggered')
@@ -68,7 +69,7 @@ export const DELETE = async (req) => {
       // Remove user profile picture, if exists.
       if (user.profile_picture_url) {
         try {
-          await fs.unlink(user.profile_picture_url)
+          await fs.unlink(path.join(process.cwd(), user.profile_picture_url))
         } catch (err) {
           // Log the error.
           console.log(err)

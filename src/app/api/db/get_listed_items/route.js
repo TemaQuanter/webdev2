@@ -39,7 +39,7 @@ export const GET = async (req) => {
   // Try to retrieve the necessary data.
   try {
     // Retrieve all the required products data from the database.
-    listedItems = await prisma.products.findUnique({
+    listedItems = await prisma.products.findMany({
       where: {
         seller_id: userId
       },
@@ -47,6 +47,7 @@ export const GET = async (req) => {
         product_uuid: true,
         title: true,
         description: true,
+        image_url: true,
         price: true,
         number_of_items: true
       }
