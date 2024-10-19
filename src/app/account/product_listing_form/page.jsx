@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import ButtonBack from '@/components/ButtonBack'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 const ProductListing = () => {
   const [productName, setProductName] = useState('')
@@ -12,15 +14,10 @@ const ProductListing = () => {
   const [image, setImage] = useState(null)
   const [price, setPrice] = useState('')
   const [items, setItems] = useState(1)
-  const [error, setError] = useState(null)
-
-  // These categories will be loaded from the database.
   const [allCategories, setAllCategories] = useState(null)
 
   // Load the available categories from the database.
   useEffect(() => {
-    console.log('useEffect started...')
-
     const handleDatabaseRequest = async () => {
       try {
         const response = await fetch('/api/db/get_product_categories', {
@@ -30,59 +27,31 @@ const ProductListing = () => {
           }
         })
 
-        // Check if the request was executed successfully.
         if (response.ok) {
-          // Get the response data.
           const data = await response.json()
-
-          // Log the data.
-          console.log(data)
-
-          // Update the categories.
           setAllCategories(data)
         } else {
-          // An error occurred while retrieving the categories.
-
-          // Get the error data.
           const errorData = await response.json()
-
-          // Log the error.
-          console.log(errorData.message)
-
-          // Display the error to the user.
-          setError(errorData.message)
-        } // end if
+          toast.error(`Error loading categories: ${errorData.message}`)
+        }
       } catch (err) {
-        // An error occurred while retrieving the categories.
+        toast.error('Error loading categories. Please try again later.')
+      }
+    }
 
-        // Log the error.
-        console.log(err)
-
-        // Display the error to the user.
-        // setError(err)
-      } // end try-catch
-    } // end handleDatabaseRequest.
-
-    // Call the function to execute the request.
     handleDatabaseRequest()
   }, [])
 
   const handleSubmit = async (e) => {
-    // Prevent the default form submission behavior.
     e.preventDefault()
-
-    // Reset any previous error messages
-    setError(null)
 
     // Check if the image exceeds 10MB in size
     if (image && image.size > 10485760) {
-      setError('Image size exceeds 10MB limit.')
+      toast.error('Image size exceeds 10MB limit.')
       return
-    } // end if
+    }
 
-    // Create a submission form.
     const formData = new FormData()
-
     formData.append('productTitle', productName)
     formData.append('productDescription', description)
     formData.append('productCategory', category)
@@ -90,7 +59,6 @@ const ProductListing = () => {
     formData.append('productPrice', price)
     formData.append('numberOfItems', items)
 
-    // Call an api to list the product.
     try {
       const response = await fetch('/api/db/list_item', {
         method: 'POST',
@@ -98,45 +66,26 @@ const ProductListing = () => {
         body: formData
       })
 
-      console.log(response)
-
-      // Check if the response was successful.
       if (response.ok) {
-        // The response was successful.
-        // Redirect the user to sales page.
-        // Do hard reload to update the state.
-        window.location.href = '/account/sales'
+        // Show success toast and redirect after 0.5 seconds (500ms)
+        toast.success('Product listed successfully! Redirecting...')
+        setTimeout(() => {
+          window.location.href = '/account/sales'
+        }, 500) // 500ms delay
       } else {
-        // An error occurred.
-
-        // Get the error.
         const errorData = await response.json()
-
-        // Log the error.
-        console.log(errorData.message)
-
-        // Display the error to the user.
-        setError(errorData.message)
-      } // end if
+        toast.error(`Error listing product: ${errorData.message}`)
+      }
     } catch (err) {
-      // Something went wrong.
-
-      // Log the error.
-      console.log(err)
-
-      // Display the error to the user.
-      setError(err)
-    } // end try-catch
-  } // end function handleSubmit
+      toast.error('Error listing product. Please try again later.')
+    }
+  }
 
   return (
     <div className="min-h-screen bg-light d-flex flex-column justify-content-center align-items-center">
       <ButtonBack href="/account/sales" />
 
       <h1 style={{ margin: '3rem 0 3rem 0' }}>List a Product</h1>
-
-      {/* Error message displayed if there is an error */}
-      {error && <p className="text-danger">{error}</p>}
 
       <Form
         className="w-80"
@@ -224,6 +173,15 @@ const ProductListing = () => {
           Submit Product
         </Button>
       </Form>
+
+      {/* Toastify Container */}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        pauseOnHover
+        closeOnClick
+      />
     </div>
   )
 }

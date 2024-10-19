@@ -5,6 +5,8 @@ import { Container } from 'react-bootstrap'
 import Header from '@/components/header/Header'
 import Footer from '@/components/footer/Footer'
 import ProductCard from '@/components/ProductCard'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 const Purchase = () => {
   const [isHovered, setIsHovered] = useState(false)
@@ -50,6 +52,7 @@ const Purchase = () => {
 
           // Display the error to the user.
           setError(errorData.message)
+          toast.error(errorData.message)
         }
       } catch (err) {
         // An error occurred while making the API request.
@@ -59,6 +62,7 @@ const Purchase = () => {
 
         // Display error to the user.
         setError(err)
+        toast.error('An error occurred while loading your cart.')
       } // end try-catch
     } // end handleCartInfoRequest
 
@@ -99,11 +103,13 @@ const Purchase = () => {
       if (response.ok) {
         // The response was successful.
 
-        // Notify the user about success.
-        alert('The purchase was completed successfully!')
+        // Notify the user about success using Toastify.
+        toast.success('The purchase was completed successfully! Redirecting...')
 
-        // Redirect the user to their account.
-        window.location.href = '/account'
+        // Redirect the user to their account after a short delay (optional).
+        setTimeout(() => {
+          window.location.href = '/account'
+        }, 1000) // 0.5-second delay before redirecting
       } else {
         // Something went wrong.
 
@@ -113,8 +119,9 @@ const Purchase = () => {
         // Log the error.
         console.log(errorData.message)
 
-        // Show the error to the user.
+        // Show the error to the user using Toastify.
         setError(errorData.message)
+        toast.error(errorData.message)
       } // end if
     } catch (err) {
       // An error occurred while making a request.
@@ -122,10 +129,11 @@ const Purchase = () => {
       // Log the error.
       console.log(err)
 
-      // Set the error.
+      // Set the error and show it using Toastify.
       setError(err)
+      toast.error('An error occurred during the purchase. Please try again.')
     } // end try-catch
-  } // end function handelPurchase
+  } // end function handlePurchase
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -154,7 +162,7 @@ const Purchase = () => {
               )
 
               return (
-                <div>
+                <div key={index}>
                   <ProductCard
                     title={cartItem.products.title}
                     description={cartItem.products.description}
@@ -220,6 +228,15 @@ const Purchase = () => {
           Purchase
         </button>
       </div>
+
+      {/* Toastify Container */}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        pauseOnHover
+        closeOnClick
+      />
 
       {/* Footer Section */}
       <Footer />

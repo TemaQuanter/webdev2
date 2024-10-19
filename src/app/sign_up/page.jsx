@@ -6,6 +6,8 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { INTERNAL_SERVER_ERROR } from '@/constants'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css' // Import Toastify CSS
 
 const SignUp = () => {
   const [firstName, setFirstName] = useState('')
@@ -13,30 +15,23 @@ const SignUp = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [repeatPassword, setRepeatPassword] = useState('')
-
   const router = useRouter()
 
   // Error to be displayed in case something goes wrong.
-  const [error, setError] = useState(null)
-
   const handleSubmit = async (e) => {
     // Prevent a default behavior.
     e.preventDefault()
 
-    // Clear any existing errors.
-    setError(null)
-
     // Make sure that password and repeat password match.
     if (password !== repeatPassword) {
-      // Display an error.
-      setError('Passwords do not match.')
-
+      // Display an error toast.
+      toast.error('Passwords do not match.')
       return
-    } // end if
+    }
 
-    // Try to make a call to register api.
+    // Try to make a call to register API.
     try {
-      // Make a call to registration api and send user credentials to it.
+      // Make a call to registration API and send user credentials to it.
       const response = await fetch('api/auth/register', {
         method: 'POST',
         headers: {
@@ -53,19 +48,31 @@ const SignUp = () => {
       })
 
       // Check the server response.
+      const responseData = await response.json()
+
       if (response.ok) {
-        // The response is OK and it is possible to proceed further.
-        // Redirect the client to log in page.
-        router.push('/sign_in')
+        // Display a success toast
+        toast.success(
+          responseData.message || 'Registration successful! Redirecting...'
+        )
+        // Redirect after a short delay to allow the user to see the toast message
+        setTimeout(() => {
+          router.push('/sign_in')
+        }, 1000) // 2-second delay before redirect
       } else {
-        // An error was returned.
-        const errorData = await response.json()
-        setError(errorData.message)
+        // Display an error toast if the server responds with an error
+        toast.error(
+          responseData.message || 'Registration failed. Please try again.'
+        )
       }
     } catch (err) {
-      setError(INTERNAL_SERVER_ERROR)
-    } // end try-catch
-  } // end function handleSubmit
+      // Display an error toast if the request fails
+      toast.error(
+        INTERNAL_SERVER_ERROR || 'Something went wrong. Please try again.'
+      )
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gray-100 d-flex flex-column justify-content-center align-items-center">
       <div
@@ -81,10 +88,7 @@ const SignUp = () => {
         Sign up
       </p>
 
-      {/* An error message, if it is necessary to display it. */}
-      {error && <p className="text-danger">{error}</p>}
-
-      {/* Login form */}
+      {/* Registration form */}
       <Form
         className="d-flex flex-column align-items-center"
         style={{ width: '80vw', maxWidth: '30rem' }}
@@ -163,6 +167,15 @@ const SignUp = () => {
       <Link href="/" style={{ marginTop: '1rem' }}>
         &lt; Back
       </Link>
+
+      {/* Add ToastContainer to display toast notifications */}
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        closeOnClick
+        pauseOnHover
+      />
     </div>
   )
 }

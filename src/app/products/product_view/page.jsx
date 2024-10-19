@@ -1,4 +1,5 @@
 'use client'
+
 import { useEffect, useState } from 'react'
 import Header from '@/components/header/Header'
 import Footer from '@/components/footer/Footer'
@@ -6,6 +7,8 @@ import ProductCard from '@/components/ProductCard'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import { useSearchParams } from 'next/navigation'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 const RESULT_LIMIT = 10
 
@@ -13,8 +16,6 @@ const Products = () => {
   const [product, setProduct] = useState(null)
   const [error, setError] = useState(null)
   const [imageUrl, setImageUrl] = useState(null)
-
-  // Number of items to purchase.
   const [items, setItems] = useState(1)
 
   // Get search parameters from the URL
@@ -23,81 +24,59 @@ const Products = () => {
   // Access the 'search' query parameter
   const searchQuery = searchParams.get('search')
 
-  // Access the 'productUUId' query parameter.
+  // Access the 'productUUId' query parameter
   const productUUId = searchParams.get('productUUId')
 
-  // Retrieve the searched for products from the database.
+  // Retrieve the searched products from the database
   useEffect(() => {
-    // Reset the errors.
+    // Reset any previous error
     setError(null)
 
-    // This function makes an api call to retrieve the product items.
+    // Function to handle product search API request
     const handleProductSearch = async () => {
-      // Make a request to retrieve the searched for products.
       try {
+        // Make a POST request to fetch product data
         const response = await fetch('/api/db/get_product_public_data', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
           credentials: 'include',
-          body: JSON.stringify({
-            product_uuid: productUUId
-          })
+          body: JSON.stringify({ product_uuid: productUUId })
         })
 
-        // Check if the request was successful.
+        // Check if the request was successful
         if (response.ok) {
-          // The products were successfully retrieved from the database.
-
-          // Get the data.
           const data = await response.json()
 
-          // Log the data.
-          console.log(data)
-
-          // Get a correct image URL.
+          // Set the image URL and product data
           setImageUrl(data.image_url.replace('public/', '/'))
-
-          // Store the response.
           setProduct(data)
         } else {
-          // The response is an error.
-
-          // Retrieve the error information.
+          // Handle response errors
           const errorData = await response.json()
-
-          // Display the error.
-          console.log(errorData.message)
-
-          // Show the error to the user.
           setError(errorData.message)
-        } // end if
+        }
       } catch (err) {
-        // An error occurred while retrieving the products.
-
-        // Log the error.
-        console.log(err)
-
-        // Display the error to the user.
+        // Handle any other errors
         setError(err)
-      } // end try-catch
-    } // end function handleProductSearch
+      }
+    }
 
-    // Call the request handler.
+    // Execute the product search function
     handleProductSearch()
-  }, [])
+  }, [productUUId])
 
+  // Function to handle adding product to cart
   const handleAddToCart = async (e) => {
-    // This prevent the page from instant reload on form
-    // submission.
+    // Prevent page reload on form submission
     e.preventDefault()
 
-    // Reset errors.
+    // Reset previous error
     setError(null)
 
-    // Make a request to an API to add a product to the cart.
     try {
+      // Make a POST request to add product to the cart
       const response = await fetch('/api/db/add_to_cart', {
         method: 'POST',
         headers: {
@@ -110,41 +89,37 @@ const Products = () => {
         })
       })
 
-      // Check if the request was successful.
+      // Check if the request was successful
       if (response.ok) {
-        // Response was successful.
+        // Show success message using Toastify
+        toast.success('Product successfully added to cart! Redirecting...')
 
-        // Tell a user about that.
-        alert('The product was successfully added to a cart')
-
-        // Redirect the user to the the cart.
-        window.location.href = '/account/cart'
+        // Redirect to cart page after a short delay (1 second)
+        setTimeout(() => {
+          window.location.href = '/account/cart'
+        }, 1000)
       } else {
-        // An error occurred.
-
-        // Get the error.
+        // Handle response errors
         const errorData = await response.json()
-
-        // Log the error.
-        console.log(errorData.message)
-
-        // Show the error message to the user.
         setError(errorData.message)
-      } // end if
+        toast.error(errorData.message)
+      }
     } catch (err) {
-      // Log the error.
-      console.log(err)
-
-      // Display the error to the user.
+      // Handle any other errors
       setError(err)
-    } // end try-catch
-  } // end function handleAddToCart
+      toast.error('An error occurred while adding to cart.')
+    }
+  }
 
   return (
     <>
-      <Header searchBarText={searchQuery} /> {/* Include the header */}
-      {/* Error message displayed if there is an error */}
+      {/* Include the header component */}
+      <Header searchBarText={searchQuery} />
+
+      {/* Display any error message */}
       {error && <p className="text-danger">{error}</p>}
+
+      {/* Display the product information */}
       {product && (
         <div>
           <h1 className="fs-4 text-center" style={{ margin: '1rem 0 1rem 0' }}>
@@ -153,11 +128,12 @@ const Products = () => {
           <p className="fs-5 text-center" style={{ marginTop: '1rem' }}>
             Category: {product.categories.name}
           </p>
+
           <div
             className="mx-auto d-flex flex-column"
             style={{ maxWidth: '85%', gap: '3rem' }}
           >
-            {/* Conditionally render the list only when on the client and when products are loaded */}
+            {/* Render the ProductCard component */}
             <ProductCard
               title={product.title}
               description={product.description}
@@ -166,7 +142,8 @@ const Products = () => {
               price={product.price}
             />
           </div>
-          {/* Number of items available in stock */}
+
+          {/* Display stock information */}
           {product.number_of_items > 0 ? (
             <p
               className="fs-4 text-success text-center"
@@ -184,6 +161,8 @@ const Products = () => {
           )}
         </div>
       )}
+
+      {/* Form to add the product to the cart */}
       <div
         className="d-flex flex-column align-items-center justify-content-center"
         style={{ marginTop: '2rem' }}
@@ -215,9 +194,20 @@ const Products = () => {
           </Button>
         </Form>
       </div>
-      <Footer /> {/* Include the footer */}
+
+      {/* Include the footer component */}
+      <Footer />
+
+      {/* Toastify container for notifications */}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        pauseOnHover
+        closeOnClick
+      />
     </>
   )
-} // end function Products
+}
 
 export default Products

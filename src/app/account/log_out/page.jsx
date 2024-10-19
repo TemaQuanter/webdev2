@@ -1,10 +1,8 @@
-/*
-    This endpoint logs out the user.
-*/
-
 'use client'
 
 import { useState, useEffect } from 'react'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css' // Import Toastify CSS
 
 const Logout = () => {
   const [isLoading, setIsLoading] = useState(true)
@@ -15,7 +13,7 @@ const Logout = () => {
 
     const handleLogout = async () => {
       try {
-        console.log('Starting the refresh process...')
+        console.log('Starting the logout process...')
 
         const response = await fetch('/api/auth/log_out', {
           method: 'POST',
@@ -31,14 +29,21 @@ const Logout = () => {
 
         // Check if the response was successful.
         if (response.ok) {
-          // User logged out successfully, redirect them to the main page.
-          // Force a full page reload to ensure cookies are set and state is correct.
-          window.location.href = '/'
+          // User logged out successfully, show success toast
+          toast.success('Logout successful! Redirecting to home...')
+
+          // Redirect after a short delay to allow the user to see the toast
+          setTimeout(() => {
+            window.location.href = '/'
+          }, 500) // .5-second delay
         } else {
-          console.error('Failed to log out.')
+          // Failed to log out, show error toast
+          toast.error('Failed to log out. Please try again.')
         } // end if
       } catch (error) {
-        console.error('Error during the refresh process:', error)
+        console.error('Error during the logout process:', error)
+        // Show a generic error toast
+        toast.error('An error occurred during logout. Please try again.')
       } finally {
         setIsLoading(false)
       } // end try-catch
@@ -49,10 +54,23 @@ const Logout = () => {
   }, [])
 
   if (isLoading) {
-    return <p>Login out...</p>
+    return <p>Logging out...</p>
   } // end if
 
-  return <p>Something went wrong, please try reloading the page.</p>
+  return (
+    <div>
+      <p>Something went wrong, please try reloading the page.</p>
+
+      {/* Add ToastContainer to display toast notifications */}
+      <ToastContainer
+        position="top-right"
+        autoClose={500}
+        hideProgressBar={false}
+        closeOnClick
+        pauseOnHover
+      />
+    </div>
+  )
 } // end function Logout
 
 export default Logout
