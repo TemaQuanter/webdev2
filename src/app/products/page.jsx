@@ -15,7 +15,7 @@ const Products = () => {
   const [error, setError] = useState(null)
 
   // Button animations.
-  const [isHovered, setIsHovered] = useState(false)
+  const [isHovered, setIsHovered] = useState(-1)
 
   // Get search parameters from the URL
   const searchParams = useSearchParams()
@@ -171,10 +171,10 @@ const Products = () => {
                 style={{ textDecoration: 'none', color: 'inherit' }}
               >
                 <div
-                  onMouseEnter={() => setIsHovered(true)}
-                  onMouseLeave={() => setIsHovered(false)}
+                  onMouseEnter={() => setIsHovered(index)}
+                  onMouseLeave={() => setIsHovered(-1)}
                   style={{
-                    transform: isHovered ? 'scale(1.05)' : 'scale(1)',
+                    transform: isHovered === index ? 'scale(1.05)' : 'scale(1)',
                     transition: 'transform 0.3s ease-in-out',
                     cursor: 'pointer'
                   }}

@@ -13,6 +13,9 @@ const Purchases = () => {
   const [error, setError] = useState(null)
   const [account, setAccount] = useState(null)
 
+  // Button animations.
+  const [isHovered, setIsHovered] = useState(-1)
+
   // Load the listed products.
   useEffect(() => {
     console.log('useEffect started...')
@@ -150,14 +153,36 @@ const Purchases = () => {
                   'public/',
                   '/'
                 )
+
+                // Create query parameters using URLSearchParams.
+                const params = new URLSearchParams({
+                  productUUId: listedProduct.product_uuid
+                })
+
                 return (
-                  <ProductCard
-                    title={listedProduct.title}
-                    sellerName={`${account.first_name} ${account.last_name}`}
-                    description={listedProduct.description}
-                    imageUrl={imagePath}
-                    price={listedProduct.price}
-                  />
+                  <Link
+                    href={`/account/edit_item?${params}`}
+                    style={{ textDecoration: 'none', color: 'inherit' }}
+                  >
+                    <div
+                      onMouseEnter={() => setIsHovered(index)}
+                      onMouseLeave={() => setIsHovered(-1)}
+                      style={{
+                        transform:
+                          isHovered === index ? 'scale(1.05)' : 'scale(1)',
+                        transition: 'transform 0.3s ease-in-out',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      <ProductCard
+                        title={listedProduct.title}
+                        sellerName={`${account.first_name} ${account.last_name}`}
+                        description={listedProduct.description}
+                        imageUrl={imagePath}
+                        price={listedProduct.price}
+                      />
+                    </div>
+                  </Link>
                 )
               })
             : null}

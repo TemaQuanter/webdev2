@@ -31,7 +31,8 @@ const FlexboxLayout = (props) => {
             width: '100%', // Make the image responsive
             maxWidth: '150px', // Cap the image size to 150px
             aspectRatio: '1', // Keep the image square
-            backgroundColor: '#d3d3d3'
+            backgroundColor: '#d3d3d3',
+            objectFit: 'cover'
           }}
           src={props.imageUrl}
         />
@@ -67,16 +68,6 @@ const FlexboxLayout = (props) => {
         <p style={{ marginBottom: '0.25rem', fontWeight: 'bold' }}>
           Price: EUR {props.price}
         </p>
-        {props.buttonAvailable && (
-          <Button
-            type="submit"
-            variant="primary"
-            style={{ width: '90%', maxWidth: '10rem', marginTop: '1rem' }}
-            onSubmit={props.onSubmit}
-          >
-            {props.value}
-          </Button>
-        )}
       </div>
     </div>
   )

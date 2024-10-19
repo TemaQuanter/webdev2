@@ -4,20 +4,32 @@ import { useEffect, useState } from 'react'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import ButtonBack from '@/components/ButtonBack'
-import { ToastContainer, toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
+import { useSearchParams } from 'next/navigation'
 
-const ProductListing = () => {
+const ItemEditing = () => {
   const [productName, setProductName] = useState('')
   const [description, setDescription] = useState('')
   const [category, setCategory] = useState('')
   const [image, setImage] = useState(null)
   const [price, setPrice] = useState('')
   const [items, setItems] = useState(1)
+  const [error, setError] = useState(null)
+
+  const [imageUrl, setImageUrl] = useState(null)
+
+  // Search parameters.
+  const searchParams = useSearchParams()
+
+  // Get product UUID from search parameters.
+  const productUUId = searchParams.get('productUUId')
+
+  // These categories will be loaded from the database.
   const [allCategories, setAllCategories] = useState(null)
 
   // Load the available categories from the database.
   useEffect(() => {
+    console.log('useEffect started...')
+
     const handleDatabaseRequest = async () => {
       try {
         const response = await fetch('/api/db/get_product_categories', {
@@ -27,68 +39,175 @@ const ProductListing = () => {
           }
         })
 
+        // Check if the request was executed successfully.
         if (response.ok) {
+          // Get the response data.
           const data = await response.json()
+
+          // Log the data.
+          console.log(data)
+
+          // Update the categories.
           setAllCategories(data)
         } else {
-          const errorData = await response.json()
-          toast.error(`Error loading categories: ${errorData.message}`)
-        }
-      } catch (err) {
-        toast.error('Error loading categories. Please try again later.')
-      }
-    }
+          // An error occurred while retrieving the categories.
 
+          // Get the error data.
+          const errorData = await response.json()
+
+          // Log the error.
+          console.log(errorData.message)
+
+          // Display the error to the user.
+          setError(errorData.message)
+        } // end if
+      } catch (err) {
+        // An error occurred while retrieving the categories.
+
+        // Log the error.
+        console.log(err)
+
+        // Display the error to the user.
+        // setError(err)
+      } // end try-catch
+    } // end handleDatabaseRequest.
+
+    // Call the function to execute the request.
     handleDatabaseRequest()
-  }, [])
+  }, []) // end useEffect
+
+  // Load the current product data.
+  useEffect(() => {
+    console.log('useEffect started...')
+
+    const handleDatabaseRequest = async () => {
+      try {
+        // Make a POST request to fetch product data
+        const response = await fetch('/api/db/get_product_public_data', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          credentials: 'include',
+          body: JSON.stringify({ product_uuid: productUUId })
+        })
+
+        // Check if the request was executed successfully.
+        if (response.ok) {
+          // Get the response data.
+          const data = await response.json()
+
+          // Log the data.
+          console.log(data)
+
+          // Update the fields.
+          setProductName(data.title)
+          setDescription(data.description)
+          setCategory(data.categories.category_uuid)
+          setPrice(data.price)
+          setItems(data.number_of_items)
+          setImageUrl(data.image_url.replace('public/', '/'))
+        } else {
+          // An error occurred while retrieving the categories.
+
+          // Get the error data.
+          const errorData = await response.json()
+
+          // Log the error.
+          console.log(errorData.message)
+
+          // Display the error to the user.
+          setError(errorData.message)
+        } // end if
+      } catch (err) {
+        // An error occurred while retrieving the categories.
+
+        // Log the error.
+        console.log(err)
+
+        // Display the error to the user.
+        // setError(err)
+      } // end try-catch
+    } // end handleDatabaseRequest.
+
+    // Call the function to execute the request.
+    handleDatabaseRequest()
+  }, []) // end useEffect
 
   const handleSubmit = async (e) => {
+    // Prevent the default form submission behavior.
     e.preventDefault()
+
+    // Reset any previous error messages
+    setError(null)
 
     // Check if the image exceeds 10MB in size
     if (image && image.size > 10485760) {
-      toast.error('Image size exceeds 10MB limit.')
+      setError('Image size exceeds 10MB limit.')
       return
-    }
+    } // end if
 
+    // Create a submission form.
     const formData = new FormData()
+
     formData.append('productTitle', productName)
     formData.append('productDescription', description)
     formData.append('productCategory', category)
     formData.append('productImage', image)
     formData.append('productPrice', price)
     formData.append('numberOfItems', items)
+    formData.append('productUUId', productUUId)
 
+    // Call an api to list the product.
     try {
-      const response = await fetch('/api/db/list_item', {
+      const response = await fetch('/api/db/update_item_data', {
         method: 'POST',
         credentials: 'include',
         body: formData
       })
 
+      console.log(response)
+
+      // Check if the response was successful.
       if (response.ok) {
-        // Show success toast and redirect after 0.5 seconds (500ms)
-        toast.success('Product listed successfully! Redirecting...')
-        setTimeout(() => {
-          window.location.href = '/account/sales'
-        }, 500) // 500ms delay
+        // The response was successful.
+        // Redirect the user to sales page.
+        // Do hard reload to update the state.
+        window.location.href = '/account/sales'
       } else {
+        // An error occurred.
+
+        // Get the error.
         const errorData = await response.json()
-        toast.error(`Error listing product: ${errorData.message}`)
-      }
+
+        // Log the error.
+        console.log(errorData.message)
+
+        // Display the error to the user.
+        setError(errorData.message)
+      } // end if
     } catch (err) {
-      toast.error('Error listing product. Please try again later.')
-    }
-  }
+      // Something went wrong.
+
+      // Log the error.
+      console.log(err)
+
+      // Display the error to the user.
+      setError(err)
+    } // end try-catch
+  } // end function handleSubmit
 
   return (
     <div className="min-h-screen bg-light d-flex flex-column justify-content-center align-items-center">
       <ButtonBack href="/account/sales" />
 
-      <h1 style={{ margin: '3rem 0 3rem 0' }}>List a Product</h1>
+      <h1 style={{ margin: '3rem 0 3rem 0' }}>Edit Item</h1>
+
+      {/* Error message displayed if there is an error */}
+      {error && <p className="text-danger">{error}</p>}
 
       <img
-        src={image && URL.createObjectURL(image)}
+        src={image ? URL.createObjectURL(image) : imageUrl}
         width={150}
         height={150}
         style={{
@@ -153,7 +272,6 @@ const ProductListing = () => {
           <Form.Control
             type="file"
             onChange={(e) => setImage(e.target.files[0])}
-            required
           />
         </Form.Group>
 
@@ -172,7 +290,7 @@ const ProductListing = () => {
           <Form.Label>Number of Items for Sale</Form.Label>
           <Form.Control
             type="number"
-            min={1}
+            min={0}
             value={items}
             onChange={(e) => setItems(e.target.value)}
             required
@@ -185,20 +303,11 @@ const ProductListing = () => {
           variant="primary"
           type="submit"
         >
-          Submit Product
+          Save changes
         </Button>
       </Form>
-
-      {/* Toastify Container */}
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        pauseOnHover
-        closeOnClick
-      />
     </div>
   )
 }
 
-export default ProductListing
+export default ItemEditing
