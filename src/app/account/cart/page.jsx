@@ -79,6 +79,54 @@ const Purchase = () => {
     return totalPrice.toFixed(2)
   } // end function getTotal
 
+  // This function handles a purchase of the product.
+  const handlePurchase = async (e) => {
+    // Prevent the page from automatic reload.
+    e.preventDefault()
+
+    // Send a request to make a purchase.
+    try {
+      const response = await fetch('/api/db/make_purchase', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify({})
+      })
+
+      // Check if the response was successful.
+      if (response.ok) {
+        // The response was successful.
+
+        // Notify the user about success.
+        alert('The purchase was completed successfully!')
+
+        // Redirect the user to their account.
+        window.location.href = '/account'
+      } else {
+        // Something went wrong.
+
+        // Retrieve the error from the response.
+        const errorData = await response.json()
+
+        // Log the error.
+        console.log(errorData.message)
+
+        // Show the error to the user.
+        setError(errorData.message)
+      } // end if
+    } catch (err) {
+      // An error occurred while making a request.
+
+      // Log the error.
+      console.log(err)
+
+      // Set the error.
+      setError(err)
+    } // end try-catch
+  } // end function handelPurchase
+
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Header Section */}
@@ -155,6 +203,7 @@ const Purchase = () => {
         <button
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
+          onClick={handlePurchase}
           style={{
             padding: '5px 10px',
             borderRadius: '20px',

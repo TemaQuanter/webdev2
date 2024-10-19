@@ -3,6 +3,7 @@
 */
 
 import { INTERNAL_SERVER_ERROR } from '@/constants'
+import { TYPE_ACCESS_TOKEN, verifyJWT } from '@/utils/jwt_manager'
 import { PrismaClient } from '@prisma/client'
 import { NextResponse } from 'next/server'
 
@@ -109,7 +110,11 @@ export const POST = async (req) => {
                 user_id: Number(item.products.seller_id)
               }
             },
-            product_id: Number(item.product_id),
+            products: {
+              connect: {
+                product_id: Number(item.product_id)
+              }
+            },
             number_of_items: Number(item.number_of_items)
           }
         })
@@ -126,7 +131,7 @@ export const POST = async (req) => {
       })
 
       // Clear the user cart.
-      await prisma.cart.delete({
+      await prisma.cart.deleteMany({
         where: {
           user_id: userId
         }
@@ -148,6 +153,6 @@ export const POST = async (req) => {
     await prisma.$disconnect()
   } // end try-catch
 
-  // Return the user.
-  return NextResponse.json(user, { status: 200 })
+  // Return the successful response.
+  return NextResponse.json({}, { status: 200 })
 } // end function POST
