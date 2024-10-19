@@ -49,15 +49,12 @@ const Purchases = () => {
 
           data.map((item, index) => {
             // Check if this sales date was already recorded.
-
-            // If array is empty, then include this date.
-            // Else if the date is not recorded, then record it.
             if (index === 0) {
               sDates.push(item.purchase_date)
             } else if (sDates[sDates.length - 1] !== item.purchase_date) {
               sDates.push(item.purchase_date)
-            } // end if
-          }) // end map
+            }
+          })
 
           // Set the sales dates.
           setSalesDates(sDates)
@@ -69,31 +66,33 @@ const Purchases = () => {
           console.log(sDates)
         } else {
           // An error occurred while making a request.
-
-          // Get the error data.
           const errorData = await response.json()
-
-          // Log the error.
           console.log(errorData.message)
-
-          // Display the error to the user.
           setError(errorData.message)
-        } // end if
+        }
       } catch (err) {
-        // Log the error.
         console.log(err)
-
-        // Show the error to the user.
         setError(err)
-      } // end try-catch
-    } // end function handleLoadSalesHistory
+      }
+    }
 
-    // Call the function to retrieve the sales data.
     handleLoadSalesHistory()
   }, []) // end useEffect
 
   return (
     <div className="min-h-screen bg-gray-100 d-flex flex-column justify-content-center align-items-center">
+      {/* Purchases Dashboard Section with Gradient and Fade-in Animation */}
+      <Container
+        fluid
+        className="purchases-dashboard-section text-white py-5"
+        style={{
+          background: 'linear-gradient(90deg, #d3d3d3, #8bcbff)',
+          animation: 'fadeIn 2s ease-in-out'
+        }}
+      >
+        <h1 className="text-center">Purchases Dashboard</h1>
+      </Container>
+
       <ButtonBack href="/account/sales" />
 
       <div>
@@ -101,7 +100,6 @@ const Purchases = () => {
           <p className="text-left fs-5 fw-bolder" style={{ marginTop: '2rem' }}>
             Purchases
           </p>
-          {/* Main Page Heading */}
         </Container>
         <hr />
       </div>
@@ -153,6 +151,18 @@ const Purchases = () => {
             ))}
         </div>
       </Container>
+
+      {/* Keyframes for fade-in effect */}
+      <style jsx>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+      `}</style>
     </div>
   )
 }

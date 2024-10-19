@@ -15,6 +15,9 @@ const Sales = () => {
   const [salesHistory, setSalesHistory] = useState([])
   const [salesDates, setSalesDates] = useState([])
 
+  // User information.
+  const [userName, setUserName] = useState('') // Store user's name here
+
   // An error indicator.
   const [error, setError] = useState(null)
 
@@ -44,20 +47,22 @@ const Sales = () => {
             (a, b) => new Date(a.purchase_date) - new Date(b.purchase_date)
           )
 
+          // Get the user's name from the data (assuming it's included)
+          if (data.length > 0) {
+            const { first_name, last_name } = data[0].products.users // Modify as per your data structure
+            setUserName(`${first_name} ${last_name}`)
+          }
+
           // Get all sales dates in a sorted order.
           let sDates = []
 
           data.map((item, index) => {
-            // Check if this sales date was already recorded.
-
-            // If array is empty, then include this date.
-            // Else if the date is not recorded, then record it.
             if (index === 0) {
               sDates.push(item.purchase_date)
             } else if (sDates[sDates.length - 1] !== item.purchase_date) {
               sDates.push(item.purchase_date)
-            } // end if
-          }) // end map
+            }
+          })
 
           // Set the sales dates.
           setSalesDates(sDates)
@@ -69,39 +74,42 @@ const Sales = () => {
           console.log(sDates)
         } else {
           // An error occurred while making a request.
-
-          // Get the error data.
           const errorData = await response.json()
-
-          // Log the error.
           console.log(errorData.message)
-
-          // Display the error to the user.
           setError(errorData.message)
-        } // end if
+        }
       } catch (err) {
-        // Log the error.
         console.log(err)
-
-        // Show the error to the user.
         setError(err)
-      } // end try-catch
-    } // end function handleLoadSalesHistory
+      }
+    }
 
-    // Call the function to retrieve the sales data.
     handleLoadSalesHistory()
   }, []) // end useEffect
 
   return (
     <div className="min-h-screen bg-gray-100 d-flex flex-column justify-content-center align-items-center">
-      <ButtonBack href="/account/sales" />
+      {/* Sales Dashboard Section with Gradient and Fade-in Animation */}
+      <Container
+        fluid
+        className="sales-dashboard-section text-white py-5"
+        style={{
+          background: 'linear-gradient(90deg, #d3d3d3, #8bcbff)',
+          animation: 'fadeIn 2s ease-in-out'
+        }}
+      >
+        <h1 className="text-center">
+          Sales Overview - {userName ? userName : 'Valued User'}
+        </h1>
+      </Container>
 
       <div>
+        <ButtonBack href="/account/sales" />
+
         <Container>
           <p className="text-left fs-5 fw-bolder" style={{ marginTop: '2rem' }}>
-            Sales history
+            Sales History
           </p>
-          {/* Main Page Heading */}
         </Container>
         <hr />
       </div>
@@ -128,7 +136,6 @@ const Sales = () => {
                     return sale.purchase_date === salesDate
                   })
                   .map((filteredSale, idx) => {
-                    // Get a proper image URL.
                     const imageUrl = filteredSale.products.image_url.replace(
                       'public/',
                       '/'
@@ -153,6 +160,18 @@ const Sales = () => {
             ))}
         </div>
       </Container>
+
+      {/* Keyframes for fade-in effect */}
+      <style jsx>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+      `}</style>
     </div>
   )
 }

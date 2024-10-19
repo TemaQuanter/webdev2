@@ -78,7 +78,7 @@ const Purchases = () => {
           // Log the retrieved data.
           console.log(data)
 
-          // Load the listed items.
+          // Load the account data.
           setAccount(data)
         }
       } catch (err) {
@@ -98,6 +98,23 @@ const Purchases = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 d-flex flex-column justify-content-center align-items-center">
+      {/* Heading with gradient and fade-in animation */}
+      <Container
+        fluid
+        className="purchases-dashboard-section text-white py-5"
+        style={{
+          background: 'linear-gradient(90deg, #d3d3d3, #8bcbff)',
+          animation: 'fadeIn 2s ease-in-out'
+        }}
+      >
+        <h1 className="text-center">
+          Sales Dashboard -{' '}
+          {account
+            ? `${account.first_name} ${account.last_name}`
+            : 'Valued User'}
+        </h1>
+      </Container>
+
       <ButtonBack href="/account" />
 
       <div>
@@ -105,7 +122,6 @@ const Purchases = () => {
           <p className="text-left fs-5 fw-bolder" style={{ marginTop: '2rem' }}>
             Sales
           </p>
-          {/* Main Page Heading */}
         </Container>
         <hr />
       </div>
@@ -135,7 +151,6 @@ const Purchases = () => {
           <p className="text-left fs-5 fw-bolder" style={{ marginTop: '2rem' }}>
             Listed items:
           </p>
-          {/* Main Page Heading */}
         </Container>
         <hr />
       </div>
@@ -188,6 +203,18 @@ const Purchases = () => {
             : null}
         </div>
       </Container>
+
+      {/* Keyframes for fade-in effect */}
+      <style jsx>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+      `}</style>
     </div>
   )
 }
