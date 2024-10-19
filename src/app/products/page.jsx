@@ -5,6 +5,7 @@ import Footer from '@/components/footer/Footer'
 import ProductCard from '@/components/ProductCard'
 import Pagination from 'react-bootstrap/Pagination'
 import { useSearchParams } from 'next/navigation'
+import Link from 'next/link'
 
 const RESULT_LIMIT = 10
 
@@ -12,6 +13,9 @@ const Products = () => {
   const [products, setProducts] = useState([])
   const [sellers, setSellers] = useState([])
   const [error, setError] = useState(null)
+
+  // Button animations.
+  const [isHovered, setIsHovered] = useState(false)
 
   // Get search parameters from the URL
   const searchParams = useSearchParams()
@@ -155,14 +159,35 @@ const Products = () => {
             // Get image URL for the product.
             const imageUrl = productItem.image_url.replace('public/', '/')
 
+            // Create query parameters using URLSearchParams.
+            const params = new URLSearchParams({
+              search: searchQuery,
+              productUUId: productItem.product_uuid
+            })
+
             return (
-              <ProductCard
-                title={productItem.title}
-                description={productItem.description}
-                imageUrl={imageUrl}
-                sellerName={`${sellers[index].first_name} ${sellers[index].last_name}`}
-                price={productItem.price}
-              />
+              <Link
+                href={`/products/product_view?${params}`}
+                style={{ textDecoration: 'none', color: 'inherit' }}
+              >
+                <div
+                  onMouseEnter={() => setIsHovered(true)}
+                  onMouseLeave={() => setIsHovered(false)}
+                  style={{
+                    transform: isHovered ? 'scale(1.05)' : 'scale(1)',
+                    transition: 'transform 0.3s ease-in-out',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <ProductCard
+                    title={productItem.title}
+                    description={productItem.description}
+                    imageUrl={imageUrl}
+                    sellerName={`${sellers[index].first_name} ${sellers[index].last_name}`}
+                    price={productItem.price}
+                  />
+                </div>
+              </Link>
             )
           })}
       </div>

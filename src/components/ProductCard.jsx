@@ -1,4 +1,5 @@
 import React from 'react'
+import Button from 'react-bootstrap/Button'
 
 const FlexboxLayout = (props) => {
   return (
@@ -66,6 +67,16 @@ const FlexboxLayout = (props) => {
         <p style={{ marginBottom: '0.25rem', fontWeight: 'bold' }}>
           Price: EUR {props.price}
         </p>
+        {props.buttonAvailable && (
+          <Button
+            type="submit"
+            variant="primary"
+            style={{ width: '90%', maxWidth: '10rem', marginTop: '1rem' }}
+            onSubmit={props.onSubmit}
+          >
+            {props.value}
+          </Button>
+        )}
       </div>
     </div>
   )

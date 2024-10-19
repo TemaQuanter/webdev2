@@ -47,5 +47,5 @@ export async function middleware(req) {
 } // end function middleware
 
 export const config = {
-  matcher: ['/account/:path*', '/account']
+  matcher: ['/account/:path*', '/account', '/api/db/add_to_cart']
 } // end config

@@ -8,41 +8,57 @@ import { PrismaClient } from '@prisma/client'
 import { NextResponse } from 'next/server'
 
 export const POST = async (req) => {
-  console.log('get_public_user_data api triggered')
+  console.log('get_product_public_data api triggered')
 
   // Retrieve the user credentials from the request.
   let data = await req.json()
 
   // Verify that the uuid of the user is included in the request.
-  if (data.user_uuid === null) {
+  if (data.product_uuid === null) {
     // Return an error.
     return NextResponse.json(
-      { message: 'user_uuid must be specified' },
+      { message: 'product_uuid must be specified' },
       { status: 400 }
     )
   } // end if
 
   // Data that will be retrieved from the database.
-  let user
+  let product
 
   // Establish a connection with the database.
   const prisma = new PrismaClient()
 
   // Try to retrieve the necessary data.
   try {
-    // Retrieve all the required user data from the database.
-    user = await prisma.users.findUnique({
+    // Retrieve all the required product data from the database.
+    product = await prisma.products.findUnique({
       where: {
-        user_uuid: data.user_uuid
+        product_uuid: data.product_uuid
       },
       select: {
-        user_uuid: true,
-        first_name: true,
-        last_name: true
+        product_uuid: true,
+        users: {
+          select: {
+            user_uuid: true,
+            first_name: true,
+            last_name: true
+          }
+        },
+        categories: {
+          select: {
+            category_uuid: true,
+            name: true
+          }
+        },
+        title: true,
+        description: true,
+        image_url: true,
+        price: true,
+        number_of_items: true
       }
     })
 
-    console.log(user)
+    console.log(product)
   } catch (err) {
     // Log the error.
     console.log(err)
@@ -57,6 +73,6 @@ export const POST = async (req) => {
     await prisma.$disconnect()
   } // end try-catch
 
-  // Return the user.
-  return NextResponse.json(user, { status: 200 })
+  // Return the product.
+  return NextResponse.json(product, { status: 200 })
 } // end function POST
