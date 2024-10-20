@@ -62,18 +62,32 @@ export const GET = async (req) => {
     console.log(user)
 
     // Calculate the number of purchases.
-    numOfPurchases = await prisma.purchases.count({
-      where: {
-        buyer_id: userId
-      }
-    })
+    numOfPurchases =
+      (
+        await prisma.purchases.aggregate({
+          _sum: {
+            number_of_items: true
+          },
+          where: {
+            buyer_id: userId
+          }
+        })
+      )._sum.number_of_items || 0
 
     // Calculate the number of sales.
-    numOfSales = await prisma.purchases.count({
-      where: {
-        seller_id: userId
-      }
-    })
+    numOfSales =
+      (
+        await prisma.purchases.aggregate({
+          _sum: {
+            number_of_items: true
+          },
+          where: {
+            seller_id: userId
+          }
+        })
+      )._sum.number_of_items || 0
+
+    console.log(numOfSales)
   } catch (err) {
     // Log the error.
     console.log(err)

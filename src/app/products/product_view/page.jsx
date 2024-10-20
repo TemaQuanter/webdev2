@@ -67,6 +67,69 @@ const Products = () => {
     handleProductSearch()
   }, [productUUId])
 
+  // Load the current number of items in the user cart.
+  useEffect(() => {
+    console.log('useEffect cart check started...')
+    // Reset any previous error
+    setError(null)
+
+    // Function to handle product search API request
+    const handleCartSearch = async () => {
+      try {
+        // Make a POST request to fetch product data
+        const response = await fetch('/api/db/get_cart', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          credentials: 'include'
+        })
+
+        // If the user is not authorized, then don't do anything.
+        if (response.status === 401) {
+          return
+        } // end if
+
+        // Check if the request was successful
+        if (response.ok) {
+          const data = await response.json()
+
+          console.log(data)
+          console.log('Checking products')
+
+          let numItems = 0
+
+          // Find the product with the required UUID and get the
+          // number of items in the user's cart.
+          for (const curProduct of data) {
+            // Check if the current product is the product searched for.
+            if (curProduct.products.product_uuid === productUUId) {
+              // The product is found.
+              // Set the number of items in the cart.
+              numItems = curProduct.number_of_items
+
+              // Exit the loop immediately.
+              break
+            } // end if
+          } // end for
+
+          // Set the Number of items in the user's cart
+          setItems(numItems)
+        } else {
+          // Handle response errors
+          const errorData = await response.json()
+          setError(errorData.message)
+        }
+      } catch (err) {
+        // Handle any other errors
+        setError(err)
+      } // end try-catch
+    } // end function handleCartSearch
+
+    // Execute the cart search function
+    handleCartSearch()
+  }, [product])
+
   // Function to handle adding product to cart
   const handleAddToCart = async (e) => {
     // Prevent page reload on form submission
@@ -176,8 +239,8 @@ const Products = () => {
             <Form.Label>Quantity</Form.Label>
             <Form.Control
               type="number"
-              min={1}
-              max={product ? Math.max(product.number_of_items, 1) : 1}
+              min={0}
+              max={product ? Math.max(product.number_of_items, 1) : 0}
               value={items}
               onChange={(e) => setItems(e.target.value)}
               required
@@ -187,10 +250,10 @@ const Products = () => {
           <Button
             style={{ borderRadius: '20px', margin: '3rem 0 3rem 0' }}
             className="w-100"
-            variant="primary"
+            variant={items > 0 ? 'primary' : 'danger'}
             type="submit"
           >
-            Add to cart
+            {items > 0 ? 'Add to cart' : 'Delete from cart'}
           </Button>
         </Form>
       </div>

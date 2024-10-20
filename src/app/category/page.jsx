@@ -131,15 +131,26 @@ const Category = () => {
               // Get a valid product image URL.
               const imageUrl = product.image_url.replace('public/', '/')
 
+              // Create query parameters using URLSearchParams.
+              const params = new URLSearchParams({
+                search: '',
+                productUUId: product.product_uuid
+              })
+
               return (
                 <Col xs={12} sm={11} md={10} lg={9} className="mb-4">
-                  <ProductCard
-                    title={product.title}
-                    description={product.description}
-                    sellerName={`${product.seller_first_name} ${product.seller_last_name}`}
-                    price={product.price}
-                    imageUrl={imageUrl}
-                  />
+                  <a
+                    href={`/products/product_view?${params}`}
+                    style={{ textDecoration: 'none', color: 'inherit' }}
+                  >
+                    <ProductCard
+                      title={product.title}
+                      description={product.description}
+                      sellerName={`${product.seller_first_name} ${product.seller_last_name}`}
+                      price={product.price}
+                      imageUrl={imageUrl}
+                    />
+                  </a>
                 </Col>
               )
             })}

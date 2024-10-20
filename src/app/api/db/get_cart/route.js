@@ -14,6 +14,12 @@ export const GET = async (req) => {
   // Get access token from the cookies.
   const accessToken = req.cookies.get('accessToken')
 
+  // Check if the access token exists.
+  if (accessToken == null) {
+    // Send a not authorized response to the client.
+    return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
+  } // end try-catch
+
   // Data that will be retrieved from the database.
   let cart
 

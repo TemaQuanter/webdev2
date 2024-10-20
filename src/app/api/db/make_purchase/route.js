@@ -118,6 +118,25 @@ export const POST = async (req) => {
             number_of_items: Number(item.number_of_items)
           }
         })
+
+        // Get the seller information.
+        const seller = await prisma.users.findUnique({
+          where: {
+            user_id: Number(item.products.seller_id)
+          }
+        })
+
+        // Increase the seller's balance.
+        await prisma.users.update({
+          where: {
+            user_id: Number(item.products.seller_id)
+          },
+          data: {
+            balance:
+              Number(seller.balance) +
+              Number(item.products.price) * Number(item.number_of_items)
+          }
+        })
       } // end for
 
       // Subtract the user balance.
@@ -142,6 +161,16 @@ export const POST = async (req) => {
   } catch (err) {
     // Log the error.
     console.log(err)
+
+    // The buyer did not have enough funds to buy the product.
+    if (err.message === 'Insufficient balance') {
+      return NextResponse.json({ message: err.message }, { status: 400 })
+    } // end if
+
+    // There is not enough products of a particular type on the stock at the moment.
+    if (err.message.includes('Not enough products on the stock:')) {
+      return NextResponse.json({ message: err.message }, { status: 400 })
+    } // end if
 
     // Return a general server error.
     return NextResponse.json(

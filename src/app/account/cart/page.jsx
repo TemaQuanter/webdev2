@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Container } from 'react-bootstrap'
+import { Button, Container } from 'react-bootstrap'
 import Header from '@/components/header/Header'
 import Footer from '@/components/footer/Footer'
 import ProductCard from '@/components/ProductCard'
@@ -84,6 +84,11 @@ const Cart = () => {
 
   // This function handles a purchase of the product.
   const handlePurchase = async (e) => {
+    // Make sure that the total is greater than 0.
+    if (getTotal() === 0) {
+      return
+    } // end if
+
     // Prevent the page from automatic reload.
     e.preventDefault()
 
@@ -160,15 +165,26 @@ const Cart = () => {
                 '/'
               )
 
+              // Create query parameters using URLSearchParams.
+              const params = new URLSearchParams({
+                search: '',
+                productUUId: cartItem.products.product_uuid
+              })
+
               return (
                 <div key={index}>
-                  <ProductCard
-                    title={cartItem.products.title}
-                    description={cartItem.products.description}
-                    sellerName={`${cartItem.products.users.first_name} ${cartItem.products.users.last_name}`}
-                    price={cartItem.products.price}
-                    imageUrl={imageUrl}
-                  />
+                  <a
+                    href={`/products/product_view?${params}`}
+                    style={{ textDecoration: 'none', color: 'inherit' }}
+                  >
+                    <ProductCard
+                      title={cartItem.products.title}
+                      description={cartItem.products.description}
+                      sellerName={`${cartItem.products.users.first_name} ${cartItem.products.users.last_name}`}
+                      price={cartItem.products.price}
+                      imageUrl={imageUrl}
+                    />
+                  </a>
 
                   <div
                     style={{
@@ -207,20 +223,21 @@ const Cart = () => {
           gap: '20px'
         }}
       >
-        <button
+        <Button
           onClick={handlePurchase}
           style={{
             padding: '5px 10px',
             borderRadius: '20px',
             fontWeight: 'bold',
             textDecoration: 'none',
-            transition: 'background-color 0.3s, color 0.3s',
+            // transition: 'background-color 0.3s, color 0.3s',
             cursor: 'pointer',
             marginBottom: '3rem'
           }}
+          variant="primary"
         >
           Purchase
-        </button>
+        </Button>
       </div>
 
       {/* Toastify Container */}

@@ -66,9 +66,19 @@ export const POST = async (req) => {
         product_uuid: data.productUUId
       },
       select: {
-        product_id: true
+        product_id: true,
+        seller_id: true
       }
     })
+
+    // The user cannot buy their own products.
+    if (userId === Number(product.seller_id)) {
+      // Return an error.
+      return NextResponse.json(
+        { message: 'A user cannot buy their own products' },
+        { status: 400 }
+      )
+    } // end
 
     // Try to retrieve the item from the cart.
     const retrievedItem = await prisma.cart.findUnique({
@@ -82,20 +92,32 @@ export const POST = async (req) => {
 
     // If the product was retrieved.
     if (retrievedItem) {
-      // Increase the number of products in the cart.
-      const productInCart = await prisma.cart.update({
-        where: {
-          user_id_product_id: {
-            user_id: userId,
-            product_id: product.product_id
+      // Check either it is necessary to remove a product from the cart or not.
+      if (Number(data.numberOfItems) === 0) {
+        // Remove the product from the cart.
+        const removedProduct = await prisma.cart.delete({
+          where: {
+            user_id_product_id: {
+              user_id: userId,
+              product_id: product.product_id
+            }
           }
-        },
-        data: {
-          number_of_items:
-            Number(retrievedItem.number_of_items) + Number(data.numberOfItems)
-        }
-      })
-    } else {
+        })
+      } else {
+        // Change the number of products in the cart.
+        const productInCart = await prisma.cart.update({
+          where: {
+            user_id_product_id: {
+              user_id: userId,
+              product_id: product.product_id
+            }
+          },
+          data: {
+            number_of_items: Number(data.numberOfItems)
+          }
+        })
+      } // end if
+    } else if (Number(data.numberOfItems) > 0) {
       // The product was not added to the cart still.
       // Insert it to the cart.
       const productInCart = await prisma.cart.create({
