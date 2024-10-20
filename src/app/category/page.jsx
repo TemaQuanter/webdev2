@@ -88,6 +88,17 @@ const Category = () => {
     handleProductSearch()
   }, []) // end useEffect
 
+  const loadPage = (pageToLoad) => {
+    // Create query parameters using URLSearchParams.
+    const params = new URLSearchParams({
+      categoryUUId: categoryUUId,
+      page: pageToLoad
+    })
+
+    // Load the page.
+    window.location.href = `/category?${params}`
+  } // end function loadPage
+
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Header Section */}
@@ -162,10 +173,12 @@ const Category = () => {
         style={{ marginTop: '1rem' }}
       >
         <Pagination>
-          <Pagination.First />
-          <Pagination.Prev />
-          <Pagination.Item>{1}</Pagination.Item>
-          <Pagination.Next />
+          <Pagination.First onClick={() => loadPage(1)} />
+          <Pagination.Prev
+            onClick={() => loadPage(Math.max(Number(pageQuery) - 1, 1))}
+          />
+          <Pagination.Item>{pageQuery}</Pagination.Item>
+          <Pagination.Next onClick={() => loadPage(Number(pageQuery) + 1)} />
         </Pagination>
       </div>
 
