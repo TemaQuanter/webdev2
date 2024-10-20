@@ -41,7 +41,7 @@ const Purchases = () => {
 
           // Sort the items by purchase date.
           data.sort(
-            (a, b) => new Date(a.purchase_date) - new Date(b.purchase_date)
+            (a, b) => new Date(b.purchase_date) - new Date(a.purchase_date)
           )
 
           // Get all sales dates in a sorted order.

@@ -8,8 +8,7 @@ import ProductCard from '@/components/ProductCard'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
-const Purchase = () => {
-  const [isHovered, setIsHovered] = useState(false)
+const Cart = () => {
   const [cart, setCart] = useState([])
   const [error, setError] = useState(null)
 
@@ -209,16 +208,11 @@ const Purchase = () => {
         }}
       >
         <button
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
           onClick={handlePurchase}
           style={{
             padding: '5px 10px',
             borderRadius: '20px',
-            border: isHovered ? '1px solid #007bff' : '1px solid transparent',
             fontWeight: 'bold',
-            backgroundColor: isHovered ? '#007bff' : 'aliceblue',
-            color: isHovered ? 'white' : '#007bff',
             textDecoration: 'none',
             transition: 'background-color 0.3s, color 0.3s',
             cursor: 'pointer',
@@ -244,4 +238,4 @@ const Purchase = () => {
   )
 }
 
-export default Purchase
+export default Cart

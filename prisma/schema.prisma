@@ -18,10 +18,12 @@ model cart {
 }
 
 model categories {
-  category_id   Int        @id @default(autoincrement())
-  category_uuid String     @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  name          String     @db.VarChar(100)
-  products      products[]
+  category_id    Int        @id @default(autoincrement())
+  category_uuid  String     @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name           String     @db.VarChar(100)
+  category_motto String
+  banner_url     String
+  products       products[]
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.

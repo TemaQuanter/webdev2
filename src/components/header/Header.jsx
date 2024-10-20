@@ -132,13 +132,20 @@ const Header = (props) => {
         {error && <p className="text-danger">{error}</p>}
 
         <ul style={{ listStyle: 'none', padding: '0' }}>
-          {allCategories
-            ? allCategories.map((category, index) => (
+          {allCategories &&
+            allCategories.map((category, index) => {
+              // Create query parameters using URLSearchParams.
+              const params = new URLSearchParams({
+                categoryUUId: category.category_uuid,
+                page: 1
+              })
+
+              return (
                 <li className="mb-2" key={index}>
-                  <Link href="/">{category.name}</Link>
+                  <a href={`/category?${params}`}>{category.name}</a>
                 </li>
-              ))
-            : null}
+              )
+            })}
         </ul>
       </div>
     </div>

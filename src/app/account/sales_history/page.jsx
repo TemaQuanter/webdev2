@@ -44,8 +44,10 @@ const Sales = () => {
 
           // Sort the items by purchase date.
           data.sort(
-            (a, b) => new Date(a.purchase_date) - new Date(b.purchase_date)
+            (a, b) => new Date(b.purchase_date) - new Date(a.purchase_date)
           )
+
+          console.log(data)
 
           // Get the user's name from the data (assuming it's included)
           if (data.length > 0) {
