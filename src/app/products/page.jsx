@@ -141,6 +141,18 @@ const Products = () => {
     } // end if
   }, [products])
 
+  // This function facilitates navigation via pagination.
+  const loadPage = (pageToLoad) => {
+    // Create query parameters using URLSearchParams.
+    const params = new URLSearchParams({
+      search: searchQuery,
+      page: pageToLoad
+    })
+
+    // Load the page.
+    window.location.href = `/products?${params}`
+  } // end function loadPage
+
   return (
     <>
       <Header searchBarText={searchQuery} /> {/* Include the header */}
@@ -196,10 +208,12 @@ const Products = () => {
         style={{ marginTop: '1rem' }}
       >
         <Pagination>
-          <Pagination.First />
-          <Pagination.Prev />
-          <Pagination.Item>{1}</Pagination.Item>
-          <Pagination.Next />
+          <Pagination.First onClick={() => loadPage(1)} />
+          <Pagination.Prev
+            onClick={() => loadPage(Math.max(Number(pageQuery) - 1, 1))}
+          />
+          <Pagination.Item>{pageQuery}</Pagination.Item>
+          <Pagination.Next onClick={() => loadPage(Number(pageQuery) + 1)} />
         </Pagination>
       </div>
       <Footer /> {/* Include the footer */}
