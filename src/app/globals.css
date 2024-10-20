@@ -106,23 +106,6 @@ body {
   }
 }
 
-/* Global Styles for Dark and Light Mode */
-.bg-dark {
-  background-color: #1a1a1a;
-}
-
-.text-light {
-  color: #f5f5f5;
-}
-
-.bg-light {
-  background-color: #ffffff;
-}
-
-.text-dark {
-  color: #000000;
-}
-
 /* In globals.css or a CSS module */
 @keyframes fadeIn {
   from {
@@ -142,5 +125,29 @@ body {
   }
   100% {
     transform: scale(1);
+  }
+}
+
+/* Ensuring the image takes up full width while maintaining aspect ratio */
+.responsive-img {
+  width: 100%; /* Make the image responsive */
+  height: 400px; /* Maintain the aspect ratio */
+  object-fit: cover; /* Ensure the image covers the container properly */
+}
+
+/* Optional: Limit the image's height on larger screens */
+@media (min-width: 992px) {
+  .responsive-img {
+    max-height: 25rem; /* Prevent the image from becoming too tall on desktop */
+    max-width: 45rem;
+  }
+}
+
+/* Adjust the height for smaller screens */
+@media (max-width: 768px) {
+  .responsive-img {
+    max-height: 20rem; /* Set a smaller height for mobile screens */
+    max-width: 50rem;
+    object-fit: contain; /* Ensure the image fits without cropping on smaller devices */
   }
 }

@@ -179,9 +179,6 @@ const Products = () => {
       {/* Include the header component */}
       <Header searchBarText={searchQuery} />
 
-      {/* Display any error message */}
-      {error && <p className="text-danger">{error}</p>}
-
       {/* Display the product information */}
       {product && (
         <div>

@@ -75,14 +75,12 @@ const SignUp = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 d-flex flex-column justify-content-center align-items-center">
-      <div
-        style={{
-          width: '15rem',
-          height: '5rem',
-          backgroundColor: 'grey',
-          marginTop: '3rem'
-        }}
-      ></div>
+      <img
+        src="/images/Logo.png"
+        alt="Description of image"
+        className="responsive-img"
+        style={{ marginTop: '3rem' }}
+      />
 
       <p style={{ marginTop: '2rem' }} className="fs-4 fw-bold">
         Sign up
