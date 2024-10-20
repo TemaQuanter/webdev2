@@ -13,8 +13,7 @@ import Pagination from 'react-bootstrap/Pagination'
 const RESULT_LIMIT = 10
 
 const Category = () => {
-  const [products, setProducts] = useState([])
-  const [sellers, setSellers] = useState([])
+  const [category, setCategory] = useState(null)
   const [error, setError] = useState(null)
 
   // Button animations.
@@ -61,7 +60,7 @@ const Category = () => {
           console.log(data)
 
           // Store the response.
-          setProducts(data)
+          setCategory(data)
         } else {
           // The response is an error.
 
@@ -97,7 +96,7 @@ const Category = () => {
       {/* Category Heading */}
       <div className="bg-light py-3">
         <Container>
-          <h3 className="text-left">Categories</h3> {/* Main Page Heading */}
+          <h3 className="text-left">Category</h3> {/* Main Page Heading */}
         </Container>
       </div>
 
@@ -106,11 +105,16 @@ const Category = () => {
         style={{
           width: '100%',
           height: '350px',
-          backgroundColor: '#f0f0f0'
+          backgroundImage: `url(${
+            category ? category.banner_url : '/images/banner1.png'
+          })`
         }}
       ></div>
 
-      <SimpleCard />
+      <SimpleCard
+        title={category ? category.name : 'Category'}
+        description={category ? category.category_motto : 'Category motto'}
+      />
 
       {/* Category Heading */}
       <div className="bg-light py-3">
@@ -122,18 +126,23 @@ const Category = () => {
       {/* Products Section */}
       <Container fluid className="my-4">
         <Row className="justify-content-center">
-          <Col xs={12} sm={11} md={10} lg={9} className="mb-4">
-            <ProductCard />
-          </Col>
-          <Col xs={12} sm={11} md={10} lg={9} className="mb-4">
-            <ProductCard />
-          </Col>
-          <Col xs={12} sm={11} md={10} lg={9} className="mb-4">
-            <ProductCard />
-          </Col>
-          <Col xs={12} sm={11} md={10} lg={9} className="mb-4">
-            <ProductCard />
-          </Col>
+          {category &&
+            category.products.map((product, index) => {
+              // Get a valid product image URL.
+              const imageUrl = product.image_url.replace('public/', '/')
+
+              return (
+                <Col xs={12} sm={11} md={10} lg={9} className="mb-4">
+                  <ProductCard
+                    title={product.title}
+                    description={product.description}
+                    sellerName={`${product.seller_first_name} ${product.seller_last_name}`}
+                    price={product.price}
+                    imageUrl={imageUrl}
+                  />
+                </Col>
+              )
+            })}
         </Row>
       </Container>
 
