@@ -105,23 +105,47 @@ const Category = () => {
       <Header />
 
       {/* Category Heading */}
-      <div className="bg-light py-3">
+      <div
+        className="category-heading bg-light py-5" // Increase padding for more space around heading
+        style={{
+          backgroundColor: '#f8f9fa', // Optional: change background color if needed
+          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', // Subtle shadow for separation
+          borderRadius: '8px', // Rounded corners for a softer look
+          textAlign: 'center' // Center align the heading
+        }}
+      >
         <Container>
-          <h3 className="text-left">Category</h3> {/* Main Page Heading */}
+          <h2
+            className="text-dark" // Adjust text color as needed
+            style={{
+              fontSize: '1.5rem', // Larger font size for the heading
+              fontWeight: '700', // Make the heading bold
+              letterSpacing: '1px', // Slight letter spacing for readability
+              textTransform: 'uppercase', // Optional: make heading uppercase
+              marginBottom: '0' // Remove bottom margin if needed
+            }}
+          >
+            Browse
+          </h2>
+          <p
+            style={{
+              fontSize: '1.2rem',
+              color: '#6c757d',
+              marginTop: '0.5rem'
+            }}
+          >
+            Explore our latest collection of products{' '}
+            {/* Optional: Add a description or subheading */}
+          </p>
         </Container>
       </div>
 
       <div
         className="responsive-banner"
         style={{
-          width: '100vw', // This ensures the div spans the full viewport width
-          height: '350px',
-          backgroundRepeat: 'no-repeat',
-          backgroundSize: 'cover', // Ensures the image covers the entire div
-          backgroundPosition: 'center', // Centers the image within the div
           backgroundImage: `url(${
             category ? category.banner_url : '/images/banner1.png'
-          })` // Adds a solid black border
+          })`
         }}
       ></div>
 
@@ -130,10 +154,32 @@ const Category = () => {
         description={category ? category.category_motto : 'Category motto'}
       />
 
-      {/* Category Heading */}
-      <div className="bg-light py-3">
+      {/* Products Heading */}
+      <div
+        className="products-heading py-5" // Increased padding for more spacing
+        style={{
+          backgroundColor: '#ffffff', // Clean white background for simplicity
+          display: 'flex',
+          justifyContent: 'center', // Center the heading within the container
+          alignItems: 'center',
+          marginBottom: '2rem' // Adds space after the heading
+        }}
+      >
         <Container>
-          <h3 className="text-left">Products</h3> {/* Main Page Heading */}
+          <h3
+            className="text-dark" // Dark color for a clean look
+            style={{
+              fontSize: '1.5rem', // Large font size for a bold statement
+              fontWeight: '800', // Very bold font weight
+              letterSpacing: '0.1rem', // Subtle letter spacing for a modern touch
+              textTransform: 'uppercase', // Make the word uppercase for strong emphasis
+              borderBottom: '5px solid #007bff', // Thin bottom border for the text itself
+              display: 'inline-block', // Ensures the border sticks to the word
+              paddingBottom: '0.5rem' // Padding to give space between text and underline
+            }}
+          >
+            Products
+          </h3>
         </Container>
       </div>
 

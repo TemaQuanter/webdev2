@@ -126,9 +126,6 @@ const Purchases = () => {
         <hr />
       </div>
 
-      <p className="fs-5 fw-bolder">Total income:</p>
-      <p className="fs-4 fw-bolder">269 Euro</p>
-
       <Link href="/account/product_listing_form">
         <Button
           variant="primary"

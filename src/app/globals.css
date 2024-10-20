@@ -151,3 +151,35 @@ body {
     object-fit: contain; /* Ensure the image fits without cropping on smaller devices */
   }
 }
+
+/* Ensuring the banner takes up full width while maintaining responsiveness */
+.responsive-banner {
+  width: 100vw; /* Full viewport width */
+  height: 350px; /* Default height */
+  background-repeat: no-repeat;
+  background-size: cover; /* Ensure the image covers the container */
+  background-position: center; /* Center the image */
+}
+
+/* Adjust the height and styling for larger screens */
+@media (min-width: 992px) {
+  .responsive-banner {
+    height: 400px; /* Slightly larger height on larger screens */
+  }
+}
+
+/* Adjust the height for tablet screens */
+@media (max-width: 768px) {
+  .responsive-banner {
+    height: 250px; /* Smaller height for tablet screens */
+  }
+}
+
+/* Adjust the height for mobile screens */
+@media (max-width: 576px) {
+  .responsive-banner {
+    background-size: contain; /* Prevent cropping on smaller devices */
+    display: block;
+    height: 500px;
+  }
+}
