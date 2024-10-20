@@ -100,14 +100,17 @@ const Category = () => {
         </Container>
       </div>
 
-      {/* Placeholder Rectangle */}
       <div
+        className="responsive-banner"
         style={{
-          width: '100%',
+          width: '100vw', // This ensures the div spans the full viewport width
           height: '350px',
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: 'cover', // Ensures the image covers the entire div
+          backgroundPosition: 'center', // Centers the image within the div
           backgroundImage: `url(${
             category ? category.banner_url : '/images/banner1.png'
-          })`
+          })` // Adds a solid black border
         }}
       ></div>
 
