@@ -180,6 +180,5 @@ body {
   .responsive-banner {
     background-size: contain; /* Prevent cropping on smaller devices */
     display: block;
-    height: 500px;
   }
 }
