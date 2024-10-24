@@ -21,4 +21,6 @@ VALUES
     ('Fitness Gear', 'Gear up for greatness.', '/images/banners/fitness-gear.png'),
     ('Home Appliances', 'Modern solutions for modern living.', '/images/banners/home-appliances.png'),
     ('Books', 'Open a book, open your mind.', '/images/banners/books.png'),
-    ('Furniture', 'Design your space, define your comfort.', '/images/banners/furniture.png');
+    ('Furniture', 'Design your space, define your comfort.', '/images/banners/furniture.png'),
+    ('Other', 'Discover something new.', '/images/banners/other.png');
+

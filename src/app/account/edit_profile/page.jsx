@@ -103,7 +103,7 @@ const EditProfile = () => {
     try {
       // Send a request to update the user data in the database.
       const response = await fetch('/api/db/update_account_data', {
-        method: 'POST',
+        method: 'PUT',
         credentials: 'include',
         body: formData
       })

@@ -11,7 +11,7 @@ import { promises as fs } from 'fs'
 import path from 'path'
 import { v4 as uuidv4 } from 'uuid'
 
-export const POST = async (req) => {
+export const PUT = async (req) => {
   console.log('list_item api triggered')
 
   // Get access token from the cookies.
@@ -261,4 +261,4 @@ export const POST = async (req) => {
 
   // Return the user.
   return NextResponse.json({}, { status: 200 })
-} // end function POST
+} // end function PUT

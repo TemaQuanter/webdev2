@@ -11,7 +11,7 @@ import { Buffer } from 'buffer'
 import { promises as fs } from 'fs'
 import path from 'path'
 
-export const POST = async (req) => {
+export const PUT = async (req) => {
   console.log('update_account_data api triggered')
 
   // Get access token from the cookies.
@@ -198,4 +198,4 @@ export const POST = async (req) => {
 
   // Return the successful response.
   return NextResponse.json({}, { status: 200 })
-} // end function POST
+} // end function PUT

@@ -161,7 +161,7 @@ const ItemEditing = () => {
     // Call an api to list the product.
     try {
       const response = await fetch('/api/db/update_item_data', {
-        method: 'POST',
+        method: 'PUT',
         credentials: 'include',
         body: formData
       })
