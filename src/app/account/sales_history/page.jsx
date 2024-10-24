@@ -51,7 +51,8 @@ const Sales = () => {
 
           // Get the user's name from the data (assuming it's included)
           if (data.length > 0) {
-            const { first_name, last_name } = data[0].products.users // Modify as per your data structure
+            const { first_name, last_name } =
+              data[0].users_purchases_seller_idTousers // Modify as per your data structure
             setUserName(`${first_name} ${last_name}`)
           }
 
@@ -63,8 +64,8 @@ const Sales = () => {
               sDates.push(item.purchase_date)
             } else if (sDates[sDates.length - 1] !== item.purchase_date) {
               sDates.push(item.purchase_date)
-            }
-          })
+            } // end if
+          }) // end map
 
           // Set the sales dates.
           setSalesDates(sDates)
@@ -138,7 +139,7 @@ const Sales = () => {
                     return sale.purchase_date === salesDate
                   })
                   .map((filteredSale, idx) => {
-                    const imageUrl = filteredSale.products.image_url.replace(
+                    const imageUrl = filteredSale.image_url.replace(
                       'public/',
                       '/'
                     )
@@ -146,11 +147,11 @@ const Sales = () => {
                     return (
                       <div>
                         <ProductCard
-                          title={filteredSale.products.title}
-                          description={filteredSale.products.description}
+                          title={filteredSale.title}
+                          description={filteredSale.description}
                           imageUrl={imageUrl}
-                          sellerName={`${filteredSale.products.users.first_name} ${filteredSale.products.users.last_name}`}
-                          price={filteredSale.products.price}
+                          sellerName={`${filteredSale.users_purchases_seller_idTousers.first_name} ${filteredSale.users_purchases_seller_idTousers.last_name}`}
+                          price={filteredSale.price}
                         />
                         <p className="fs-4 text-center">
                           x{filteredSale.number_of_items}

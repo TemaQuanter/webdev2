@@ -11,5 +11,5 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
-  "cSpell.words": ["ossp", "plpgsql", "Tousers"]
+  "cSpell.words": ["ossp", "plpgsql", "Tousers", "uuidv"]
 }

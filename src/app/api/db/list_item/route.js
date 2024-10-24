@@ -9,6 +9,7 @@ import { NextResponse } from 'next/server'
 import { Buffer } from 'buffer'
 import { promises as fs } from 'fs'
 import path from 'path'
+import { v4 as uuidv4 } from 'uuid'
 
 export const POST = async (req) => {
   console.log('list_item api triggered')
@@ -128,14 +129,26 @@ export const POST = async (req) => {
     )
   } // end if
 
+  // Get a file with product image.
+  productImageFile = formData.get('productImage')
+
+  // Get a file extension.
+  const fileExtension = path.extname(productImageFile.name)
+
+  // Generate a filepath.
+  let filePath = path.join(PRODUCT_IMAGES_PATH, `${uuidv4()}${fileExtension}`)
+
   // Create a new instance of a product to be listed.
   let newProduct = {
     title: formData.get('productTitle'),
     description: formData.get('productDescription'),
-    image_url: 'None', // The file path requires an ID, that will be retrieved later.
+    image_url: filePath,
     price: Number(formData.get('productPrice')),
     number_of_items: Number(formData.get('numberOfItems'))
   } // end newProduct
+
+  // Define an absolute file path.
+  filePath = path.join(process.cwd(), filePath)
 
   // Try to insert a new product to the database.
   try {
@@ -164,42 +177,16 @@ export const POST = async (req) => {
 
       // Set the product image.
 
-      // Get a file.
-      productImageFile = formData.get('productImage')
-
-      // Get a file extension.
-      const fileExtension = path.extname(productImageFile.name)
-
       // Convert file data to a buffer.
       buffer = Buffer.from(await productImageFile.arrayBuffer())
 
       // Save the profile picture to the required path.
-
-      // Generate a filepath.
-      const filePath = path.join(
-        process.cwd(),
-        PRODUCT_IMAGES_PATH,
-        `${product.product_uuid}${fileExtension}`
-      )
 
       console.log(filePath)
 
       // Write the file to the file system.
       await fs.writeFile(filePath, buffer)
       console.log(`File saved at: ${filePath}`)
-
-      // Update the image path for the product.
-      await prisma.products.update({
-        where: {
-          product_id: product.product_id
-        },
-        data: {
-          image_url: path.join(
-            PRODUCT_IMAGES_PATH,
-            `${product.product_uuid}${fileExtension}`
-          )
-        }
-      })
     })
   } catch (err) {
     // Log the error.

@@ -31,7 +31,8 @@
     "react-responsive": "^10.0.0",
     "react-toastify": "^10.0.6",
     "react-window": "^1.8.10",
-    "styled-components": "^6.1.13"
+    "styled-components": "^6.1.13",
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "postcss": "^8",

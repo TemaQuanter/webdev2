@@ -9,6 +9,7 @@ import { NextResponse } from 'next/server'
 import { Buffer } from 'buffer'
 import { promises as fs } from 'fs'
 import path from 'path'
+import { v4 as uuidv4 } from 'uuid'
 
 export const POST = async (req) => {
   console.log('list_item api triggered')
@@ -193,10 +194,7 @@ export const POST = async (req) => {
       // Check if a new product image was set.
       // If it was set, then update the product image.
       if (formData.get('productImage') instanceof File) {
-        // Erase previous product image.
-        await fs.unlink(path.join(process.cwd(), product.image_url))
-
-        // Set the product image.
+        // Set a new product image.
 
         // Get a file.
         productImageFile = formData.get('productImage')
@@ -209,11 +207,14 @@ export const POST = async (req) => {
 
         // Save the profile picture to the required path.
 
+        // Generate a unique UUIDV for the product image.
+        const filePathUUIDV4 = uuidv4()
+
         // Generate a filepath.
         const filePath = path.join(
           process.cwd(),
           PRODUCT_IMAGES_PATH,
-          `${product.product_uuid}${fileExtension}`
+          `${filePathUUIDV4}${fileExtension}`
         )
 
         console.log(filePath)
@@ -230,7 +231,7 @@ export const POST = async (req) => {
           data: {
             image_url: path.join(
               PRODUCT_IMAGES_PATH,
-              `${product.product_uuid}${fileExtension}`
+              `${filePathUUIDV4}${fileExtension}`
             )
           }
         })

@@ -47,7 +47,10 @@ export const POST = async (req) => {
               title: true,
               number_of_items: true,
               price: true,
-              seller_id: true
+              seller_id: true,
+              description: true,
+              image_url: true,
+              category_id: true
             }
           },
           product_id: true,
@@ -97,6 +100,8 @@ export const POST = async (req) => {
           throw new Error('Insufficient balance')
         } // end if
 
+        console.log(item)
+
         // Add the purchase to the purchase history.
         await prisma.purchases.create({
           data: {
@@ -115,7 +120,12 @@ export const POST = async (req) => {
                 product_id: Number(item.product_id)
               }
             },
-            number_of_items: Number(item.number_of_items)
+            number_of_items: Number(item.number_of_items),
+            title: item.products.title,
+            description: item.products.description,
+            price: Number(item.products.price),
+            category_id: Number(item.products.category_id),
+            image_url: item.products.image_url
           }
         })
 

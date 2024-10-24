@@ -45,21 +45,21 @@ export const GET = async (req) => {
         }
       },
       select: {
+        title: true,
+        description: true,
         products: {
           select: {
-            title: true,
-            description: true,
-            product_uuid: true,
-            price: true,
-            users: {
-              select: {
-                first_name: true,
-                last_name: true
-              }
-            },
-            image_url: true
+            product_uuid: true
           }
         },
+        price: true,
+        users_purchases_seller_idTousers: {
+          select: {
+            first_name: true,
+            last_name: true
+          }
+        },
+        image_url: true,
         number_of_items: true,
         purchase_date: true
       }

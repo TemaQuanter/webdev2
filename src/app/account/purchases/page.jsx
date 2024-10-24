@@ -127,7 +127,7 @@ const Purchases = () => {
                   })
                   .map((filteredSale, idx) => {
                     // Get a proper image URL.
-                    const imageUrl = filteredSale.products.image_url.replace(
+                    const imageUrl = filteredSale.image_url.replace(
                       'public/',
                       '/'
                     )
@@ -135,11 +135,11 @@ const Purchases = () => {
                     return (
                       <div>
                         <ProductCard
-                          title={filteredSale.products.title}
-                          description={filteredSale.products.description}
+                          title={filteredSale.title}
+                          description={filteredSale.description}
                           imageUrl={imageUrl}
-                          sellerName={`${filteredSale.products.users.first_name} ${filteredSale.products.users.last_name}`}
-                          price={filteredSale.products.price}
+                          sellerName={`${filteredSale.users_purchases_seller_idTousers.first_name} ${filteredSale.users_purchases_seller_idTousers.last_name}`}
+                          price={filteredSale.price}
                         />
                         <p className="fs-4 text-center">
                           x{filteredSale.number_of_items}
