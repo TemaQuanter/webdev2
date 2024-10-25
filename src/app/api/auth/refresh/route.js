@@ -48,7 +48,7 @@ export const POST = async (req) => {
   // Store the refresh token in the cookies.
   response.cookies.set('refreshToken', newRefreshToken, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production', // Use secure in production
+    // secure: process.env.NODE_ENV === 'production', // Use secure in production
     path: '/',
     sameSite: 'Strict',
     maxAge: 60 * 60 * 24 * 7 // 1 week
@@ -57,7 +57,7 @@ export const POST = async (req) => {
   // Store the access token in the cookies.
   response.cookies.set('accessToken', newAccessToken, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production', // Use secure in production
+    // secure: process.env.NODE_ENV === 'production', // Use secure in production
     path: '/',
     sameSite: 'Strict',
     maxAge: 60 * 60 // 1 hour

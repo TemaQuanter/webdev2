@@ -113,7 +113,7 @@ export const DELETE = async (req) => {
   // Delete access and refresh tokens for the deleted user.
   response.cookies.set('refreshToken', '', {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production', // Only set to secure in production
+    // secure: process.env.NODE_ENV === 'production', // Only set to secure in production
     path: '/',
     sameSite: 'Strict',
     maxAge: 0 // Delete the cookie straightaway.
@@ -121,7 +121,7 @@ export const DELETE = async (req) => {
 
   response.cookies.set('accessToken', '', {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production', // Only set to secure in production
+    // secure: process.env.NODE_ENV === 'production', // Only set to secure in production
     path: '/',
     sameSite: 'Strict',
     maxAge: 0 // Delete the cookie straightaway.

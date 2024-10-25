@@ -10,6 +10,7 @@ import { NextResponse } from 'next/server'
 import { Buffer } from 'buffer'
 import { promises as fs } from 'fs'
 import path from 'path'
+import { isFile } from '@/utils/functions'
 
 export const PUT = async (req) => {
   console.log('update_account_data api triggered')
@@ -79,7 +80,7 @@ export const PUT = async (req) => {
   const prisma = new PrismaClient()
 
   // If the image was provided, get the file data.
-  if (formData.get('profilePicture') instanceof File) {
+  if (isFile(formData.get('profilePicture'))) {
     // Remove the previous profile picture of the user from the database.
 
     // Retrieve the path of the previous profile picture from the database.

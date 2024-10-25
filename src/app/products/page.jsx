@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import Header from '@/components/header/Header'
 import Footer from '@/components/footer/Footer'
 import ProductCard from '@/components/ProductCard'
@@ -221,6 +221,14 @@ const Products = () => {
       <Footer /> {/* Include the footer */}
     </>
   )
+} // end function Products
+
+const ProductsWrapper = () => {
+  return (
+    <Suspense fallback={<div>Loading products data...</div>}>
+      <Products />
+    </Suspense>
+  )
 }
 
-export default Products
+export default ProductsWrapper

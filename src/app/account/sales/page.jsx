@@ -175,6 +175,7 @@ const Purchases = () => {
                   <Link
                     href={`/account/edit_item?${params}`}
                     style={{ textDecoration: 'none', color: 'inherit' }}
+                    key={index}
                   >
                     <div
                       onMouseEnter={() => setIsHovered(index)}

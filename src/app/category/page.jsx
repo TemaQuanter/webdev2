@@ -6,7 +6,7 @@ import ProductCard from '../../components/ProductCard'
 import { Row, Col, Container } from 'react-bootstrap'
 import SimpleCard from '@/components/SimpleCard'
 import { useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 
 import Pagination from 'react-bootstrap/Pagination'
 
@@ -239,4 +239,12 @@ const Category = () => {
   )
 } // end function Category
 
-export default Category
+const CategoryWrapper = () => {
+  return (
+    <Suspense fallback={<div>Loading category data...</div>}>
+      <Category />
+    </Suspense>
+  )
+}
+
+export default CategoryWrapper

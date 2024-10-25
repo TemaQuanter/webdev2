@@ -10,6 +10,7 @@ import { Buffer } from 'buffer'
 import { promises as fs } from 'fs'
 import path from 'path'
 import { v4 as uuidv4 } from 'uuid'
+import { isFile } from '@/utils/functions'
 
 export const PUT = async (req) => {
   console.log('list_item api triggered')
@@ -87,7 +88,7 @@ export const PUT = async (req) => {
 
   // Make sure that the image is provided and that the format of the image is valid.
   if (
-    formData.get('productImage') instanceof File &&
+    isFile(formData.get('productImage')) &&
     (!formData.get('productImage').type.includes('image') ||
       formData.get('productImage').size > 10485760)
   ) {
@@ -193,7 +194,7 @@ export const PUT = async (req) => {
 
       // Check if a new product image was set.
       // If it was set, then update the product image.
-      if (formData.get('productImage') instanceof File) {
+      if (isFile(formData.get('productImage'))) {
         // Set a new product image.
 
         // Get a file.

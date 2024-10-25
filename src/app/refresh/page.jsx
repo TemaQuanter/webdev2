@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 
 const Refresh = () => {
@@ -59,4 +59,12 @@ const Refresh = () => {
   return <p>Something went wrong, please try reloading the page.</p>
 }
 
-export default Refresh
+const RefreshWrapper = () => {
+  return (
+    <Suspense fallback={<div>Loading refresh data...</div>}>
+      <Refresh />
+    </Suspense>
+  )
+}
+
+export default RefreshWrapper

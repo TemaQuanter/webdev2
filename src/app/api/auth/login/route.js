@@ -60,7 +60,7 @@ export const POST = async (req) => {
   console.log('Setting refresh token in cookies:', refreshToken)
   response.cookies.set('refreshToken', refreshToken, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production', // Only set to secure in production
+    // secure: process.env.NODE_ENV === 'production', // Only set to secure in production
     path: '/',
     sameSite: 'Strict',
     maxAge: 60 * 60 * 24 * 7 // 1 week
@@ -69,7 +69,7 @@ export const POST = async (req) => {
   console.log('Setting access token in cookies:', accessToken)
   response.cookies.set('accessToken', accessToken, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    // secure: process.env.NODE_ENV === 'production',
     path: '/',
     sameSite: 'Strict',
     maxAge: 60 * 60 // 1 hour

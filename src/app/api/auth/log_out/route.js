@@ -42,7 +42,7 @@ export const POST = async (req) => {
   // Set the refresh token in the cookies to none and delete it.
   response.cookies.set('refreshToken', '', {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production', // Use secure in production
+    // secure: process.env.NODE_ENV === 'production', // Use secure in production
     path: '/',
     sameSite: 'Strict',
     maxAge: 0 // Remove the token instantly
@@ -51,7 +51,7 @@ export const POST = async (req) => {
   // Set the access token in the cookies to none and delete it.
   response.cookies.set('accessToken', '', {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production', // Use secure in production
+    // secure: process.env.NODE_ENV === 'production', // Use secure in production
     path: '/',
     sameSite: 'Strict',
     maxAge: 0 // Remove the token instantly
