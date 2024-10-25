@@ -33,8 +33,8 @@ const EmailVerification = () => {
 
         // Redirect the user with a delay to allow the toast to be seen.
         setTimeout(() => {
-          window.location.href = '/'
-        }, 1000) // 2-second delay
+          window.location.assign('/')
+        }, 250) // 0.25-second delay
       } else {
         // An error occurred while trying to delete an account.
 

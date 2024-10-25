@@ -70,8 +70,8 @@ const ProductListing = () => {
         // Show success toast and redirect after 0.5 seconds (500ms)
         toast.success('Product listed successfully! Redirecting...')
         setTimeout(() => {
-          window.location.href = '/account/sales'
-        }, 500) // 500ms delay
+          window.location.assign('/account/sales')
+        }, 250) // 250ms delay
       } else {
         const errorData = await response.json()
         toast.error(`Error listing product: ${errorData.message}`)

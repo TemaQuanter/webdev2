@@ -70,6 +70,9 @@ const SearchBar = (props) => {
     // Prevent the default behavior.
     e.preventDefault()
 
+    // Force reflow
+    document.body.offsetHeight
+
     // Create query parameters using URLSearchParams.
     const params = new URLSearchParams({
       search: productSearchText,
@@ -77,7 +80,9 @@ const SearchBar = (props) => {
     })
 
     // Redirect the user to the products page.
-    window.location.href = `/products?${params.toString()}`
+    setTimeout(() => {
+      window.location.assign(`/products?${params.toString()}`)
+    }, 250)
   } // end function handleSearchSubmit
 
   return (

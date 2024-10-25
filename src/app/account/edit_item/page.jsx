@@ -173,7 +173,9 @@ const ItemEditing = () => {
         // The response was successful.
         // Redirect the user to sales page.
         // Do hard reload to update the state.
-        window.location.href = '/account/sales'
+        setTimeout(() => {
+          window.location.assign('/account/sales')
+        }, 250)
       } else {
         // An error occurred.
 

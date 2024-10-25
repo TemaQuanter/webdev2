@@ -34,8 +34,8 @@ const Logout = () => {
 
           // Redirect after a short delay to allow the user to see the toast
           setTimeout(() => {
-            window.location.href = '/'
-          }, 500) // .5-second delay
+            window.location.assign('/')
+          }, 250) // .25-second delay
         } else {
           // Failed to log out, show error toast
           toast.error('Failed to log out. Please try again.')

@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { INTERNAL_SERVER_ERROR } from '@/constants'
 import Cookies from 'js-cookie' // Import js-cookie for cookie handling
 
@@ -12,7 +11,6 @@ const SignIn = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState(null)
-  const router = useRouter()
 
   // Use useEffect to clear any existing tokens when the component loads
   //   useEffect(() => {
@@ -46,8 +44,10 @@ const SignIn = () => {
       } // end if
 
       console.log('Login successful, reloading page...')
-      // Force a full page reload to ensure cookies are set and state is correct
-      window.location.href = '/account'
+      // Force a full page reload to ensure cookies are set and state is correct.
+      setTimeout(() => {
+        window.location.assign('/account')
+      }, 250)
     } catch (err) {
       console.error('Login process failed with error:', err)
       setError(INTERNAL_SERVER_ERROR)

@@ -150,7 +150,9 @@ const Products = () => {
     })
 
     // Load the page.
-    window.location.href = `/products?${params}`
+    setTimeout(() => {
+      window.location.assign(`/products?${params}`)
+    }, 250)
   } // end function loadPage
 
   return (

@@ -142,7 +142,18 @@ const Header = (props) => {
 
               return (
                 <li className="mb-2" key={index}>
-                  <a href={`/category?${params}`}>{category.name}</a>
+                  <a
+                    href={`/category?${encodeURI(params)}`}
+                    onClick={(e) => {
+                      e.preventDefault()
+
+                      setTimeout(() => {
+                        window.location.assign(`/category?${encodeURI(params)}`)
+                      }, 250)
+                    }}
+                  >
+                    {category.name}
+                  </a>
                 </li>
               )
             })}

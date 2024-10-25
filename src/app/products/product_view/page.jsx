@@ -157,10 +157,10 @@ const Products = () => {
         // Show success message using Toastify
         toast.success('Product successfully added to cart! Redirecting...')
 
-        // Redirect to cart page after a short delay (1 second)
+        // Redirect to cart page after a short delay (250ms)
         setTimeout(() => {
-          window.location.href = '/account/cart'
-        }, 1000)
+          window.location.assign('/account/cart')
+        }, 250)
       } else {
         // Handle response errors
         const errorData = await response.json()

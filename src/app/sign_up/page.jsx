@@ -3,7 +3,6 @@
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { INTERNAL_SERVER_ERROR } from '@/constants'
 import { ToastContainer, toast } from 'react-toastify'
@@ -15,7 +14,6 @@ const SignUp = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [repeatPassword, setRepeatPassword] = useState('')
-  const router = useRouter()
 
   // Error to be displayed in case something goes wrong.
   const handleSubmit = async (e) => {
@@ -57,7 +55,7 @@ const SignUp = () => {
         )
         // Redirect after a short delay to allow the user to see the toast message
         setTimeout(() => {
-          router.push('/sign_in')
+          window.location.assign('/sign_in')
         }, 1000) // 2-second delay before redirect
       } else {
         // Display an error toast if the server responds with an error

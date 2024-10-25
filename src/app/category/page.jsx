@@ -96,7 +96,9 @@ const Category = () => {
     })
 
     // Load the page.
-    window.location.href = `/category?${params}`
+    setTimeout(() => {
+      window.location.assign(`/category?${params}`)
+    }, 250)
   } // end function loadPage
 
   return (

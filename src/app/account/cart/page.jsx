@@ -112,8 +112,8 @@ const Cart = () => {
 
         // Redirect the user to their account after a short delay (optional).
         setTimeout(() => {
-          window.location.href = '/account'
-        }, 1000) // 0.5-second delay before redirecting
+          window.location.assign('/account')
+        }, 250) // 0.25-second delay before redirecting
       } else {
         // Something went wrong.
 

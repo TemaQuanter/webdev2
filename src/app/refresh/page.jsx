@@ -1,11 +1,10 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 
 const Refresh = () => {
   const [isLoading, setIsLoading] = useState(true)
-  const router = useRouter()
   const searchParams = useSearchParams()
 
   useEffect(() => {
@@ -31,14 +30,20 @@ const Refresh = () => {
           const redirectTo = searchParams.get('redirectTo') || '/account'
           console.log('Setting redirect path to:', redirectTo)
           // Force a full page reload to ensure cookies are set and state is correct.
-          window.location.href = redirectTo
+          setTimeout(() => {
+            window.location.assign(redirectTo)
+          }, 250)
         } else {
           console.error('Failed to refresh token. Redirecting to sign-in page.')
-          router.replace('/sign_in')
+          setTimeout(() => {
+            window.location.assign('/sign_in')
+          }, 250)
         }
       } catch (error) {
         console.error('Error during the refresh process:', error)
-        router.replace('/sign_in')
+        setTimeout(() => {
+          window.location.assign('/sign_in')
+        })
       } finally {
         setIsLoading(false)
       }

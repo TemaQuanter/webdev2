@@ -5,7 +5,6 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
 import ButtonBack from '@/components/ButtonBack'
 
 const EditProfile = () => {
@@ -14,8 +13,6 @@ const EditProfile = () => {
   const [profilePic, setProfilePic] = useState(null)
   const [error, setError] = useState(null)
   const [user, setUser] = useState(null)
-
-  const router = useRouter()
 
   // Retrieve the existing user information from the database.
   useEffect(() => {
@@ -115,7 +112,9 @@ const EditProfile = () => {
         // Successful update.
         // Redirect the user to the main account page.
         // Do hard reload to update the user data after changes.
-        window.location.href = '/account'
+        setTimeout(() => {
+          window.location.assign('/account')
+        }, 250)
       } else {
         // An error occurred.
 
