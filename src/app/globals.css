@@ -178,7 +178,7 @@ body {
 /* Adjust the height for mobile screens */
 @media (max-width: 576px) {
   .responsive-banner {
+    height: 110px;
     background-size: contain; /* Prevent cropping on smaller devices */
-    display: block;
   }
 }

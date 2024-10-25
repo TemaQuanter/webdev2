@@ -14,14 +14,15 @@ const Header = (props) => {
   const sidebarStyle = {
     position: 'fixed',
     top: '0',
-    right: isSidebarOpen ? '0' : '-250px', // Slide in from the right
+    right: isSidebarOpen ? '0' : '-250px',
     width: '250px',
     height: '100%',
-    background: '#f8f9fa',
-    boxShadow: '2px 0 5px rgba(0, 0, 0, 0.5)',
+    background: 'white', // Matches main page colors
+    boxShadow: 'rgba(0, 0, 0, 0.3) 0px 4px 12px', // Softer shadow for modern feel
     zIndex: '1000',
     padding: '1rem',
-    transition: 'right 0.3s ease' // Smooth transition for opening/closing
+    transition: 'right 0.3s ease',
+    overflowY: 'auto'
   }
 
   // These categories will be loaded from the database.
@@ -119,7 +120,17 @@ const Header = (props) => {
       {/* Sidebar */}
       <div style={sidebarStyle}>
         <div className="d-flex justify-content-between align-items-center mb-3">
-          <h5 className="mb-0">Categories</h5>
+          <h5
+            className="mb-0"
+            style={{
+              fontSize: '1.2rem',
+              fontWeight: 'bold', // Bold text
+              color: '#333',
+              textShadow: '0 0 8px rgba(255, 255, 255, 0.6)' // Subtle glow
+            }}
+          >
+            Categories
+          </h5>
           <button
             className="btn btn-outline-secondary btn-sm"
             onClick={toggleSidebar}
@@ -151,6 +162,13 @@ const Header = (props) => {
                         window.location.assign(`/category?${encodeURI(params)}`)
                       }, 250)
                     }}
+                    style={{
+                      color: '#555', // Dark gray by default
+                      fontWeight: 'bold', // Optional: bold text
+                      transition: 'color 0.2s ease' // Smooth color transition
+                    }}
+                    onMouseEnter={(e) => (e.target.style.color = 'black')} // Change to black on hover
+                    onMouseLeave={(e) => (e.target.style.color = '#555')} // Revert to dark gray when not hovering
                   >
                     {category.name}
                   </a>

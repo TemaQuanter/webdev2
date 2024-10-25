@@ -146,7 +146,7 @@ const Category = () => {
         className="responsive-banner"
         style={{
           backgroundImage: `url(${
-            category ? category.banner_url : '/images/banner1.png'
+            category ? category.banner_url : '/images/banners/banner1.png'
           })`
         }}
       ></div>
