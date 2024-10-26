@@ -156,6 +156,7 @@ const SignUp = () => {
       <Button
         variant="secondary"
         style={{ width: '80vw', maxWidth: '30rem', borderRadius: '20px' }}
+        disabled
       >
         <i className="bi bi-google" style={{ marginRight: '1rem' }}></i>
         Sign up with Google

@@ -159,12 +159,6 @@ const Cart = () => {
         >
           {cart &&
             cart.map((cartItem, index) => {
-              // Extract an image URL.
-              const imageUrl = cartItem.products.image_url.replace(
-                'public/',
-                '/'
-              )
-
               // Create query parameters using URLSearchParams.
               const params = new URLSearchParams({
                 search: '',
@@ -182,7 +176,7 @@ const Cart = () => {
                       description={cartItem.products.description}
                       sellerName={`${cartItem.products.users.first_name} ${cartItem.products.users.last_name}`}
                       price={cartItem.products.price}
-                      imageUrl={imageUrl}
+                      imageUrl={`/api/db/get_public_image?${new URLSearchParams({ imagePath: cartItem.products.image_url })}`}
                     />
                   </a>
 

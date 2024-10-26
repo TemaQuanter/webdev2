@@ -9,4 +9,4 @@ export const INTERNAL_SERVER_ERROR =
 export const MIN_PASSWORD_LENGTH = 10
 
 export const PROFILE_PICTURES_PATH = 'protected_images/profile_pictures'
-export const PRODUCT_IMAGES_PATH = 'public/images/products'
+export const PRODUCT_IMAGES_PATH = 'public_images/products'

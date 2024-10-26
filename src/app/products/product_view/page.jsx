@@ -197,7 +197,7 @@ const Products = () => {
             <ProductCard
               title={product.title}
               description={product.description}
-              imageUrl={imageUrl}
+              imageUrl={`/api/db/get_public_image?${new URLSearchParams({ imagePath: product.image_url })}`}
               sellerName={`${product.users.first_name} ${product.users.last_name}`}
               price={product.price}
             />

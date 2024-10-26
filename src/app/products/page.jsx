@@ -170,9 +170,6 @@ const Products = () => {
         {/* Conditionally render the list only when on the client and when products are loaded */}
         {products.length === sellers.length &&
           products.map((productItem, index) => {
-            // Get image URL for the product.
-            const imageUrl = productItem.image_url.replace('public/', '/')
-
             // Create query parameters using URLSearchParams.
             const params = new URLSearchParams({
               search: searchQuery,
@@ -183,6 +180,7 @@ const Products = () => {
               <Link
                 href={`/products/product_view?${params}`}
                 style={{ textDecoration: 'none', color: 'inherit' }}
+                key={index}
               >
                 <div
                   onMouseEnter={() => setIsHovered(index)}
@@ -196,7 +194,7 @@ const Products = () => {
                   <ProductCard
                     title={productItem.title}
                     description={productItem.description}
-                    imageUrl={imageUrl}
+                    imageUrl={`/api/db/get_public_image?${new URLSearchParams({ imagePath: productItem.image_url })}`}
                     sellerName={`${sellers[index].first_name} ${sellers[index].last_name}`}
                     price={productItem.price}
                   />

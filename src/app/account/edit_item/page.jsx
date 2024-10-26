@@ -106,7 +106,9 @@ const ItemEditing = () => {
           setCategory(data.categories.category_uuid)
           setPrice(data.price)
           setItems(data.number_of_items)
-          setImageUrl(data.image_url.replace('public/', '/'))
+          setImageUrl(
+            `/api/db/get_public_image?${new URLSearchParams({ imagePath: data.image_url })}`
+          )
         } else {
           // An error occurred while retrieving the categories.
 

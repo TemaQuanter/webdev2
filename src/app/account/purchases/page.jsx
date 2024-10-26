@@ -137,7 +137,7 @@ const Purchases = () => {
                         <ProductCard
                           title={filteredSale.title}
                           description={filteredSale.description}
-                          imageUrl={imageUrl}
+                          imageUrl={`/api/db/get_public_image?${new URLSearchParams({ imagePath: filteredSale.image_url })}`}
                           sellerName={`${filteredSale.users_purchases_seller_idTousers.first_name} ${filteredSale.users_purchases_seller_idTousers.last_name}`}
                           price={filteredSale.price}
                         />

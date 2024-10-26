@@ -190,9 +190,6 @@ const Category = () => {
         <Row className="justify-content-center">
           {category &&
             category.products.map((product, index) => {
-              // Get a valid product image URL.
-              const imageUrl = product.image_url.replace('public/', '/')
-
               // Create query parameters using URLSearchParams.
               const params = new URLSearchParams({
                 search: '',
@@ -200,7 +197,14 @@ const Category = () => {
               })
 
               return (
-                <Col xs={12} sm={11} md={10} lg={9} className="mb-4">
+                <Col
+                  xs={12}
+                  sm={11}
+                  md={10}
+                  lg={9}
+                  className="mb-4"
+                  key={index}
+                >
                   <a
                     href={`/products/product_view?${params}`}
                     style={{ textDecoration: 'none', color: 'inherit' }}
@@ -210,7 +214,7 @@ const Category = () => {
                       description={product.description}
                       sellerName={`${product.seller_first_name} ${product.seller_last_name}`}
                       price={product.price}
-                      imageUrl={imageUrl}
+                      imageUrl={`/api/db/get_public_image?${new URLSearchParams({ imagePath: product.image_url })}`}
                     />
                   </a>
                 </Col>

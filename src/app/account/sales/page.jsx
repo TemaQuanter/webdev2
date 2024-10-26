@@ -160,12 +160,6 @@ const Purchases = () => {
         >
           {listedProducts && account
             ? listedProducts.map((listedProduct, index) => {
-                // Remove 'public' from the UR
-                const imagePath = listedProduct.image_url.replace(
-                  'public/',
-                  '/'
-                )
-
                 // Create query parameters using URLSearchParams.
                 const params = new URLSearchParams({
                   productUUId: listedProduct.product_uuid
@@ -191,7 +185,7 @@ const Purchases = () => {
                         title={listedProduct.title}
                         sellerName={`${account.first_name} ${account.last_name}`}
                         description={listedProduct.description}
-                        imageUrl={imagePath}
+                        imageUrl={`/api/db/get_public_image?${new URLSearchParams({ imagePath: listedProduct.image_url })}`}
                         price={listedProduct.price}
                       />
                     </div>
