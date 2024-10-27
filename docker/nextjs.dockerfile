@@ -42,9 +42,7 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/next.config.mjs ./next.config.mjs
 COPY --from=builder /app/protected_images ./protected_images
 COPY --from=builder /app/public_images ./public_images
-
-# Set the environment variable for production
-# ENV NODE_ENV=production
+COPY --from=builder /app/favicon.ico ./favicon.ico
 
 # Expose port 3000
 EXPOSE 3000

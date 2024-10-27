@@ -27,7 +27,8 @@ services:
     depends_on:
       - postgres-marketplace # ensures Next.js starts after Postgres
     volumes:
-      - marketplace-nextjs-data:/app
+      - marketplace-nextjs-protected-images:/app/protected_images
+      - marektplace-nextjs-public-images:/app/public_images
     networks:
       - internal-network
       - external-network
@@ -35,7 +36,9 @@ services:
 volumes:
   marketplace-postgres-data:
     external: true
-  marketplace-nextjs-data:
+  marketplace-nextjs-protected-images:
+    external: true
+  marektplace-nextjs-public-images:
     external: true
 
 networks:
