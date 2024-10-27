@@ -10,7 +10,7 @@ import { Buffer } from 'buffer'
 import { promises as fs } from 'fs'
 import path from 'path'
 import { v4 as uuidv4 } from 'uuid'
-import { isFile } from '@/utils/functions'
+import { isFile, isImageFile } from '@/utils/functions'
 
 export const PUT = async (req) => {
   console.log('list_item api triggered')
@@ -90,7 +90,8 @@ export const PUT = async (req) => {
   if (
     isFile(formData.get('productImage')) &&
     (!formData.get('productImage').type.includes('image') ||
-      formData.get('productImage').size > 10485760)
+      formData.get('productImage').size > 10485760 ||
+      !isImageFile(formData.get('productImage')))
   ) {
     // The product image is invalid.
     return NextResponse.json(

@@ -10,7 +10,7 @@ import { NextResponse } from 'next/server'
 import { Buffer } from 'buffer'
 import { promises as fs } from 'fs'
 import path from 'path'
-import { isFile } from '@/utils/functions'
+import { isFile, isImageFile } from '@/utils/functions'
 
 export const PUT = async (req) => {
   console.log('update_account_data api triggered')
@@ -81,6 +81,23 @@ export const PUT = async (req) => {
 
   // If the image was provided, get the file data.
   if (isFile(formData.get('profilePicture'))) {
+    // Get a file.
+    profilePictureFile = formData.get('profilePicture')
+
+    // Check the file type.
+    if (
+      !profilePictureFile.type.includes('image') ||
+      !isImageFile(profilePictureFile)
+    ) {
+      // It is a wrong file type, return an error.
+      console.log('Wrong file type for profile picture')
+
+      return NextResponse.json(
+        { message: 'File must be an image' },
+        { status: 400 }
+      )
+    } // end if
+
     // Remove the previous profile picture of the user from the database.
 
     // Retrieve the path of the previous profile picture from the database.
@@ -98,11 +115,7 @@ export const PUT = async (req) => {
       // If the file exists, remove it.
       if (previousUserState.profile_picture_url) {
         await fs.unlink(
-          path.join(
-            process.cwd(),
-            PROFILE_PICTURES_PATH,
-            previousUserState.profile_picture_url
-          )
+          path.join(process.cwd(), previousUserState.profile_picture_url)
         )
       } // end if
     } catch (err) {
@@ -116,20 +129,6 @@ export const PUT = async (req) => {
         { status: 500 }
       )
     } // end try-catch
-
-    // Get a file.
-    profilePictureFile = formData.get('profilePicture')
-
-    // Check the file type.
-    if (!profilePictureFile.type.includes('image')) {
-      // It is a wrong file type, return an error.
-      console.log('Wrong file type for profile picture')
-
-      return NextResponse.json(
-        { message: 'File must be an image' },
-        { status: 400 }
-      )
-    } // end if
 
     // Get a file extension.
     fileExtension = path.extname(profilePictureFile.name)

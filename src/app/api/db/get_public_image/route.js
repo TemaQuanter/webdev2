@@ -18,6 +18,9 @@ export const GET = async (req) => {
   // Get image path that has to be read.
   let imagePath = searchParams.get('imagePath')
 
+  // Sanitize imagePath by removing any `../` sequences.
+  imagePath = path.normalize(imagePath).replace(/^(\.\.(\/|\\|$))+/, '')
+
   // Construct the image path.
   const imagePathRoot = path.join(process.cwd(), PRODUCT_IMAGES_PATH)
 
